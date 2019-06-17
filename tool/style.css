@@ -1,0 +1,53 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    overflow: hidden;
+}
+
+.panels {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.codePanel {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.codeHeader {
+    display: flex;
+    flex-direction: row;
+}
+.codeHeader span {
+    margin: 20px;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.codeHeader div {
+    margin: 20px;
+    flex: initial;
+    border: 1px #d4d4d4 solid;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+.codeHeader div:hover {
+    background: #333;
+}

@@ -1,0 +1,3 @@
+[submodule "dependencies/bind"]
+	path = dependencies/bind
+	url = https://github.com/luigi-rosso/bind
