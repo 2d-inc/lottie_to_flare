@@ -7,19 +7,22 @@ import JSZip from "jszip";
 import LottieToFlare from "../converter/lottie_to_flare.js";
 import "./style.css";
 
+const DefaultLottieUrl = "https://assets10.lottiefiles.com/packages/lf20_Vs49OV.json";//"https://assets5.lottiefiles.com/packages/lf20_9wwQRk.json";
+
 class App extends React.Component
 {
 	constructor(props)
 	{
 		super(props);
 		this.state = {
-			code: '{"test":true}',
+			code: '',
 		}
 	}
 
 	componentDidMount()
 	{
 		window.addEventListener("resize", this.onResizeWindow);
+		this.downloadLottie(DefaultLottieUrl);
 	}
 
 	componentWillUnmount()
@@ -74,20 +77,8 @@ class App extends React.Component
 		});
 	}
 
-	@bind
-	getLottieFromURL()
+	downloadLottie(url)
 	{
-		const { lottieEditor } = this;
-		if (!lottieEditor)
-		{
-			return;
-		}
-
-		const url = prompt("Lottie URL:", "https://assets4.lottiefiles.com/temp/lf20_XPFCL2.json");
-		if (!url)
-		{
-			return;
-		}
 		const req = new XMLHttpRequest();
 		req.addEventListener("load", () =>
 		{
@@ -112,22 +103,39 @@ class App extends React.Component
 	}
 
 	@bind
+	getLottieFromURL()
+	{
+		const { lottieEditor } = this;
+		if (!lottieEditor)
+		{
+			return;
+		}
+
+		const url = prompt("Lottie URL:", DefaultLottieUrl);
+		if (!url)
+		{
+			return;
+		}
+		this.downloadLottie(url);
+	}
+
+	@bind
 	downloadFlare()
 	{
 		const { flareEditor } = this;
-		if(!flareEditor)
+		if (!flareEditor)
 		{
 			return;
 		}
 		const value = flareEditor.getValue();
 		const name = "name.flr2d";
-		
+
 		const zip = JSZip();
 		zip.file(name, value);
-		zip.generateAsync({type:"blob"}).then(function(content) {
+		zip.generateAsync({ type: "blob" }).then(function (content)
+		{
 			download(content, name, "application/octet-stream");
 		});
-		
 	}
 
 	render()

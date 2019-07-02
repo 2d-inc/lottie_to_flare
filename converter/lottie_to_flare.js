@@ -1,3 +1,5 @@
+import Animation from "./lottie/animation.js";
+
 export default class LottieToFlare
 {
     constructor(options)
@@ -5,10 +7,27 @@ export default class LottieToFlare
 
     }
 
-    convert(json)
+    convert(string)
     {
         return new Promise((resolve, reject) =>
         {
+            let json = null;
+            try
+            {
+                json = JSON.parse(string);
+            }
+            catch(err)
+            {
+                console.warn("failed to parse json", err);
+                reject();
+                return;
+            }
+            const animation = new Animation();
+            if(animation.deserialize(json))
+            {
+
+            }
+
             resolve({
                 "artboards": {
                     "type": "artboards",
