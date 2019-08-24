@@ -41,7 +41,7 @@ const artboard = async (composition) => {
 		],
 		width: composition.width,
 		height: composition.height,
-		color: [1,0,0,1],
+		color: [0,0,0,0],
 		clipContents: true,
 		animations: [],
 		children

@@ -1,10 +1,15 @@
-const node = async (layer) => {
+import nodeId from '../helpers/nodeId'
 
-	console.log(layer)
+const node = async (children = [], transform = {}, name = "Node") => {
 
 	return {
-		type: "node"
+		type: "node",
+		id: nodeId(),
+		name,
+		...transform,
+		displayType: "empty",
+		children,
 	}
 }
 
-export default solid
+export default node
