@@ -32,6 +32,10 @@ const iterateGroup = (items, shapes, tranforms) => {
 			const shape = createNewShape(item, localTransforms)
 			shapes.push(shape)
 			localShapes.push(shape)
+		} else if (item.type === shapeTypes.STROKE) {
+			const shape = createNewShape(item, localTransforms)
+			shapes.push(shape)
+			localShapes.push(shape)
 		} else if (item.type === shapeTypes.TRANSFORM) {
 			localTransforms.push(item)
 		} else if (pathTypes.includes(item.type)) {

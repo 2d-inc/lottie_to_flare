@@ -1,6 +1,7 @@
 import deserialize from "../deserialize.js";
 import Path from "./path.js";
 import Fill from "./fill.js";
+import Stroke from "./stroke.js";
 import Transform from "../properties/transform.js";
 import shapeTypes from './shapeTypes';
 import Rectangle from "../shapes/rectangle.js";
@@ -25,6 +26,7 @@ export default class Group
             'sh': Path,
             'gr': Group,
             'fl': Fill,
+            'st': Stroke,
             'tr': Transform,
             'rc': Rectangle,
         };
