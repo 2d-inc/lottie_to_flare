@@ -30,7 +30,7 @@ export default class Group
             this._Items = value;
         });
 
-        console.log('group', this);
+        // console.log('group', this);
         return true;
     }
 }

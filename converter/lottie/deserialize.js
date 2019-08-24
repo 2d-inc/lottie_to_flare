@@ -73,26 +73,13 @@ export default class Deserialize
 
     static type(value, type, cb)
     {
-        if (!(value instanceof Array))
+        const item = new type();
+        if (item.deserialize(value))
         {
-            return cb(null);
-        }
-        const items = [];
-        for (const itemData of value)
+            return cb(item);
+        } else 
         {
-            const typeValue = itemData['ty'];
-            const knownType = types[typeValue];
-            if(!knownType)
-            {
-                console.warn("unhandled type", typeValue);
-                continue;
-            }
-            const item = new knownType();
-            if (item.deserialize(itemData))
-            {
-                items.push(item);
-            }
+            return cb(null)
         }
-        return cb(items);
     }
 }

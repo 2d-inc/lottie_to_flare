@@ -29,7 +29,7 @@ module.exports = {
             filename: "./index.html"
         })
     ],
-    entry: "./tool/index.js",
+    entry: ["@babel/polyfill", "./tool/index.js"],
     output: {
         filename: '[name].bundle.js',
         path: __dirname

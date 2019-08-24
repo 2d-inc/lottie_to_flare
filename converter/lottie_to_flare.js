@@ -1,4 +1,5 @@
 import Animation from "./lottie/animation.js";
+import convert from './flare/converter.js'
 
 export default class LottieToFlare
 {
@@ -25,7 +26,7 @@ export default class LottieToFlare
             const animation = new Animation();
             if(animation.deserialize(json))
             {
-
+                resolve(convert(animation))
             }
 
             resolve({
