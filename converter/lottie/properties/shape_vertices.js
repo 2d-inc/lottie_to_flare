@@ -67,4 +67,12 @@ export default class ShapeVertices
 
         return true;
     }
+
+    get closed() {
+        return this._IsClosed
+    }
+
+    get vertices() {
+        return this._Vertices
+    }
 }

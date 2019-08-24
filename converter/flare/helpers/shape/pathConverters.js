@@ -1,4 +1,5 @@
 import rectangle from '../../rectangle'
+import path from '../../path'
 
 const convertRectangleType = (data) => {
 	const size = data.size
@@ -7,11 +8,7 @@ const convertRectangleType = (data) => {
 
 const convertPathType = (data) => {
 	
-	return rectangle([100,100], [50,50], 0)
-
-	/*return {
-		type: 'path'
-	}*/
+	return path(data.vertices)
 }
 
 export {
