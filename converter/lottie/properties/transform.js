@@ -11,6 +11,7 @@ export default class Transform
         this._Scale = vec2.fromValues(0, 0);
         this._Rotation = 0;
         this._Opacity = 0;
+        this._Type = 'transform'
     }
 
     deserialize(json) {
@@ -58,5 +59,9 @@ export default class Transform
 
     get opacity() {
         return this._Opacity
+    }
+
+    get type() {
+        return this._Type
     }
 }

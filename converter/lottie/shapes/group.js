@@ -1,7 +1,9 @@
 import deserialize from "../deserialize.js";
-import Shape from "./shape.js";
+import Path from "./path.js";
 import Fill from "./fill.js";
-import Transform from "./transform.js";
+import Transform from "../properties/transform.js";
+import shapeTypes from './shapeTypes';
+import Rectangle from "../shapes/rectangle.js";
 
 export default class Group
 {
@@ -9,6 +11,7 @@ export default class Group
     {
         this._Name = null;
         this._Items = null;
+        this._Type = shapeTypes.GROUP;
     }
 
     deserialize(json)
@@ -19,10 +22,11 @@ export default class Group
         });
 
         const itemTypes = {
-            'sh': Shape,
+            'sh': Path,
             'gr': Group,
             'fl': Fill,
-            'tr': Transform
+            'tr': Transform,
+            'rc': Rectangle,
         };
         
         deserialize.typesList(json['it'], itemTypes, (value) =>
@@ -32,5 +36,13 @@ export default class Group
 
         // console.log('group', this);
         return true;
+    }
+
+    get items() {
+        return this._Items
+    }
+
+    get type() {
+        return this._Type
     }
 }

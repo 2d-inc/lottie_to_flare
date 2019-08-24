@@ -25,8 +25,6 @@ const artboard = async (composition) => {
 	
 	const children = await convertLayers(composition.layers)
 
-	console.log('artboard', children)
-
 	return {
 		type: "artboard",
 		id: nodeId(),

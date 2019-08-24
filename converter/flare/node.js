@@ -1,6 +1,6 @@
 import nodeId from '../helpers/nodeId'
 
-const node = async (children = [], transform = {}, name = "Node") => {
+const node = (children = [], transform = {}, name = "Node") => {
 
 	return {
 		type: "node",

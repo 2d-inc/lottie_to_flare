@@ -1,13 +1,15 @@
 import deserialize from "../deserialize.js";
 import AnimatableProperty from "../properties/animatable_property.js";
 import ShapeVertices from "../properties/shape_vertices.js";
+import shapeTypes from './shapeTypes';
 
-export default class Shape
+export default class Path
 {
 	constructor()
 	{
         this._Name = null;
         this._Vertices = null;
+        this._Type = shapeTypes.PATH;
 	}
 
 	deserialize(json)
@@ -22,7 +24,14 @@ export default class Shape
 			this._Vertices = value;
 		});
 
-		console.log('shape', this);
 		return true;
 	}
+
+    get vertices() {
+        return this._Vertices
+    }
+
+    get type() {
+        return this._Type
+    }
 }
