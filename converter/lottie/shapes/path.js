@@ -2,7 +2,7 @@ import deserialize from "../deserialize.js";
 import AnimatableProperty from "../properties/animatable_property.js";
 import ShapeVertices from "../properties/shape_vertices.js";
 import shapeTypes from './shapeTypes';
-import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
+import {getShapePropertyFirstValue} from "../../helpers/getPropertyFirstValue.js";
 
 export default class Path
 {
@@ -25,7 +25,7 @@ export default class Path
 			this._Vertices = value;
 		});*/
 
-		deserialize.type(getPropertyFirstValue(json['ks']), ShapeVertices, (value) =>
+		deserialize.type(getShapePropertyFirstValue(json['ks']), ShapeVertices, (value) =>
 		{
 			this._Vertices = value;
 		});

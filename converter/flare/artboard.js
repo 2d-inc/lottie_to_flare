@@ -1,9 +1,12 @@
 import shape from './shape.js'
 import solid from './solid.js'
+import precomp from './precomp.js'
 import nodeId from '../helpers/nodeId'
 
 const convertLayer = async (layer) => {
 	switch(layer.type) {
+		case 0:
+		return precomp(layer)
 		case 1:
 		return solid(layer)
 		case 4:

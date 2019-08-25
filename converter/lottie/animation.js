@@ -1,4 +1,5 @@
 import deserialize from "./deserialize.js";
+import PrecompLayer from "./layers/precomp_layer.js";
 import ShapeLayer from "./layers/shape_layer.js";
 import SolidLayer from "./layers/solid_layer.js";
 import Layer from "./layers/layer.js";
@@ -7,9 +8,7 @@ export default class Animation
 {
 	constructor()
 	{
-		this._Version = null;
 		this._Name = null;
-		this._FrameRate = 60;
 		this._Height = null;
 		this._Width = null;
 		this._InPoint = null;
@@ -55,14 +54,16 @@ export default class Animation
 		});
 
 		const layerTypes = {
+			0: PrecompLayer,
 			1: SolidLayer,
 			4: ShapeLayer,
 			3: Layer,
 		};
+
 		deserialize.typesList(json['layers'], layerTypes, (value) =>
 		{
 			this._Layers = value;
-		});
+		}, [json['assets']]);
 
 		// console.log('composition', this);
 		return true;

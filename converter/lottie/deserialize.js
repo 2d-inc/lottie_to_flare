@@ -46,7 +46,7 @@ export default class Deserialize
         return cb(items);
     }
 
-    static typesList(value, types, cb)
+    static typesList(value, types, cb, deserializeParams = [])
     {
         if (!(value instanceof Array))
         {
@@ -63,7 +63,7 @@ export default class Deserialize
                 continue;
             }
             const item = new knownType();
-            if (item.deserialize(itemData))
+            if (item.deserialize.apply(item, [itemData, ...deserializeParams]))
             {
                 items.push(item);
             }

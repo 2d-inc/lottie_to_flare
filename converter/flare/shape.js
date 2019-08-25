@@ -6,6 +6,7 @@ import {addChildrenToLastLeaves} from './helpers/lastLeavesHelper.js';
 const pathTypes = [
 	shapeTypes.PATH,
 	shapeTypes.RECTANGLE,
+	shapeTypes.ELLIPSE,
 ]
 
 const createNewShape = (shape, transforms) => {

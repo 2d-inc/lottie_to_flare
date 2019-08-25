@@ -3,6 +3,7 @@ import toArray from '../helpers/toArray'
 
 const buildVertices = (vertices) => {
 	return vertices.map(vertex => {
+
 		
 		const translation = toArray(vertex.position);
 		const inPoints = toArray(vertex.in).map((value, index)=> value + translation[index]);
@@ -24,6 +25,11 @@ const buildVertices = (vertices) => {
 
 const path = (shapeVertices) => {
 
+
+	if (shapeVertices === null) {
+		console.log(null)
+		return
+	}
 
 	return {
 		type: "path",

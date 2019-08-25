@@ -1,5 +1,5 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
-import {convertRectangleType, convertPathType} from './pathConverters.js';
+import {convertRectangleType, convertPathType, convertEllipseType} from './pathConverters.js';
 import {convertFillType, convertStrokeType} from './textureConverters.js';
 import transformNode from '../../transformNode.js';
 import {addChildrenToLastLeaves, addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
@@ -32,6 +32,7 @@ export default class ShapeCollection {
 		const converters = {
 			[shapeTypes.PATH]: convertPathType,
 			[shapeTypes.RECTANGLE]: convertRectangleType,
+			[shapeTypes.ELLIPSE]: convertEllipseType,
 		}
 
 		return converters[pathData.path.type](pathData.path)

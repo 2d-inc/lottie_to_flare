@@ -5,6 +5,7 @@ import Group from "../shapes/group.js";
 import Fill from "../shapes/fill.js";
 import Stroke from "../shapes/stroke.js";
 import Rectangle from "../shapes/rectangle.js";
+import Ellipse from "../shapes/ellipse.js";
 
 export default class ShapeLayer extends Layer
 {
@@ -27,6 +28,7 @@ export default class ShapeLayer extends Layer
             'fl': Fill,
             'st': Stroke,
             'rc': Rectangle,
+            'el': Ellipse,
         };
         deserialize.typesList(json['shapes'], shapeTypes, (value) =>
         {
