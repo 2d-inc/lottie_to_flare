@@ -29,7 +29,6 @@ export default class LottieToFlare
             //
             if(animation.deserialize(json))
             {
-                animation.buildParenting()
                 resolve(convert(animation))
             }
 

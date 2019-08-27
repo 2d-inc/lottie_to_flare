@@ -77,11 +77,4 @@ export default class Layer
 		return this._Id
 	}
 
-	get parents() {
-		return this._ParentHierarchy
-	}
-
-	addParent(parent) {
-		this._ParentHierarchy.push(parent)
-	}
 }
