@@ -27,7 +27,7 @@ export default class PrecompLayer extends Layer
             4: ShapeLayer,
             3: Layer,
         };
-        deserialize.typesList(layers, layerTypes, (value) =>
+        deserialize.typesList(layers.reverse(), layerTypes, (value) =>
         {
             this._Layers = value;
         }, [assets]);

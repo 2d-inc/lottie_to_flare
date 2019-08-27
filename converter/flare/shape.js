@@ -19,12 +19,10 @@ const addPathToShapes = (path, shapes, transforms) => {
 
 const iterateGroup = (items, shapes, tranforms) => {
 
-	let len = items.length - 1
-	let item
 	const localShapes = []
 	const localTransforms = [...tranforms]
-	while (len >= 0) {
-		item = items[len]
+	items
+	.forEach(item => {
 		if (item.type === shapeTypes.GROUP) {
 			iterateGroup(item.items, shapes, localTransforms)
 		} else if (item.type === shapeTypes.FILL) {
@@ -40,8 +38,7 @@ const iterateGroup = (items, shapes, tranforms) => {
 		} else if (pathTypes.includes(item.type)) {
 			addPathToShapes(item, shapes, tranforms)
 		}
-		len -= 1
-	}
+	})
 
 	localShapes.forEach(shape => shape.close())
 

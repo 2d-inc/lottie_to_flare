@@ -30,7 +30,7 @@ export default class ShapeLayer extends Layer
             'rc': Rectangle,
             'el': Ellipse,
         };
-        deserialize.typesList(json['shapes'], shapeTypes, (value) =>
+        deserialize.typesList(json['shapes'].reverse(), shapeTypes, (value) =>
         {
             this._Items = value;
         });

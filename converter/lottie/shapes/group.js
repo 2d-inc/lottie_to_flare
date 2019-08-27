@@ -33,7 +33,7 @@ export default class Group
             'el': Ellipse,
         };
         
-        deserialize.typesList(json['it'], itemTypes, (value) =>
+        deserialize.typesList(json['it'].reverse(), itemTypes, (value) =>
         {
             this._Items = value;
         });

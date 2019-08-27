@@ -1,6 +1,7 @@
 import deserialize from "../deserialize.js";
 import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import shapeTypes from './shapeTypes';
+import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
 
 export default class Fill
 {
@@ -13,6 +14,7 @@ export default class Fill
         this._LineCap = 0;
         this._LineJoin = 0;
         this._Type = shapeTypes.STROKE;
+        this._DrawOrder = getDrawOrderIndex();
     }
 
     deserialize(json)
@@ -69,5 +71,9 @@ export default class Fill
 
     get lineJoin() {
         return this._LineCap
+    }
+
+    get drawOrder() {
+        return this._DrawOrder
     }
 }

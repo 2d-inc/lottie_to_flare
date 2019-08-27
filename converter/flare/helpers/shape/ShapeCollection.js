@@ -48,7 +48,6 @@ export default class ShapeCollection {
 	}
 
 	convert() {
-
 		const paths = this._Paths.map(this.convertPath)
 
 		const texture = this.convertTexture(this._ShapeData)
@@ -58,7 +57,7 @@ export default class ShapeCollection {
 			id: nodeId(),
 			name: "Shape",
 			blendMode: "srcOver",
-			drawOrder: 1,
+			drawOrder: this._ShapeData.drawOrder,
 			children: [texture, ...paths]
 		}
 

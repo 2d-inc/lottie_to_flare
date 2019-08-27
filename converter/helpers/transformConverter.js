@@ -33,6 +33,10 @@ const transform = (transform) => {
 		transformProperties.anchorPoint = getPropertyIfNotDefault(transform.anchorPoint, 1)
 	}
 
+	if ('opacity' in transform) {
+		transformProperties.opacity = getPropertyIfNotDefault(transform.opacity, 1)
+	}
+
 	return transformProperties
 }
 

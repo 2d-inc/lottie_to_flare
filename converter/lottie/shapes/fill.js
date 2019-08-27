@@ -1,6 +1,7 @@
 import deserialize from "../deserialize.js";
 import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import shapeTypes from './shapeTypes';
+import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
 
 export default class Fill
 {
@@ -10,6 +11,7 @@ export default class Fill
         this._Color = [0, 0, 0];
         this._Opacity = 0;
         this._Type = shapeTypes.FILL;
+        this._DrawOrder = getDrawOrderIndex();
     }
 
     deserialize(json)
@@ -39,5 +41,9 @@ export default class Fill
 
     get opacity() {
         return this._Opacity
+    }
+
+    get drawOrder() {
+        return this._DrawOrder
     }
 }

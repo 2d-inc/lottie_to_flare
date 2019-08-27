@@ -1,5 +1,6 @@
 import deserialize from "../deserialize.js";
 import Layer from "./layer.js";
+import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
 
 import hexToColor from '../../helpers/hexToColor.js'
 
@@ -11,6 +12,7 @@ export default class SolidLayer extends Layer
         this._Width = 0;
         this._Height = 0;
         this._Color = null;
+        this._DrawOrder = getDrawOrderIndex();
     }
 
     deserialize(json)
@@ -48,5 +50,9 @@ export default class SolidLayer extends Layer
 
     get color() {
         return this._Color
+    }
+
+    get drawOrder() {
+        return this._DrawOrder
     }
 }

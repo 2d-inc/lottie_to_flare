@@ -60,8 +60,9 @@ export default class Animation
 			3: Layer,
 		};
 
-		deserialize.typesList(json['layers'], layerTypes, (value) =>
+		deserialize.typesList(json['layers'].reverse(), layerTypes, (value) =>
 		{
+			console.log(value)
 			this._Layers = value;
 		}, [json['assets']]);
 

@@ -1,5 +1,6 @@
 import Animation from "./lottie/animation.js";
-import convert from './flare/converter.js'
+import convert from './flare/converter.js';
+import {resetDrawOrderIndex} from './helpers/drawOrderIndex';
 
 export default class LottieToFlare
 {
@@ -23,6 +24,7 @@ export default class LottieToFlare
                 reject();
                 return;
             }
+            resetDrawOrderIndex()
             const animation = new Animation();
             //
             // TODO: complete assets for precomps and images

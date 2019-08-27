@@ -10,7 +10,7 @@ const solid = (layer) => {
 			id: nodeId(),
 			name: "Shape",
 			blendMode: "srcOver",
-			drawOrder: 1,
+			drawOrder: layer.drawOrder,
 			children: [
 				fill(layer.color, layer.transform.opacity),
 				rectangle([layer.width, layer.height], [layer.width / 2, layer.height / 2]),
