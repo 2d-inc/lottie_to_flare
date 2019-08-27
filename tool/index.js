@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
 import MonacoEditor from 'react-monaco-editor';
@@ -7,7 +8,8 @@ import JSZip from "jszip";
 import LottieToFlare from "../converter/lottie_to_flare.js";
 import "./style.css";
 
-const DefaultLottieUrl = "https://assets10.lottiefiles.com/packages/lf20_Vs49OV.json";//"https://assets5.lottiefiles.com/packages/lf20_9wwQRk.json";
+// const DefaultLottieUrl = "https://assets10.lottiefiles.com/packages/lf20_Vs49OV.json";//"https://assets5.lottiefiles.com/packages/lf20_9wwQRk.json";
+const DefaultLottieUrl = "animations/data.json";//"Local json";
 
 class App extends React.Component
 {

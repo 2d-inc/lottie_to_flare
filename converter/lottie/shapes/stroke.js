@@ -10,6 +10,8 @@ export default class Fill
         this._Color = [0, 0, 0];
         this._Opacity = 0;
         this._Width = 0;
+        this._LineCap = 0;
+        this._LineJoin = 0;
         this._Type = shapeTypes.STROKE;
     }
 
@@ -31,7 +33,17 @@ export default class Fill
         {
             this._Width = value;
         });
-        
+
+        deserialize.number(json['lc'], (value) =>
+        {
+            this._LineCap = value;
+        });
+
+        deserialize.number(json['lj'], (value) =>
+        {
+            this._LineJoin = value;
+        });
+
         return true;
     }
 
@@ -49,5 +61,13 @@ export default class Fill
 
     get width() {
         return this._Width
+    }
+
+    get lineCap() {
+        return this._LineCap
+    }
+
+    get lineJoin() {
+        return this._LineCap
     }
 }

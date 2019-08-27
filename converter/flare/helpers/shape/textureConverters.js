@@ -6,7 +6,7 @@ const convertFillType = (data) => {
 }
 
 const convertStrokeType = (data) => {
-	return stroke(data.color, data.opacity, data.width)
+	return stroke(data.color, data.opacity, data.width, data.lineCap, data.lineJoin)
 }
 
 export {

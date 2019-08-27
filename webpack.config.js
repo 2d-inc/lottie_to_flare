@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
     module: {
         rules: [
@@ -27,7 +28,10 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: "./tool/index.html",
             filename: "./index.html"
-        })
+        }),
+        new CopyPlugin([
+            { from: './animations/data.json', to: 'animations' },
+        ]),
     ],
     entry: ["@babel/polyfill", "./tool/index.js"],
     output: {
