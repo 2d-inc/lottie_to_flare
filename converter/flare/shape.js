@@ -1,7 +1,5 @@
-import transformNode from './transformNode';
 import shapeTypes from '../lottie/shapes/shapeTypes.js';
 import ShapeCollection from './helpers/shape/ShapeCollection';
-import {addChildrenToLastLeaves} from './helpers/lastLeavesHelper.js';
 
 const pathTypes = [
 	shapeTypes.PATH,
@@ -56,20 +54,12 @@ const buildShapes = (items) => {
 	const shapes = iterateGroup(items, [], tranforms)
 	.map(shapeCollection => shapeCollection.convert());
 
-	// console.log(shapes)
-
 	return shapes;
 }
 
-const shape = async (layer) => {
+const shape = (layer) => {
 
-	const transformerNodes = transformNode(layer.transform);
-
-	const shapes = buildShapes(layer.items);
-
-	addChildrenToLastLeaves(transformerNodes, shapes);
-
-	return transformerNodes;
+	return buildShapes(layer.items);
 }
 
 export default shape

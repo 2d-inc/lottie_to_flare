@@ -21,6 +21,7 @@ const convertLayers = async (layers) => {
 	return Promise.all(
 		layers
 		.filter(layer => layer.type !== 3)
+		.reverse()
 		.map(convertLayer)
 	)
 }

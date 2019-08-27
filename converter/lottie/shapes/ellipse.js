@@ -25,8 +25,6 @@ export default class Ellipse
 
 		this._Size = getPropertyFirstValue(json['s']);
 
-		console.log(json)
-
 		return true;
 	}
 

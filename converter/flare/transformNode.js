@@ -31,6 +31,10 @@ const transformNode = (transform) => {
 
 	const transformProps = transformConverter(transform)
 
+	if (!transformProps) {
+		return null
+	}
+
 	const children = [node([], getElementTransform(transformProps))]
 
 	return node(children, getNodeTransform(transformProps))

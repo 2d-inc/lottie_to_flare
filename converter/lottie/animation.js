@@ -69,6 +69,21 @@ export default class Animation
 		return true;
 	}
 
+	searchParent(layer, id, layers) {
+		if (id) {
+			const parentLayer = layers.find(parentLayer => parentLayer.id === id)
+			layer.addParent(parentLayer)
+			this.searchParent(layer, parentLayer.parentId, layers)
+		}
+	}
+
+	buildParenting() {
+		const layers = this._Layers
+		layers.forEach(layer => {
+			this.searchParent(layer, layer.parentId, layers)
+		})
+	}
+
 	get layers() {
 		return this._Layers
 	}

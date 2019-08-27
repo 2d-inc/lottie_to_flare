@@ -9,9 +9,11 @@ export default class Layer
 		this._Name = null;
 		this._InPoint = null;
 		this._OutPoint = null;
-		this._Parent = null;
+		this._Id = null;
+		this._ParentId = null;
 		this._BlendMode = null;
 		this._Transform = null;
+		this._ParentHierarchy = [];
 	}
 
 	deserialize(json)
@@ -33,7 +35,7 @@ export default class Layer
 
 		deserialize.number(json['parent'] || 0, (value) =>
 		{
-			this._Parent = value;
+			this._ParentId = value;
 		});
 
 		deserialize.number(json['bm'], (value) =>
@@ -51,7 +53,11 @@ export default class Layer
 			this._Transform = value;
 		});
 
-		// console.log('layer', this);
+		deserialize.number(json['ind'], (value) =>
+		{
+			this._Id = value;
+		});
+
 		return true;
 	}
 
@@ -61,5 +67,21 @@ export default class Layer
 
 	get transform() {
 		return this._Transform
+	}
+
+	get parentId() {
+		return this._ParentId
+	}
+
+	get id() {
+		return this._Id
+	}
+
+	get parents() {
+		return this._ParentHierarchy
+	}
+
+	addParent(parent) {
+		this._ParentHierarchy.push(parent)
 	}
 }

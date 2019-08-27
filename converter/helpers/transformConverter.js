@@ -11,6 +11,10 @@ const getPropertyIfNotDefault = (property, defaultValue) => {
 
 const transform = (transform) => {
 
+	if(!transform) {
+		return null
+	}
+
 	const transformProperties = {}
 
 	if ('rotation' in transform && transform.rotation !== 0) {

@@ -24,8 +24,12 @@ export default class LottieToFlare
                 return;
             }
             const animation = new Animation();
+            //
+            // TODO: complete assets for precomps and images
+            //
             if(animation.deserialize(json))
             {
+                animation.buildParenting()
                 resolve(convert(animation))
             }
 
