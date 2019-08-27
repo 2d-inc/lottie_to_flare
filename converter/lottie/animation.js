@@ -62,7 +62,6 @@ export default class Animation
 
 		deserialize.typesList(json['layers'].reverse(), layerTypes, (value) =>
 		{
-			console.log(value)
 			this._Layers = value;
 		}, [json['assets']]);
 

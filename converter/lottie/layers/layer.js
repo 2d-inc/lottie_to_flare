@@ -9,6 +9,7 @@ export default class Layer
 		this._Name = null;
 		this._InPoint = null;
 		this._OutPoint = null;
+		this._StartPoint = null;
 		this._Id = null;
 		this._ParentId = null;
 		this._BlendMode = null;
@@ -31,6 +32,11 @@ export default class Layer
 		deserialize.number(json['op'], (value) =>
 		{
 			this._OutPoint = value;
+		});
+
+		deserialize.number(json['st'], (value) =>
+		{
+			this._StartPoint = value;
 		});
 
 		deserialize.number(json['parent'] || 0, (value) =>
@@ -75,6 +81,18 @@ export default class Layer
 
 	get id() {
 		return this._Id
+	}
+
+	get inPoint() {
+		return this._InPoint
+	}
+
+	get outPoint() {
+		return this._OutPoint
+	}
+
+	get startPoint() {
+		return this._StartPoint
 	}
 
 }
