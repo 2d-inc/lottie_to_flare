@@ -21,24 +21,28 @@ export default class FlareTransform {
 
 	getPropertyIfNotDefault(property, defaultValue) {
 
-		let value = void 0
+		let returnValue = void 0
 
 		if (property.animated) {
-			value = property
-		} else if(property.animatable) {
-			value = property.value
+			returnValue = property
 		} else {
-			value = property
-		}
+			if(property.animatable) {
+				returnValue = property
+			} else {
+				returnValue = {
+					value: property
+				}
+			}
 
-		if (value.length) {
-			const index = value.findIndex(val => val !== defaultValue)
-			if (index === -1) {
-				value = void 0
+			if (returnValue.value.length) {
+				const index = returnValue.value.findIndex(val => val !== defaultValue)
+				if (index === -1) {
+					returnValue = void 0
+				}
 			}
 		}
 
-		return value
+		return returnValue
 	}
 
 	traverseTransformProps(transform) {

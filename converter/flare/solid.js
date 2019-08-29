@@ -1,7 +1,6 @@
 import nodeId from '../helpers/nodeId';
 import fill from './fill';
 import rectangle from './rectangle';
-import convertProperty from './helpers/propertyConverter';
 
 const solid = (layer) => {
 
@@ -13,7 +12,7 @@ const solid = (layer) => {
 			blendMode: "srcOver",
 			drawOrder: layer.drawOrder,
 			children: [
-				fill(layer.color, convertProperty(layer.transform.opacity, 'opacity', '123', 0.01)),
+				fill(layer.color, 1),
 				rectangle([layer.width, layer.height], [layer.width / 2, layer.height / 2]),
 			]
 		}

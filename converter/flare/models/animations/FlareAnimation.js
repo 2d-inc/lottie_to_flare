@@ -115,7 +115,7 @@ export default class FlareAnimation {
 	animateOpacity(keyframes, multiplier) {
 
 		return {
-			opacity: keyframes.map((keyframe, index) => {
+			frameOpacity: keyframes.map((keyframe, index) => {
 				if (index === keyframes.length - 1) {
 					return {
 						v: keyframe.value[0] * multiplier,

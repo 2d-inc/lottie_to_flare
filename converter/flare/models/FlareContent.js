@@ -31,9 +31,6 @@ export default class FlareContent extends FlareLayer {
 
 			opacityNode.opacity = convertProperty(lottieLayer.transform.opacity, 'opacity', animations, opacityNode.id, 0.01)
 
-			console.log(opacityNode.convert())
-
-
 			content = [opacityNode.convert()]
 
 		}
