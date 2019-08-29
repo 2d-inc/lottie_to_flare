@@ -1,8 +1,11 @@
 import FlareArtboard from './models/FlareArtboard'
+import FlareAnimations from './models/animations/FlareAnimation'
 
 const artboard = async (composition) => {
 
-	const artboard = new FlareArtboard(composition)
+	const animations = new FlareAnimations()
+
+	const artboard = new FlareArtboard(composition, animations)
 	return artboard.convert()
 }
 

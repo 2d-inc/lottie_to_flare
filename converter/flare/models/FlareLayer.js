@@ -1,38 +1,39 @@
-import transformNode from '../transformNode';
+import FlareTransform from './properties/FlareTransform'
 import node from '../node';
 import {addChildrenToLastLeaves} from '../helpers/lastLeavesHelper.js';
 
 export default class FlareLayer
 {
 
-	createContentTree(lottieLayer, converter) {
-
-		let content = converter(lottieLayer)
-
-		if (lottieLayer.transform && 'opacity' in lottieLayer.transform && lottieLayer.transform.opacity !== 1) {
-			content = [node(content, {}, 'Node', lottieLayer.transform.opacity)]
-		}
-
-		return content
-
-	}
-
-	constructor(lottieLayer, converter)
+	constructor(lottieLayer, animations)
 	{
 		this._LottieLayer = lottieLayer
-		this._Transforms = transformNode(lottieLayer.transform)
-		this._Content = this.createContentTree(lottieLayer, converter)
+		this._Animations = animations
+		this._Transforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
 		this._Children = []
 	}
 
+	createContent() {
+
+		return []
+
+	}
+
 	convert() {
+
 		let children = this._Children.map(child => {return child.convert()})
-		children = this._Content.concat(children)
-		if (!this._Transforms) {
+
+		const content = this.createContent()
+
+		children = content.concat(children)
+
+		const transform = this._Transforms.convert(this._Animations)
+
+		if (!transform) {
 			return children
 		} else {
-			addChildrenToLastLeaves(this._Transforms, children)
-			return this._Transforms
+			addChildrenToLastLeaves(transform, children)
+			return transform
 		}
 	}
 

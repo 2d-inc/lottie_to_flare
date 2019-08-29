@@ -1,4 +1,6 @@
 import deserialize from "../deserialize.js";
+import AnimatableProperty from "./animatable_property.js";
+import PrimitiveType from "./primitiveType.js";
 import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import { vec2 } from "gl-matrix";
 
@@ -16,32 +18,44 @@ export default class Transform
 
     deserialize(json) {
 
-    	deserialize.number(getPropertyFirstValue(json['r']), (value) =>
-    	{
-    	    this._Rotation = value;
-    	});
+        AnimatableProperty.deserializeType(json['r'], PrimitiveType, (value) =>
+        {
+            this._Rotation = value;
+        });
 
-    	deserialize.number(getPropertyFirstValue(json['o']), (value) =>
+        AnimatableProperty.deserializeType(json['o'], PrimitiveType, (value) =>
+        {
+            this._Opacity = value;
+        });
+
+    	/*deserialize.number(getPropertyFirstValue(json['o']), (value) =>
     	{
     	    this._Opacity = value / 100;
-    	});
+    	});*/
 
-    	const position = getPropertyFirstValue(json['p'])
-    	this._Position[0] = position[0]
-    	this._Position[1] = position[1]
+        AnimatableProperty.deserializeType(json['p'], PrimitiveType, (value) =>
+        {
+            this._Position = value;
+        });
 
-    	const anchorPoint = getPropertyFirstValue(json['a'])
-    	this._AnchorPoint[0] = anchorPoint[0]
-    	this._AnchorPoint[1] = anchorPoint[1]
+        AnimatableProperty.deserializeType(json['a'], PrimitiveType, (value) =>
+        {
+            this._AnchorPoint = value;
+        });
 
-    	const scale = getPropertyFirstValue(json['s'])
-    	this._Scale[0] = scale[0] / 100
-    	this._Scale[1] = scale[1] / 100
+        AnimatableProperty.deserializeType(json['s'], PrimitiveType, (value) =>
+        {
+            this._Scale = value;
+        });
 
         return true;
     }
 
     get position() {
+        return this._Position
+    }
+
+    get position2() {
         return this._Position
     }
 

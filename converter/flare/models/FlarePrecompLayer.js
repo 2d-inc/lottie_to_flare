@@ -4,29 +4,34 @@ import shape from '../shape.js'
 import solid from '../solid.js'
 import nullElement from '../null.js'
 import FlareLayer from './FlareLayer';
+import FlareContent from './FlareContent';
 
 export default class FlarePrecompLayer extends FlareLayer {
 
-	constructor(lottieLayer) {
+	constructor(lottieLayer, animations) {
 
-		super(lottieLayer, ()=>{return []})
+		super(lottieLayer, animations)
 
-		this._Content = this.convertLayers(lottieLayer.layers)
+		// this._Content = this.convertLayers(lottieLayer.layers)
 	}
 
 	createLayer(layer) {
 		switch(layer.type) {
 			case 0:
-			return new FlarePrecompLayer(layer)
+			return new FlarePrecompLayer(layer, this._Animations)
 			case 1:
-			return new FlareLayer(layer, solid)
+			return new FlareContent(layer, this._Animations, solid)
 			case 3:
-			return new FlareLayer(layer, nullElement)
+			return new FlareContent(layer, this._Animations, nullElement)
 			case 4:
-			return new FlareLayer(layer, shape)
+			return new FlareContent(layer, this._Animations, shape)
 			default:
 			return null
 		}
+	}
+
+	createContent() {
+		return this.convertLayers(this._LottieLayer.layers, this._Animations)
 	}
 
 	nestParentedChildren(children) {
@@ -49,11 +54,11 @@ export default class FlarePrecompLayer extends FlareLayer {
 		return remaining
 	}
 
-	convertLayers(layers) {
+	convertLayers(layers, animations) {
 		return layers
 		.reverse()
-		.map(this.createLayer)
+		.map((layer) => this.createLayer(layer))
 		.reduce(this.nestChildLayers,[])
-		.map(child => {return child.convert()})
+		.map(child => {return child.convert(animations)})
 	}
 }

@@ -6,7 +6,7 @@ export default class AnimatableProperty
     constructor()
     {
         this._IsAnimated = false;
-        this._Value = null;
+        this._Property = null;
         this._KeyFrames = null;
     }
 
@@ -54,7 +54,6 @@ export default class AnimatableProperty
             }
 
             this._KeyFrames = keyFrames;
-            console.log('KEY', keyFrames);
 
             return true;
         }
@@ -64,11 +63,27 @@ export default class AnimatableProperty
             const value = new type();
             if (value.deserialize(k))
             {
-                this._Value = value;
+                this._Property = value;
             }
             return true;
         }
 
         return false;
+    }
+
+    get animated() {
+        return this._IsAnimated;
+    }
+
+    get animatable() {
+        return true;
+    }
+
+    get value() {
+        return this._Property.value;
+    }
+
+    get keyframes() {
+        return this._KeyFrames;
     }
 }

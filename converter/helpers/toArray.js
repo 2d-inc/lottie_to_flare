@@ -1,5 +1,5 @@
-const toArray = (property) => {
-	return Array.prototype.map.call(property, value => value)
+const toArray = (property, multiplier = 1) => {
+	return Array.prototype.map.call(property, value => value * multiplier)
 }
 
 export default toArray

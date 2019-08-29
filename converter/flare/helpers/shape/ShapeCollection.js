@@ -47,7 +47,8 @@ export default class ShapeCollection {
 		return converters[textureData.type](textureData)
 	}
 
-	convert() {
+	convert(animations) {
+
 		const paths = this._Paths.map(this.convertPath)
 
 		const texture = this.convertTexture(this._ShapeData)

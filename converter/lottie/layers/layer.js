@@ -67,6 +67,10 @@ export default class Layer
 		return true;
 	}
 
+	get name() {
+		return this._Name
+	}
+
 	get type() {
 		return this._Type
 	}

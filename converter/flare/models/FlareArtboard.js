@@ -3,8 +3,8 @@ import nodeId from '../../helpers/nodeId';
 
 export default class FlareArtboard extends FlarePrecompLayer {
 
-	constructor(composition) {
-		super(composition)
+	constructor(composition, animations) {
+		super(composition, animations)
 		this._Composition = composition
 	}
 
@@ -26,7 +26,7 @@ export default class FlareArtboard extends FlarePrecompLayer {
 			height: this._Composition.height,
 			color: [0,0,0,0],
 			clipContents: true,
-			animations: [],
+			animations: this._Animations.convert(),
 			children
 		}
 	}

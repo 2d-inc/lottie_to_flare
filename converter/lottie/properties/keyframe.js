@@ -5,10 +5,10 @@ export default class Keyframe
 {
     constructor()
     {
-        this._In = vec2.fromValues(0, 0);
-        this._Out = vec2.fromValues(1, 1);
+        this._In = [vec2.fromValues(0, 0), vec2.fromValues(0, 0)];
+        this._Out = [vec2.fromValues(1, 1), vec2.fromValues(1, 1)];
         this._Time = 0;
-        this._Value = null;
+        this._Property = null;
     }
 
     static deserializeType(prevJson, json, type, cb)
@@ -27,20 +27,33 @@ export default class Keyframe
         return cb(null);
     }
 
+    setEasingValues(controls, ease) {
+        // console.log(ease)
+        if (Array.isArray(ease.x)) {
+            controls[0][0] = ease.x[0]
+            controls[0][1] = ease.y[0]
+            controls[1][0] = ease.x[1]
+            controls[1][1] = ease.y[1]
+        } else if(ease.x) {
+            controls[0][0] = ease.x
+            controls[0][1] = ease.y
+            controls[1][0] = ease.x
+            controls[1][1] = ease.y
+        }
+    }
+
     deserialize(prevJson, json, type)
     {
         const inValue = json['i'];
         if (inValue instanceof Object)
         {
-            this._In[0] = inValue.x || 0;
-            this._In[1] = inValue.y || 0;
+            this.setEasingValues(this._In, inValue)
         }
 
         const outValue = json['o'];
         if (outValue instanceof Object)
         {
-            this._Out[0] = outValue.x || 0;
-            this._Out[1] = outValue.y || 0;
+            this.setEasingValues(this._Out, outValue)
         }
 
         deserialize.number(json['t'], (value) =>
@@ -54,7 +67,7 @@ export default class Keyframe
             let value = new type();
             if (value.deserialize(s))
             {
-                this._Value = value;
+                this._Property = value;
             }
             else if (s instanceof Array && s.length === 1)
             {
@@ -62,10 +75,26 @@ export default class Keyframe
                 let value = new type();
                 if (value.deserialize(s[0]))
                 {
-                    this._Value = value;
+                    this._Property = value;
                 }
             }
         }
         return true;
+    }
+
+    get value() {
+        return this._Property.value
+    }
+
+    get time() {
+        return this._Time
+    }
+
+    get in() {
+        return this._In
+    }
+
+    get out() {
+        return this._Out
     }
 }
