@@ -1,20 +1,65 @@
 import toArray from '../../helpers/toArray'
+import nodeId from '../../helpers/nodeId'
 
 const convert3dTo2dArray = (arr, multiplier) => {
 	return toArray(arr, multiplier)
 	.filter((element, index) => index < 2)
 }
 
+const convertPath = (shapeVertices) => {
+
+	const vertices = shapeVertices.vertices
+
+	return vertices.map(vertex => {
+
+		const translation = toArray(vertex.position);
+		const inPoints = toArray(vertex.in).map((value, index)=> value + translation[index]);
+		const outPoints = toArray(vertex.out).map((value, index)=> value + translation[index]);
+
+		return {
+			type: "point",
+			id: nodeId(),
+			name: "Path Point",
+			translation,
+			in: inPoints,
+			out: outPoints,
+			pointType: "D",
+			radius: 0,
+			weights: [],
+		}
+	})
+}
+
 export default (property, type, animations, nodeId, multiplier = 1) => {
 	if (property.animated) {
-		animations.addAnimation(property, type, nodeId, multiplier)
-		return void 0
+		let convertedProp
+		if (type === 'translation' || type === 'scale') {
+			convertedProp = convert3dTo2dArray(property.keyframes[0].value, multiplier)
+		} else if (type === 'opacity') {
+			convertedProp = property.keyframes[0].value * multiplier
+		} else if (type === 'rotation') {
+			convertedProp = property.keyframes[0].value
+		} else if (type === 'path') {
+			convertedProp = convertPath(property.keyframes[0].value)
+		} else {
+			convertedProp = toArray(property.value, multiplier)
+		}
+		if (type === 'path') {
+			animations.addPathAnimation(property, nodeId, convertedProp)
+		} else {
+			animations.addAnimation(property, type, nodeId, multiplier)
+			
+		}
+		return convertedProp
 	} else {
-
-		if (type == 'translation' || type == 'scale') {
+		if (type === 'translation' || type === 'scale') {
 			return convert3dTo2dArray(property.value, multiplier)
-		} else if (type == 'rotation' || type == 'opacity') {
+		} else if (type === 'opacity') {
 			return property.value * multiplier
+		} else if (type === 'rotation') {
+			return property.value
+		} else if (type === 'path') {
+			return convertPath(property.value)
 		} else {
 			return toArray(property.value, multiplier)
 		}

@@ -7,12 +7,13 @@ import nodeId from '../../../helpers/nodeId';
 
 export default class ShapeCollection {
 
-	constructor(shapeData, transforms) {
+	constructor(shapeData, transforms, animations) {
 
 		this._ShapeData = shapeData
 		this._Transforms = [...transforms]
 		this._Paths = []
 		this._IsClosed = false
+		this._Animations = animations
 	}
 
 	addPath(path, transforms) {
@@ -28,30 +29,34 @@ export default class ShapeCollection {
 		this._IsClosed = true
 	}
 
-	convertPath (pathData) {
+	convertPath (pathData, animations) {
+
 		const converters = {
 			[shapeTypes.PATH]: convertPathType,
 			[shapeTypes.RECTANGLE]: convertRectangleType,
 			[shapeTypes.ELLIPSE]: convertEllipseType,
 		}
+		// console.log('pathData.path.type', pathData.path.type)
 
-		return converters[pathData.path.type](pathData.path)
+		return converters[pathData.path.type](pathData.path, animations)
 	}
 
-	convertTexture(textureData) {
+	convertTexture(textureData, animations) {
 		const converters = {
 			fill: convertFillType,
 			stroke: convertStrokeType,
 		}
 
-		return converters[textureData.type](textureData)
+		// console.log('textureData.type', textureData.type)
+
+		return converters[textureData.type](textureData, animations)
 	}
 
 	convert(animations) {
 
-		const paths = this._Paths.map(this.convertPath)
+		const paths = this._Paths.map((pathData) => this.convertPath(pathData, animations))
 
-		const texture = this.convertTexture(this._ShapeData)
+		const texture = this.convertTexture(this._ShapeData, animations)
 
 		const shape = {
 			type: 'shape',

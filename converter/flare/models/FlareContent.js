@@ -10,7 +10,6 @@ export default class FlareContent extends FlareLayer {
 
 		this._Converter = converter
 
-		// this._Content = this.convertLayers(lottieLayer.layers)
 	}
 
 	createContent() {
@@ -20,7 +19,7 @@ export default class FlareContent extends FlareLayer {
 
 		const name = lottieLayer.name
 
-		let content = this._Converter(lottieLayer)
+		let content = this._Converter(lottieLayer, animations)
 
 		if (lottieLayer.transform && lottieLayer.transform.opacity) {
 			

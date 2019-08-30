@@ -2,13 +2,14 @@ import nodeId from '../../helpers/nodeId';
 
 export default class FlareNode {
 
-	constructor(name = 'NodeName', children = [], transform = {}, opacity = 1) {
+	constructor(name = 'NodeName', children = [], type = 'node', transform = {}, opacity = 1) {
 
 		this._Id = nodeId();
 		this._Children = children;
-		this._Transform = children;
+		this._Transform = transform;
 		this._Opacity = opacity;
 		this._Name = name;
+		this._Type = type;
 	}
 
 	addChildren(children) {
@@ -22,7 +23,7 @@ export default class FlareNode {
 	convert() {
 
 		return {
-			type: "node",
+			type: this._Type,
 			id: this.id,
 			name: this._Name,
 			...this._Transform,
@@ -43,6 +44,14 @@ export default class FlareNode {
 
 	set name(value) {
 		this._Name = value;
+	}
+
+	get type() {
+		return this._Type;
+	}
+
+	set type(value) {
+		this._Type = value;
 	}
 
 	set transform(value) {

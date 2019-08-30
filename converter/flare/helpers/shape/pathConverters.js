@@ -2,18 +2,18 @@ import rectangle from '../../rectangle'
 import ellipse from '../../ellipse'
 import path from '../../path'
 
-const convertRectangleType = (data) => {
+const convertRectangleType = (data, animations) => {
 	const size = data.size
-	return rectangle(data.size, data.position, data.roundness, data.drawOrder)
+	return rectangle(data.size, data.position, data.roundness, animations)
 }
 
-const convertEllipseType = (data) => {
-	return ellipse(data.size, data.position, data.drawOrder)
+const convertEllipseType = (data, animations) => {
+	return ellipse(data.size, data.position, animations)
 }
 
-const convertPathType = (data) => {
-	
-	return path(data.vertices, data.drawOrder)
+const convertPathType = (data, animations) => {
+
+	return path(data.vertices, animations)
 }
 
 export {

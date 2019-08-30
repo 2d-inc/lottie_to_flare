@@ -20,15 +20,15 @@ export default class Path
 			this._Name = value;
 		});
 
-		/*AnimatableProperty.deserializeType(json['ks'], ShapeVertices, (value) =>
-		{
-			this._Vertices = value;
-		});*/
-
-		deserialize.type(getShapePropertyFirstValue(json['ks']), ShapeVertices, (value) =>
+		AnimatableProperty.deserializeType(json['ks'], ShapeVertices, (value) =>
 		{
 			this._Vertices = value;
 		});
+
+		/*deserialize.type(getShapePropertyFirstValue(json['ks']), ShapeVertices, (value) =>
+		{
+			this._Vertices = value;
+		});*/
 
 		return true;
 	}

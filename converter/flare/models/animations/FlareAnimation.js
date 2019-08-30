@@ -13,6 +13,13 @@ export default class FlareAnimation {
 			translation: this.animateTranslation.bind(this),
 			scale: this.animateScale.bind(this),
 			opacity: this.animateOpacity.bind(this),
+			path: this.animatePath.bind(this),
+		}
+	}
+
+	animatePath(keyframes, multplier) {
+		return {
+
 		}
 	}
 
@@ -112,10 +119,9 @@ export default class FlareAnimation {
 		}
 	}
 
-	animateOpacity(keyframes, multiplier) {
-
+	animateUnidimensionalProperty(keyframes, multiplier, propertyName) {
 		return {
-			frameOpacity: keyframes.map((keyframe, index) => {
+			[propertyName]: keyframes.map((keyframe, index) => {
 				if (index === keyframes.length - 1) {
 					return {
 						v: keyframe.value[0] * multiplier,
@@ -136,37 +142,65 @@ export default class FlareAnimation {
 		}
 	}
 
-	animateRotation(keyframes, multiplier) {
+	animateOpacity(keyframes, multiplier) {
 
-		return {
-			frameRotation: keyframes.map((keyframe, index) => {
-				if (index === keyframes.length - 1) {
-					return {
-						v: keyframe.value[0] * multiplier,
-						t: keyframe.time / this._FPS,
-						i: 1,
-					}
-				}
-				
-				const inValues = toArray(keyframe.in[0])
-				const outValues = toArray(keyframe.out[0])
-				return {
-					v: keyframe.value[0] * multiplier,
-					t: keyframe.time / this._FPS,
-					curve: outValues.concat(inValues),
-					i: 2,
-				}
-			})
-		}
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameOpacity')
+	}
+
+	animateRotation(keyframes, multiplier) {
+		
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameRotation')
 	}
 
 	addAnimation(property, type, nodeId, multiplier) {
 
-		// console.log('type', type)
-
 		const node = {
 			...this._Nodes[nodeId],
 			...this._Converters[type](property.keyframes, multiplier)
+		}
+
+		this._Nodes[nodeId] = node;
+
+	}
+
+	addPathAnimation(property, nodeId, verticesNodes) {
+
+		const keyframes = property.keyframes
+
+		const frameVerticesNode = {
+			framePathVertices: keyframes.map(keyframe => {
+				
+				const inValuesX = toArray(keyframe.in[0])
+				const outValuesX = toArray(keyframe.out[0])
+
+				const vertices = keyframe.value.vertices
+				.reduce((accumulator, vertex, index, all) => {
+
+					const translation = toArray(vertex.position);
+					const inPoints = toArray(vertex.in).map((value, index)=> value + translation[index]);
+					const outPoints = toArray(vertex.out).map((value, index)=> value + translation[index]);
+
+					accumulator[verticesNodes[index].id] = {
+						pos: translation,
+						in: inPoints,
+						out: outPoints
+					}
+					return accumulator
+				}, {})
+
+				return {
+					t: keyframe.time / this._FPS,
+					v: vertices,
+					i: 2,
+					curve: outValuesX.concat(inValuesX),
+				}
+			})
+		}
+
+		const node = {
+			...this._Nodes[nodeId],
+			...frameVerticesNode,
+			
 		}
 
 		this._Nodes[nodeId] = node;

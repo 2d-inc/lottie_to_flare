@@ -75,4 +75,8 @@ export default class ShapeVertices
     get vertices() {
         return this._Vertices
     }
+
+    get value() {
+        return this
+    }
 }
