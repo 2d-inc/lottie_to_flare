@@ -1,9 +1,9 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
 import {convertRectangleType, convertPathType, convertEllipseType} from './pathConverters.js';
 import {convertFillType, convertStrokeType} from './textureConverters.js';
-import transformNode from '../../transformNode.js';
 import {addChildrenToLastLeaves, addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import nodeId from '../../../helpers/nodeId';
+import FlareTransform from '../../models/properties/FlareTransform';
 
 export default class ShapeCollection {
 
@@ -74,7 +74,8 @@ export default class ShapeCollection {
 		if (transforms.length) {
 			let lastNode
 			transforms.forEach(transform => {
-				const node = transformNode(transform)
+				const flareTransform = new FlareTransform(transform)
+				const node = flareTransform.convert(animations)
 				if (!lastNode) {
 					mainNode = node
 				} else {

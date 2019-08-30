@@ -51,6 +51,8 @@ export default class AnimatableProperty
                         keyFrames.push(keyframe);
                     }
                 });
+
+                lastKeyFrameJson = keyFrameJson
             }
 
             this._KeyFrames = keyFrames;

@@ -61,7 +61,7 @@ export default class Keyframe
             this._Time = value;
         });
 
-        const s = json['s'];
+        const s = json['s'] || prevJson['e'];
         if (s)
         {
             let value = new type();
