@@ -4,22 +4,20 @@ import convertProperty from '../helpers/propertyConverter';
 
 export default class FlareContent extends FlareLayer {
 
-	constructor(lottieLayer, animations, converter) {
+	constructor(lottieLayer, animations, offsetTime, converter) {
 
-		super(lottieLayer, animations)
+		super(lottieLayer, animations, offsetTime)
 
 		this._Converter = converter
 
 	}
 
-	createContent() {
+	createContentWrapper(content) {
 
-		const lottieLayer = this._LottieLayer
+		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
 
 		const name = lottieLayer.name
-
-		let content = this._Converter(lottieLayer, animations)
 
 		if (lottieLayer.transform && lottieLayer.transform.opacity) {
 			
@@ -31,10 +29,54 @@ export default class FlareContent extends FlareLayer {
 			opacityNode.opacity = convertProperty(lottieLayer.transform.opacity, 'opacity', animations, opacityNode.id, 0.01)
 
 			content = [opacityNode.convert()]
+		}
+
+		if (lottieLayer.inPoint + this.offsetTime > animations.inPoint || lottieLayer.outPoint + this.offsetTime < animations.outPoint) {
+			const children = content
+
+			const inOutNode = new FlareNode(name + '_InOut', children)
+
+			const keyframes = []
+
+			if (lottieLayer.inPoint + this.offsetTime > animations.inPoint) {
+				keyframes.push({
+					interpolationType: 0,
+					value: [0],
+					time: lottieLayer.inPoint + this.offsetTime - (1 / animations.frameRate)
+				})
+			}
+
+			keyframes.push({
+				interpolationType: 0,
+				value: [100],
+				time: lottieLayer.inPoint
+			},
+			{
+				interpolationType: 0,
+				value: [0],
+				time: lottieLayer.outPoint
+			})
+
+			inOutNode.opacity = convertProperty({
+				animated: true,
+				keyframes,
+			}, 'opacity', animations, inOutNode.id, 0.01, this.offsetTime)
+
+			content = [inOutNode.convert()]
 
 		}
 
 		return content
+	}
+
+	createContent() {
+
+		const lottieLayer = this.lottieLayer
+		const animations = this._Animations
+
+		let content = this._Converter(lottieLayer, animations)
+
+		return this.createContentWrapper(content)
 
 	}
 }

@@ -63,7 +63,7 @@ export default class Deserialize
                 continue;
             }
             const item = new knownType();
-            if (item.deserialize.apply(item, [itemData, ...deserializeParams]))
+            if (item.deserialize(itemData))
             {
                 items.push(item);
             }

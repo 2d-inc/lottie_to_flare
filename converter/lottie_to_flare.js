@@ -9,6 +9,27 @@ export default class LottieToFlare
 
     }
 
+    completeLayer(layer, assets) {
+        if (layer.ty !== 0 || !layer.refId) {
+            return layer
+        } else {
+            const layers = JSON.parse(JSON.stringify(assets.find(asset => asset.id === layer.refId).layers))
+            .map((layer) => this.completeLayer(layer, assets))
+
+            return {
+                ...layer,
+                refId: undefined,
+                layers
+            }
+        }
+    }
+
+    completeData(composition) {
+        const assets = composition.assets
+        composition.layers = composition.layers.map((layer) => this.completeLayer(layer, assets))
+        return composition
+    }
+
     convert(string)
     {
         return new Promise((resolve, reject) =>
@@ -24,8 +45,11 @@ export default class LottieToFlare
                 reject();
                 return;
             }
-            resetDrawOrderIndex()
+            resetDrawOrderIndex();
             const animation = new Animation();
+
+            json = this.completeData(json)
+
             //
             // TODO: complete assets for precomps and images
             //

@@ -30,7 +30,7 @@ const convertPath = (shapeVertices) => {
 	})
 }
 
-export default (property, type, animations, nodeId, multiplier = 1) => {
+export default (property, type, animations, nodeId, multiplier = 1, offsetTime = 0) => {
 	if (property.animated) {
 		let convertedProp
 		if (type === 'translation' || type === 'scale') {
@@ -45,9 +45,9 @@ export default (property, type, animations, nodeId, multiplier = 1) => {
 			convertedProp = toArray(property.value, multiplier)
 		}
 		if (type === 'path') {
-			animations.addPathAnimation(property, nodeId, convertedProp)
+			animations.addPathAnimation(property, nodeId, convertedProp, offsetTime)
 		} else {
-			animations.addAnimation(property, type, nodeId, multiplier)
+			animations.addAnimation(property, type, nodeId, multiplier, offsetTime)
 			
 		}
 		return convertedProp

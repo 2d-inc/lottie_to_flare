@@ -5,7 +5,10 @@ export default class FlareAnimation {
 
 	constructor(composition) {
 
-		this._FPS = composition.frameRate
+		this._FPS = composition.frameRate;
+		this._InPoint = composition.inPoint;
+		this._OutPoint = composition.outPoint;
+		this._Offset = 0;
 		this._Nodes = {};
 
 		this._Converters = {
@@ -13,17 +16,10 @@ export default class FlareAnimation {
 			translation: this.animateTranslation.bind(this),
 			scale: this.animateScale.bind(this),
 			opacity: this.animateOpacity.bind(this),
-			path: this.animatePath.bind(this),
 		}
 	}
 
-	animatePath(keyframes, multplier) {
-		return {
-
-		}
-	}
-
-	animateScale(keyframes, multiplier) {
+	animateScale(keyframes, multiplier, offsetTime) {
 		
 		const frameScaleX = []
 		const frameScaleY = []
@@ -35,7 +31,7 @@ export default class FlareAnimation {
 			const outValuesY = toArray(keyframe.out[1])
 
 			let props = {
-				t: keyframe.time / this._FPS,
+				t: (keyframe.time + offsetTime) / this._FPS,
 			}
 
 			if (index === keyframes.length - 1) {
@@ -71,7 +67,7 @@ export default class FlareAnimation {
 		}
 	}
 
-	animateTranslation(keyframes, multiplier) {
+	animateTranslation(keyframes, multiplier, offsetTime) {
 		
 		const framePosX = []
 		const framePosY = []
@@ -83,7 +79,7 @@ export default class FlareAnimation {
 			const outValuesY = toArray(keyframe.out[1])
 
 			let props = {
-				t: keyframe.time / this._FPS,
+				t: (keyframe.time + offsetTime) / this._FPS,
 			}
 
 			if (index === keyframes.length - 1) {
@@ -119,51 +115,59 @@ export default class FlareAnimation {
 		}
 	}
 
-	animateUnidimensionalProperty(keyframes, multiplier, propertyName) {
+	animateUnidimensionalProperty(keyframes, multiplier, propertyName, offsetTime) {
+
 		return {
 			[propertyName]: keyframes.map((keyframe, index) => {
 				if (index === keyframes.length - 1) {
 					return {
 						v: keyframe.value[0] * multiplier,
-						t: keyframe.time / this._FPS,
+						t: (keyframe.time + offsetTime) / this._FPS,
 						i: 1,
 					}
 				}
 				
-				const inValues = toArray(keyframe.in[0])
-				const outValues = toArray(keyframe.out[0])
+				const interpolation = {}
+				if (keyframe.interpolationType === 0) {
+					interpolation.i = 0
+				} else {
+					const inValues = toArray(keyframe.in[0])
+					const outValues = toArray(keyframe.out[0])
+					const curve = outValues.concat(inValues)
+					interpolation.i = 2
+					interpolation.curve = curve
+				}
 				return {
 					v: keyframe.value[0] * multiplier,
-					t: keyframe.time / this._FPS,
-					curve: outValues.concat(inValues),
-					i: 2,
+					t: (keyframe.time + offsetTime) / this._FPS,
+					...interpolation
 				}
 			})
 		}
 	}
 
-	animateOpacity(keyframes, multiplier) {
+	animateOpacity(keyframes, multiplier, offsetTime) {
 
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameOpacity')
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameOpacity', offsetTime)
 	}
 
-	animateRotation(keyframes, multiplier) {
+	animateRotation(keyframes, multiplier, offsetTime) {
 		
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameRotation')
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameRotation', offsetTime)
 	}
 
-	addAnimation(property, type, nodeId, multiplier) {
+	addAnimation(property, type, nodeId, multiplier, offsetTime) {
 
 		const node = {
 			...this._Nodes[nodeId],
-			...this._Converters[type](property.keyframes, multiplier)
+			...this._Converters[type](property.keyframes, multiplier, offsetTime)
 		}
 
 		this._Nodes[nodeId] = node;
 
 	}
 
-	addPathAnimation(property, nodeId, verticesNodes) {
+	addPathAnimation(property, nodeId, verticesNodes, offsetTime) {
 
 		const keyframes = property.keyframes
 
@@ -189,7 +193,7 @@ export default class FlareAnimation {
 				}, {})
 
 				return {
-					t: keyframe.time / this._FPS,
+					t: (keyframe.time + offsetTime) / this._FPS,
 					v: vertices,
 					i: 2,
 					curve: outValuesX.concat(inValuesX),
@@ -207,6 +211,10 @@ export default class FlareAnimation {
 
 	}
 
+	offsetAnimations() {
+		
+	}
+
 	convert() {
 		return [{
 			displayEnd: 10,
@@ -220,5 +228,17 @@ export default class FlareAnimation {
 			order: -1,
 			nodes: this._Nodes
 		}];
+	}
+
+	get inPoint() {
+		return this._InPoint
+	}
+
+	get outPoint() {
+		return this._OutPoint
+	}
+
+	get frameRate() {
+		return this._FPS
 	}
 }

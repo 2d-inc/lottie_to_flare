@@ -1,50 +1,45 @@
-import transformNode from '../transformNode';
-import precomp from '../precomp.js';
 import shape from '../shape.js'
 import solid from '../solid.js'
 import nullElement from '../null.js'
-import FlareLayer from './FlareLayer';
 import FlareContent from './FlareContent';
 
-export default class FlarePrecompLayer extends FlareLayer {
+export default class FlarePrecompLayer extends FlareContent {
 
-	constructor(lottieLayer, animations) {
+	constructor(lottieLayer, animations, offsetTime) {
+		super(lottieLayer, animations, offsetTime)
 
-		super(lottieLayer, animations)
-
-		// this._Content = this.convertLayers(lottieLayer.layers)
+		this.createLayer = this.createLayer.bind(this)
 	}
 
 	createLayer(layer) {
+
+		const offsetTime = this.lottieLayer.inPoint + this.offsetTime
+
 		switch(layer.type) {
 			case 0:
-			return new FlarePrecompLayer(layer, this._Animations)
+			return new FlarePrecompLayer(layer, this._Animations, offsetTime)
 			case 1:
-			return new FlareContent(layer, this._Animations, solid)
+			return new FlareContent(layer, this._Animations, offsetTime, solid)
 			case 3:
-			return new FlareContent(layer, this._Animations, nullElement)
+			return new FlareContent(layer, this._Animations, offsetTime, nullElement)
 			case 4:
-			return new FlareContent(layer, this._Animations, shape)
+			return new FlareContent(layer, this._Animations, offsetTime, shape)
 			default:
 			return null
 		}
 	}
 
 	createContent() {
-		return this.convertLayers(this._LottieLayer.layers, this._Animations)
-	}
+		const lottieLayer = this.lottieLayer
+		const animations = this._Animations
 
-	nestParentedChildren(children) {
-		children.forEach(child => {
-			if (child.lottieLayer.parentId) {
-				let parent = children.find(parent => parent.lottieLayer.id === child.lottieLayer.parentId)
-				parent.addChild(child)
-			}
-		})
-		return children.filter(child => !child.lottieLayer.parentId)
+		let content = this.convertLayers(this.lottieLayer.layers, this._Animations)
+
+		return this.createContentWrapper(content)
 	}
 
 	nestChildLayers(remaining, child, index, children) {
+
 		if (child.lottieLayer.parentId) {
 			let parent = children.find(parent => parent.lottieLayer.id === child.lottieLayer.parentId)
 			parent.addChild(child)
@@ -57,7 +52,7 @@ export default class FlarePrecompLayer extends FlareLayer {
 	convertLayers(layers, animations) {
 		return layers
 		.reverse()
-		.map((layer) => this.createLayer(layer))
+		.map(this.createLayer)
 		.reduce(this.nestChildLayers,[])
 		.map(child => {return child.convert(animations)})
 	}

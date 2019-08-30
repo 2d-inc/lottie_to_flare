@@ -5,10 +5,11 @@ import {addChildrenToLastLeaves} from '../helpers/lastLeavesHelper.js';
 export default class FlareLayer
 {
 
-	constructor(lottieLayer, animations)
+	constructor(lottieLayer, animations, offsetTime)
 	{
 		this._LottieLayer = lottieLayer
 		this._Animations = animations
+		this._OffsetTime = offsetTime
 		this._Transforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
 		this._Children = []
 	}
@@ -27,7 +28,7 @@ export default class FlareLayer
 
 		children = content.concat(children)
 
-		const transform = this._Transforms.convert(this._Animations)
+		const transform = this._Transforms.convert(this._Animations, this.offsetTime)
 
 		if (!transform) {
 			return children
@@ -43,5 +44,9 @@ export default class FlareLayer
 
 	get lottieLayer() {
 		return this._LottieLayer
+	}
+
+	get offsetTime() {
+		return this._OffsetTime
 	}
 }

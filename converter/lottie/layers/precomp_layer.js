@@ -12,14 +12,14 @@ export default class PrecompLayer extends Layer
         this._Items = null;
     }
 
-    deserialize(json, assets)
+    deserialize(json)
     {
         if (!super.deserialize(json))
         {
             return false;
         }
 
-        const layers = assets.find(asset => asset.id === json.refId).layers
+        const layers = json.layers
 
         const layerTypes = {
             0: PrecompLayer,
@@ -30,7 +30,7 @@ export default class PrecompLayer extends Layer
         deserialize.typesList(layers.reverse(), layerTypes, (value) =>
         {
             this._Layers = value;
-        }, [assets]);
+        });
 
         return true;
     }

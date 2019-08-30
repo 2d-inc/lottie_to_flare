@@ -112,17 +112,17 @@ export default class FlareTransform {
 		}
 	}
 
-	convertTransformations(transforms, animations, nodeId) {
+	convertTransformations(transforms, animations, nodeId, offsetTime) {
 		return Object.keys(transforms)
 		.reduce((properties, key) => {
 			const propertyKey = key === 'anchorPoint' ? 'translation' : key
 			const multiplier = multipliers[key] || 1
-			properties[propertyKey] = convertProperty(transforms[key], propertyKey, animations, nodeId, multiplier)
+			properties[propertyKey] = convertProperty(transforms[key], propertyKey, animations, nodeId, multiplier, offsetTime)
 			return properties
 		}, {})
 	}
 
-	convert(animations) {
+	convert(animations, offsetTime) {
 
 		if (!this._AnchorPointTransform && !this._OuterTransform) {
 			return null
@@ -132,7 +132,7 @@ export default class FlareTransform {
 		if (this._AnchorPointTransform) {
 
 			anchorNode = new FlareNode(this._ContainerName + '_Anchor')
-			const anchorPointTransform = this.convertTransformations(this._AnchorPointTransform, animations, anchorNode.id)
+			const anchorPointTransform = this.convertTransformations(this._AnchorPointTransform, animations, anchorNode.id, offsetTime)
 			anchorNode.transform = anchorPointTransform
 		}
 
@@ -143,7 +143,7 @@ export default class FlareTransform {
 				outerChildren.push(anchorNode.convert())
 			}
 			const outerNode = new FlareNode(this._ContainerName + '_Outer', outerChildren)
-			const outerTransform = this.convertTransformations(this._OuterTransform, animations, outerNode.id)
+			const outerTransform = this.convertTransformations(this._OuterTransform, animations, outerNode.id, offsetTime)
 			outerNode.transform = outerTransform
 
 			return outerNode.convert()

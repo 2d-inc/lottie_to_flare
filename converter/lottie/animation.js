@@ -64,7 +64,7 @@ export default class Animation
 		deserialize.typesList(json['layers'].reverse(), layerTypes, (value) =>
 		{
 			this._Layers = value;
-		}, [json['assets']]);
+		});
 
 		// console.log('composition', this);
 		return true;
@@ -84,5 +84,13 @@ export default class Animation
 
 	get frameRate() {
 		return this._FrameRate
+	}
+
+	get inPoint() {
+		return this._InPoint
+	}
+
+	get outPoint() {
+		return this._OutPoint
 	}
 }
