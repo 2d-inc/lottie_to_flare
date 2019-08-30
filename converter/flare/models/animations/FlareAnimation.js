@@ -216,17 +216,24 @@ export default class FlareAnimation {
 	}
 
 	convert() {
+
+		const workAreaStart = this.inPoint / this.frameRate
+		const workAreaEnd = this.outPoint / this.frameRate
+		const duration = this.outPoint / this.frameRate + 4
+
 		return [{
-			displayEnd: 10,
+			displayEnd: duration,
 			displayStart: 0,
-			duration: 10,
+			duration,
 			fps: this._FPS,
 			id: nodeId(),
-			isWorkAreaActive: false,
+			isWorkAreaActive: true,
 			loop: false,
 			name: "Animations",
 			order: -1,
-			nodes: this._Nodes
+			nodes: this._Nodes,
+			workAreaStart,
+			workAreaEnd,
 		}];
 	}
 
