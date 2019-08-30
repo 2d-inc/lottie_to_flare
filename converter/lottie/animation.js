@@ -14,6 +14,7 @@ export default class Animation
 		this._InPoint = null;
 		this._OutPoint = null;
 		this._Layers = null;
+		this._FrameRate = 0;
 	}
 
 	deserialize(json)
@@ -79,5 +80,9 @@ export default class Animation
 
 	get height() {
 		return this._Height
+	}
+
+	get frameRate() {
+		return this._FrameRate
 	}
 }

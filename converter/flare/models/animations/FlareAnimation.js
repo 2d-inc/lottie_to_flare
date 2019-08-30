@@ -3,9 +3,9 @@ import nodeId from '../../../helpers/nodeId'
 
 export default class FlareAnimation {
 
-	constructor() {
+	constructor(composition) {
 
-		this._FPS = 25
+		this._FPS = composition.frameRate
 		this._Nodes = {};
 
 		this._Converters = {
