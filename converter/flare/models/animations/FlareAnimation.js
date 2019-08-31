@@ -21,6 +21,8 @@ export default class FlareAnimation {
 			opacity: this.animateOpacity.bind(this),
 			color: this.animateColor.bind(this),
 			strokeWidth: this.animateStroke.bind(this),
+			cornerRadius: this.animateCornerRadius.bind(this),
+			size: this.animateSize.bind(this),
 		}
 	}
 
@@ -124,6 +126,54 @@ export default class FlareAnimation {
 		}
 	}
 
+	animateSize(keyframes, multiplier, offsetTime) {
+		
+		const frameWidth = []
+		const frameHeight = []
+
+		keyframes.forEach((keyframe, index) => {
+			const inValuesX = toArray(keyframe.in[0])
+			const outValuesX = toArray(keyframe.out[0])
+			const inValuesY = toArray(keyframe.in[1])
+			const outValuesY = toArray(keyframe.out[1])
+
+			let props = {
+				t: (keyframe.time + offsetTime) / this._FPS,
+			}
+
+			if (index === keyframes.length - 1) {
+				props = {
+					...props,
+					i: 1,
+				}
+			} else {
+				props = {
+					...props,
+					i: 2,
+				}
+			}
+
+			const value = keyframe.value
+
+			frameWidth.push({
+				v: value[0] * multiplier,
+				curve: outValuesX.concat(inValuesX),
+				...props,
+			})
+
+			frameHeight.push({
+				v: value[1] * multiplier,
+				curve: outValuesY.concat(inValuesY),
+				...props,
+			})
+		})
+
+		return {
+			frameWidth,
+			frameHeight,
+		}
+	}
+
 	animateMultidimensionalProperty(propertyName, keyframes, multiplier, offsetTime) {
 		return {
 			[propertyName]: keyframes.map((keyframe, index) => {
@@ -193,6 +243,11 @@ export default class FlareAnimation {
 	animateStroke(keyframes, multiplier, offsetTime) {
 
 		return this.animateUnidimensionalProperty('frameStrokeWidth', keyframes, multiplier, offsetTime)
+	}
+
+	animateCornerRadius(keyframes, multiplier, offsetTime) {
+
+		return this.animateUnidimensionalProperty('frameCornerRadius', keyframes, multiplier, offsetTime)
 	}
 
 	animateRotation(keyframes, multiplier, offsetTime) {

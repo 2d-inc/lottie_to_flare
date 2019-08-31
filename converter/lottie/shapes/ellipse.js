@@ -1,7 +1,7 @@
 import deserialize from "../deserialize.js";
 import shapeTypes from './shapeTypes';
-import { vec2 } from "gl-matrix";
-import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
+import AnimatableProperty from "../properties/animatable_property.js";
+import PrimitiveType from "../properties/primitiveType.js";
 
 export default class Ellipse
 {
@@ -21,9 +21,15 @@ export default class Ellipse
 			this._Name = value;
 		});
 
-		this._Position = getPropertyFirstValue(json['p']);
+        AnimatableProperty.deserializeType(json['p'], PrimitiveType, (value) =>
+        {
+            this._Position = value;
+        });
 
-		this._Size = getPropertyFirstValue(json['s']);
+        AnimatableProperty.deserializeType(json['s'], PrimitiveType, (value) =>
+        {
+            this._Size = value;
+        });
 
 		return true;
 	}

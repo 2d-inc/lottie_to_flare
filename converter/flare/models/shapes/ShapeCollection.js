@@ -1,5 +1,4 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
-import {convertRectangleType, convertPathType, convertEllipseType} from '../../helpers/shape/pathConverters.js';
 import {addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import FlareTransform from '../../models/properties/FlareTransform';
 import FlareNode from '../../models/FlareNode';
@@ -7,10 +6,19 @@ import convertProperty from '../../helpers/propertyConverter';
 
 import FlareShapeFill from './FlareShapeFill';
 import FlareShapeStroke from './FlareShapeStroke';
+import FlareShapeEllipse from './FlareShapeEllipse';
+import FlareShapeRectangle from './FlareShapeRectangle';
+import FlareShapePath from './FlareShapePath';
 
 const paintTypes = {
 	fill: FlareShapeFill,
 	stroke: FlareShapeStroke,
+}
+
+const pathTypes = {
+	[shapeTypes.PATH]: FlareShapePath,
+	[shapeTypes.RECTANGLE]: FlareShapeRectangle,
+	[shapeTypes.ELLIPSE]: FlareShapeEllipse,
 }
 
 export default class ShapeCollection {
@@ -33,28 +41,14 @@ export default class ShapeCollection {
 	}
 
 	addPath(path, transforms) {
-
 		if (!this._IsClosed) {
-			this._Paths.push({
-				path,
-				transform: [...transforms]
-			})
+			const PathType = pathTypes[path.type]
+			this._Paths.push(new PathType(path, [...transforms]));
 		}
 	}
 
 	close() {
 		this._IsClosed = true
-	}
-
-	convertPath (pathData, animations, offsetTime) {
-
-		const converters = {
-			[shapeTypes.PATH]: convertPathType,
-			[shapeTypes.RECTANGLE]: convertRectangleType,
-			[shapeTypes.ELLIPSE]: convertEllipseType,
-		}
-
-		return converters[pathData.path.type](pathData.path, animations, offsetTime)
 	}
 
 	convertTextures(animations, id, offsetTime, trimModifierData) {
@@ -94,7 +88,7 @@ export default class ShapeCollection {
 
 	convert(animations, offsetTime) {
 
-		const paths = this._Paths.map((pathData) => this.convertPath(pathData, animations, offsetTime))
+		const paths = this._Paths.map((pathData) => pathData.convert(animations, offsetTime))
 
 		let shapeNode = new FlareNode('Shape', [], 'shape')
 

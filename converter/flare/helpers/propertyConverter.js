@@ -1,7 +1,14 @@
 import toArray from '../../helpers/toArray'
 import nodeId from '../../helpers/nodeId'
 
-const oneDimensionalRegularProperties = ['opacity', 'trimStart', 'trimEnd', 'trimOffset', 'strokeWidth']
+const oneDimensionalRegularProperties = [
+	'opacity', 
+	'trimStart', 
+	'trimEnd', 
+	'trimOffset', 
+	'strokeWidth',
+	'cornerRadius',
+]
 
 const convertToArray = (arr, multiplier, maxIndex = Number.MAX_SAFE_INTEGER) => {
 	return toArray(arr, multiplier)
@@ -35,7 +42,7 @@ const convertPath = (shapeVertices) => {
 export default (property, type, animations, nodeId, multiplier = 1, offsetTime = 0) => {
 	if (property.animated) {
 		let convertedProp
-		if (type === 'translation' || type === 'scale') {
+		if (type === 'translation' || type === 'scale' || type === 'size') {
 			convertedProp = convertToArray(property.keyframes[0].value, multiplier, 2)
 		} else if (oneDimensionalRegularProperties.includes(type)) {
 			convertedProp = property.keyframes[0].value * multiplier

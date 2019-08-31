@@ -52,10 +52,6 @@ export default class FlareTransform {
 
 		const transformProperties = {}
 
-		/*if ('rotation' in transform && transform.rotation !== 0) {
-			transformProperties.rotation = transform.rotation
-		}*/
-
 		transformProperties.rotation = this.getPropertyIfNotDefault(transform.rotation, 0)
 
 		if ('position' in transform) {
