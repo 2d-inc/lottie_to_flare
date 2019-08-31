@@ -97,11 +97,13 @@ export default class FlareContent extends FlareLayer {
 
 	createContent() {
 
+		const converter = this.convertContent || this._Converter
+
 		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
 		const offsetTime = this.offsetTime
 
-		let content = this._Converter(lottieLayer, animations, offsetTime)
+		let content = this.convertContent(lottieLayer, animations, offsetTime)
 
 		return this.createContentWrapper(content)
 

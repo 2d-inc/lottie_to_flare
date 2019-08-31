@@ -1,7 +1,7 @@
-import shape from '../shape.js'
-import solid from '../solid.js'
-import nullElement from '../null.js'
 import FlareContent from './FlareContent';
+import FlareLayerNull from './FlareLayerNull';
+import FlareLayerSolid from './FlareLayerSolid';
+import FlareLayerShape from './FlareLayerShape';
 
 export default class FlarePrecompLayer extends FlareContent {
 
@@ -17,13 +17,13 @@ export default class FlarePrecompLayer extends FlareContent {
 
 		switch(layer.type) {
 			case 0:
-			return new FlarePrecompLayer(layer, this._Animations, offsetTime)
+			return new FlarePrecompLayer(layer, this._Animations, offsetTime);
 			case 1:
-			return new FlareContent(layer, this._Animations, offsetTime, solid)
+			return new FlareLayerSolid(layer, this._Animations, offsetTime);
 			case 3:
-			return new FlareContent(layer, this._Animations, offsetTime, nullElement)
+			return new FlareLayerNull(layer, this._Animations, offsetTime);
 			case 4:
-			return new FlareContent(layer, this._Animations, offsetTime, shape)
+			return new FlareLayerShape(layer, this._Animations, offsetTime);
 			default:
 			return null
 		}
