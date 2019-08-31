@@ -8,7 +8,7 @@ import convertProperty from '../propertyConverter';
 
 export default class ShapeCollection {
 
-	constructor(shapeData, transforms, modifiers) {
+	constructor(shapeData, transforms = [], modifiers = []) {
 
 		this._ShapeData = shapeData
 		this._Transforms = [...transforms]
@@ -18,6 +18,7 @@ export default class ShapeCollection {
 	}
 
 	addPath(path, transforms) {
+
 		if (!this._IsClosed) {
 			this._Paths.push({
 				path,
@@ -37,7 +38,6 @@ export default class ShapeCollection {
 			[shapeTypes.RECTANGLE]: convertRectangleType,
 			[shapeTypes.ELLIPSE]: convertEllipseType,
 		}
-		// console.log('pathData.path.type', pathData.path.type)
 
 		return converters[pathData.path.type](pathData.path, animations, offsetTime)
 	}
@@ -48,8 +48,6 @@ export default class ShapeCollection {
 			fill: convertFillType,
 			stroke: convertStrokeType,
 		}
-
-		// console.log('textureData.type', textureData.type)
 
 		return converters[textureData.type](textureData, animations, offsetTime, trimModifierData)
 	}

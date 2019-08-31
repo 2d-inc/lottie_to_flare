@@ -1,7 +1,6 @@
 import deserialize from "../deserialize.js";
 import AnimatableProperty from "./animatable_property.js";
 import PrimitiveType from "./primitiveType.js";
-import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import { vec2 } from "gl-matrix";
 
 export default class Transform
@@ -27,11 +26,6 @@ export default class Transform
         {
             this._Opacity = value;
         });
-
-    	/*deserialize.number(getPropertyFirstValue(json['o']), (value) =>
-    	{
-    	    this._Opacity = value / 100;
-    	});*/
 
         AnimatableProperty.deserializeType(json['p'], PrimitiveType, (value) =>
         {

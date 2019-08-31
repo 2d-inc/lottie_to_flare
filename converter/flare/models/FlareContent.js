@@ -1,6 +1,7 @@
 import FlareLayer from './FlareLayer';
 import FlareNode from './FlareNode';
 import convertProperty from '../helpers/propertyConverter';
+import ShapeCollection from "../helpers/shape/ShapeCollection";
 
 export default class FlareContent extends FlareLayer {
 
@@ -16,8 +17,33 @@ export default class FlareContent extends FlareLayer {
 
 		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
+		const offsetTime = this.offsetTime
 
 		const name = lottieLayer.name
+
+		if (lottieLayer.masks && lottieLayer.masks.length) {
+
+			const shapeData = {
+				type: 'fill',
+				opacity: 0,
+				drawOrder: 0,
+				color: [0, 0, 0, 0],
+			}
+
+			const shapeCollection = new ShapeCollection(shapeData)
+
+			lottieLayer.masks.forEach(mask => {
+				shapeCollection.addPath(mask, [])
+			})
+
+			const convertedMask = shapeCollection.convert(animations, offsetTime)
+			content.push(convertedMask)
+
+			const maskNode = new FlareNode(name + '_Clip', content)
+			maskNode.clips = [convertedMask.id]
+
+			content = [maskNode.convert()]
+		}
 
 		if (lottieLayer.transform && lottieLayer.transform.opacity) {
 			
@@ -26,7 +52,7 @@ export default class FlareContent extends FlareLayer {
 			const opacityNode = new FlareNode(name + '_Opacity', children)
 
 
-			opacityNode.opacity = convertProperty(lottieLayer.transform.opacity, 'opacity', animations, opacityNode.id, 0.01)
+			opacityNode.opacity = convertProperty(lottieLayer.transform.opacity, 'opacity', animations, opacityNode.id, 0.01, offsetTime)
 
 			content = [opacityNode.convert()]
 		}
@@ -60,7 +86,7 @@ export default class FlareContent extends FlareLayer {
 			inOutNode.opacity = convertProperty({
 				animated: true,
 				keyframes,
-			}, 'opacity', animations, inOutNode.id, 0.01, this.offsetTime)
+			}, 'opacity', animations, inOutNode.id, 0.01, offsetTime)
 
 			content = [inOutNode.convert()]
 
@@ -73,8 +99,9 @@ export default class FlareContent extends FlareLayer {
 
 		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
+		const offsetTime = this.offsetTime
 
-		let content = this._Converter(lottieLayer, animations)
+		let content = this._Converter(lottieLayer, animations, offsetTime)
 
 		return this.createContentWrapper(content)
 

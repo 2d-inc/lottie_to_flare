@@ -10,6 +10,7 @@ export default class FlareNode {
 		this._Opacity = opacity;
 		this._Name = name;
 		this._Type = type;
+		this._Clips = null;
 	}
 
 	addChildren(children) {
@@ -30,6 +31,7 @@ export default class FlareNode {
 			opacity: this._Opacity,
 			displayType: "empty",
 			children: this._Children,
+			clips: this._Clips,
 
 		}
 	}
@@ -60,5 +62,9 @@ export default class FlareNode {
 
 	set opacity(value) {
 		this._Opacity = value;
+	}
+
+	set clips(value) {
+		this._Clips = value;
 	}
 }

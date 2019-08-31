@@ -1,6 +1,7 @@
 import nodeId from '../helpers/nodeId'
 
-const fill = (color, opacity = 1, fillRule = "nonzero") => {
+const fill = (color = [1, 1, 1, 1], opacity = 1, fillRule = "nonzero") => {
+
 	return {
 		type: "colorFill",
 		id: nodeId(),

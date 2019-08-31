@@ -1,5 +1,6 @@
 import deserialize from "../deserialize.js";
 import Transform from "../properties/transform.js";
+import Mask from "../properties/mask.js";
 
 export default class Layer
 {
@@ -15,6 +16,7 @@ export default class Layer
 		this._BlendMode = null;
 		this._Transform = null;
 		this._ParentHierarchy = [];
+		this._Masks = [];
 	}
 
 	deserialize(json)
@@ -64,6 +66,11 @@ export default class Layer
 			this._Id = value;
 		});
 
+		deserialize.typeList(json['masksProperties'], Mask, (value) =>
+		{
+			this._Masks = value;
+		});
+
 		return true;
 	}
 
@@ -97,6 +104,10 @@ export default class Layer
 
 	get startPoint() {
 		return this._StartPoint
+	}
+
+	get masks() {
+		return this._Masks
 	}
 
 }
