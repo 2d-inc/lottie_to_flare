@@ -3,13 +3,12 @@ import toArray from '../helpers/toArray'
 import FlarePathNode from './models/nodes/FlarePathNode'
 import convertProperty from './helpers/propertyConverter'
 
-const buildVertices = (vertices, animations, nodeId) => {
-
-	return convertProperty(vertices, 'path', animations, nodeId)
+const buildVertices = (vertices, animations, nodeId, offsetTime) => {
+	return convertProperty(vertices, 'path', animations, nodeId, 1, offsetTime)
 	
 }
 
-const path = (shapeVerticesProperty, animations) => {
+const path = (shapeVerticesProperty, animations, offsetTime) => {
 
 	if (shapeVerticesProperty === null) {
 		return
@@ -24,7 +23,7 @@ const path = (shapeVerticesProperty, animations) => {
 	}
 	const shapeNode = new FlarePathNode("Path", isClosed)
 
-	const vertices = buildVertices(shapeVerticesProperty, animations, shapeNode.id)
+	const vertices = buildVertices(shapeVerticesProperty, animations, shapeNode.id, offsetTime)
 
 	shapeNode.addChildren(vertices)
 

@@ -25,9 +25,9 @@ export default class FlareContent extends FlareLayer {
 
 			const shapeData = {
 				type: 'fill',
-				opacity: 0,
+				opacity: {value: 0},
 				drawOrder: 0,
-				color: [0, 0, 0, 0],
+				color: { value: [0, 0, 0, 0]},
 			}
 
 			const shapeCollection = new ShapeCollection(shapeData)

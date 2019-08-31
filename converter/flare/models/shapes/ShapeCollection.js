@@ -117,7 +117,7 @@ export default class ShapeCollection {
 			let lastNode
 			transforms.forEach(transform => {
 				const flareTransform = new FlareTransform(transform)
-				const node = flareTransform.convert(animations)
+				const node = flareTransform.convert(animations, offsetTime)
 				if (!lastNode) {
 					mainNode = node
 				} else {

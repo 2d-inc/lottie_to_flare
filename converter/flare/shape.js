@@ -59,18 +59,18 @@ const iterateGroup = (items, shapes, tranforms, modifiers) => {
 	return shapes
 }
 
-const buildShapes = (items, animations) => {
+const buildShapes = (items, animations, offsetTime) => {
 	const tranforms = [];
 	const modifiers = [];
 	const shapes = iterateGroup(items, [], tranforms, modifiers)
-	.map(shapeCollection => shapeCollection.convert(animations));
+	.map(shapeCollection => shapeCollection.convert(animations, offsetTime));
 
 	return shapes;
 }
 
-const shape = (layer, animations) => {
+const shape = (layer, animations, offsetTime) => {
 
-	return buildShapes(layer.items, animations);
+	return buildShapes(layer.items, animations, offsetTime);
 }
 
 export default shape

@@ -32,8 +32,9 @@ export default class FlarePrecompLayer extends FlareContent {
 	createContent() {
 		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
+		const offsetTime = this.offsetTime
 
-		let content = this.convertLayers(this.lottieLayer.layers, this._Animations)
+		let content = this.convertLayers(this.lottieLayer.layers, this._Animations, offsetTime)
 
 		return this.createContentWrapper(content)
 	}
@@ -49,11 +50,11 @@ export default class FlarePrecompLayer extends FlareContent {
 		return remaining
 	}
 
-	convertLayers(layers, animations) {
+	convertLayers(layers) {
 		return layers
 		.reverse()
 		.map(this.createLayer)
 		.reduce(this.nestChildLayers,[])
-		.map(child => {return child.convert(animations)})
+		.map(child => child.convert())
 	}
 }
