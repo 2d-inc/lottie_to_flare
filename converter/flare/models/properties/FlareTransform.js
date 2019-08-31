@@ -1,4 +1,3 @@
-import node from '../../node'
 import FlareNode from '../FlareNode'
 import convertProperty from '../../helpers/propertyConverter'
 

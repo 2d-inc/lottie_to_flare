@@ -1,5 +1,4 @@
 import FlareTransform from './properties/FlareTransform'
-import node from '../node';
 import {addChildrenToLastLeaves} from '../helpers/lastLeavesHelper.js';
 
 export default class FlareLayer

@@ -1,4 +1,3 @@
-import nodeId from '../../../helpers/nodeId';
 import FlareNode from '../FlareNode'
 import convertProperty from '../../helpers/propertyConverter';
 

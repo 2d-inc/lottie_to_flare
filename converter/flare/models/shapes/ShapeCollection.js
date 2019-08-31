@@ -1,8 +1,8 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
 import {convertRectangleType, convertPathType, convertEllipseType} from '../../helpers/shape/pathConverters.js';
-import {addChildrenToLastLeaves, addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
-import nodeId from '../../../helpers/nodeId';
+import {addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import FlareTransform from '../../models/properties/FlareTransform';
+import FlareNode from '../../models/FlareNode';
 import convertProperty from '../../helpers/propertyConverter';
 
 import FlareShapeFill from './FlareShapeFill';
@@ -57,7 +57,7 @@ export default class ShapeCollection {
 		return converters[pathData.path.type](pathData.path, animations, offsetTime)
 	}
 
-	convertTextures(id, animations, offsetTime, trimModifierData) {
+	convertTextures(animations, id, offsetTime, trimModifierData) {
 		return this._Paints.map(paint => {
 			return paint.convert(id, animations, offsetTime, trimModifierData)
 		})
@@ -96,20 +96,18 @@ export default class ShapeCollection {
 
 		const paths = this._Paths.map((pathData) => this.convertPath(pathData, animations, offsetTime))
 
-		const id = nodeId()
-		const trimModifierData = this.exportTrim(animations, id, offsetTime)
-		const textures = this.convertTextures(id, animations, offsetTime, trimModifierData)
+		let shapeNode = new FlareNode('Shape', [], 'shape')
 
-		const shape = {
-			type: 'shape',
-			id,
-			name: "Shape",
+		const trimModifierData = this.exportTrim(animations, shapeNode.id, offsetTime)
+		const textures = this.convertTextures(animations, shapeNode.id, offsetTime, trimModifierData)
+
+		shapeNode.addChildren([...textures, ...paths])
+
+		let mainNode = {
+			...shapeNode.convert(),
 			blendMode: "srcOver",
 			drawOrder: this._DrawOrder,
-			children: [...textures, ...paths],
 		}
-
-		let mainNode = shape
 
 		const transforms = this._Transforms
 
