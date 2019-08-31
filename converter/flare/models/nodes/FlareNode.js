@@ -1,4 +1,4 @@
-import nodeId from '../../helpers/nodeId';
+import nodeId from '../../../helpers/nodeId';
 
 export default class FlareNode {
 

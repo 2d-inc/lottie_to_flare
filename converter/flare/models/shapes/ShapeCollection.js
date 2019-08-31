@@ -1,7 +1,7 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
 import {addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import FlareTransform from '../../models/properties/FlareTransform';
-import FlareNode from '../../models/FlareNode';
+import FlareNode from '../../models/nodes/FlareNode';
 import convertProperty from '../../helpers/propertyConverter';
 
 import FlareShapeFill from './FlareShapeFill';

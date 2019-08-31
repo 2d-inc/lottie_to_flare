@@ -1,5 +1,5 @@
 import FlareLayer from './FlareLayer';
-import FlareNode from './FlareNode';
+import FlareNode from './nodes/FlareNode';
 import convertProperty from '../helpers/propertyConverter';
 import ShapeCollection from "./shapes/ShapeCollection";
 

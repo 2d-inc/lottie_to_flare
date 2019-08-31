@@ -1,4 +1,4 @@
-import FlareNode from '../FlareNode'
+import FlareNode from './FlareNode'
 
 export default class FlarePathNode extends FlareNode {
 

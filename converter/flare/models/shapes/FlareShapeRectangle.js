@@ -1,4 +1,4 @@
-import FlareNode from '../FlareNode';
+import FlareNode from '../nodes/FlareNode';
 import FlareShapeBase from './FlareShapeBase';
 import convertProperty from '../../helpers/propertyConverter';
 

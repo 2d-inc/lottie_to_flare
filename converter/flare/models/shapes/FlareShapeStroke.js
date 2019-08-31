@@ -1,4 +1,4 @@
-import FlareNode from '../FlareNode'
+import FlareNode from '../nodes/FlareNode'
 import convertProperty from '../../helpers/propertyConverter';
 
 const lcEnum = {
