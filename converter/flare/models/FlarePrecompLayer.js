@@ -13,7 +13,7 @@ export default class FlarePrecompLayer extends FlareContent {
 
 	createLayer(layer) {
 
-		const offsetTime = this.lottieLayer.inPoint + this.offsetTime
+		const offsetTime = this.lottieLayer.startPoint + this.offsetTime
 
 		switch(layer.type) {
 			case 0:
