@@ -1,20 +1,35 @@
 import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
-import {convertRectangleType, convertPathType, convertEllipseType} from './pathConverters.js';
-import {convertFillType, convertStrokeType} from './textureConverters.js';
+import {convertRectangleType, convertPathType, convertEllipseType} from '../../helpers/shape/pathConverters.js';
 import {addChildrenToLastLeaves, addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import nodeId from '../../../helpers/nodeId';
 import FlareTransform from '../../models/properties/FlareTransform';
-import convertProperty from '../propertyConverter';
+import convertProperty from '../../helpers/propertyConverter';
+
+import FlareShapeFill from './FlareShapeFill';
+import FlareShapeStroke from './FlareShapeStroke';
+
+const paintTypes = {
+	fill: FlareShapeFill,
+	stroke: FlareShapeStroke,
+}
 
 export default class ShapeCollection {
 
-	constructor(shapeData, transforms = [], modifiers = []) {
-
-		this._ShapeData = shapeData
+	constructor(paintData, transforms = [], modifiers = []) {
+		const PaintType = paintTypes[paintData.type];
+		const paint = new PaintType(paintData);
+		this._Paints = [paint];
+		this._DrawOrder = paintData.drawOrder
 		this._Transforms = [...transforms]
 		this._Paths = []
 		this._IsClosed = false
 		this._Modifiers = modifiers
+	}
+
+	addPaint(paintData) {
+		const PaintType = paintTypes[paintData.type];
+		const paint = new PaintType(paintData);
+		this._Paints.push(paint);
 	}
 
 	addPath(path, transforms) {
@@ -42,14 +57,10 @@ export default class ShapeCollection {
 		return converters[pathData.path.type](pathData.path, animations, offsetTime)
 	}
 
-	convertTexture(textureData, animations, offsetTime, trimModifierData) {
-
-		const converters = {
-			fill: convertFillType,
-			stroke: convertStrokeType,
-		}
-
-		return converters[textureData.type](textureData, animations, offsetTime, trimModifierData)
+	convertTextures(id, animations, offsetTime, trimModifierData) {
+		return this._Paints.map(paint => {
+			return paint.convert(id, animations, offsetTime, trimModifierData)
+		})
 	}
 
 	exportTrim(animations, nodeId, offsetTime) {
@@ -87,15 +98,15 @@ export default class ShapeCollection {
 
 		const id = nodeId()
 		const trimModifierData = this.exportTrim(animations, id, offsetTime)
-		const texture = this.convertTexture(this._ShapeData, animations, offsetTime, trimModifierData)
+		const textures = this.convertTextures(id, animations, offsetTime, trimModifierData)
 
 		const shape = {
 			type: 'shape',
 			id,
 			name: "Shape",
 			blendMode: "srcOver",
-			drawOrder: this._ShapeData.drawOrder,
-			children: [texture, ...paths],
+			drawOrder: this._DrawOrder,
+			children: [...textures, ...paths],
 		}
 
 		let mainNode = shape

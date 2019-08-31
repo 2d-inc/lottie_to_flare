@@ -20,7 +20,7 @@ const stroke = (color, opacity = 1, width = 1, cap = 1, join = 1, animations, of
 		color,
 		width,
 		cap: lcEnum[cap],
-		join: ljEnum[cap],
+		join: ljEnum[join],
 		...trimModifierData,
 	}
 }

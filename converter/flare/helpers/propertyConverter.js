@@ -1,11 +1,11 @@
 import toArray from '../../helpers/toArray'
 import nodeId from '../../helpers/nodeId'
 
-const oneDimensionalRegularProperties = ['opacity', 'trimStart', 'trimEnd', 'trimOffset']
+const oneDimensionalRegularProperties = ['opacity', 'trimStart', 'trimEnd', 'trimOffset', 'strokeWidth']
 
-const convert3dTo2dArray = (arr, multiplier) => {
+const convertToArray = (arr, multiplier, maxIndex = Number.MAX_SAFE_INTEGER) => {
 	return toArray(arr, multiplier)
-	.filter((element, index) => index < 2)
+	.filter((element, index) => index < maxIndex)
 }
 
 const convertPath = (shapeVertices) => {
@@ -36,13 +36,15 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 	if (property.animated) {
 		let convertedProp
 		if (type === 'translation' || type === 'scale') {
-			convertedProp = convert3dTo2dArray(property.keyframes[0].value, multiplier)
+			convertedProp = convertToArray(property.keyframes[0].value, multiplier, 2)
 		} else if (oneDimensionalRegularProperties.includes(type)) {
 			convertedProp = property.keyframes[0].value * multiplier
 		} else if (type === 'rotation') {
 			convertedProp = property.keyframes[0].value
 		} else if (type === 'path') {
 			convertedProp = convertPath(property.keyframes[0].value)
+		} else if (type === 'color') {
+			convertedProp = convertToArray(property.keyframes[0].value, multiplier)
 		} else {
 			convertedProp = toArray(property.value, multiplier)
 		}
@@ -55,7 +57,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 		return convertedProp
 	} else {
 		if (type === 'translation' || type === 'scale') {
-			return convert3dTo2dArray(property.value, multiplier)
+			return convertToArray(property.value, multiplier, 2)
 		} else if (oneDimensionalRegularProperties.includes(type)) {
 			return property.value * multiplier
 		} else if (type === 'rotation') {

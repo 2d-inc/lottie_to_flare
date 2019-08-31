@@ -1,7 +1,7 @@
 import FlareLayer from './FlareLayer';
 import FlareNode from './FlareNode';
 import convertProperty from '../helpers/propertyConverter';
-import ShapeCollection from "../helpers/shape/ShapeCollection";
+import ShapeCollection from "./shapes/ShapeCollection";
 
 export default class FlareContent extends FlareLayer {
 

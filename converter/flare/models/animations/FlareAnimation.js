@@ -19,6 +19,8 @@ export default class FlareAnimation {
 			translation: this.animateTranslation.bind(this),
 			scale: this.animateScale.bind(this),
 			opacity: this.animateOpacity.bind(this),
+			color: this.animateColor.bind(this),
+			strokeWidth: this.animateStroke.bind(this),
 		}
 	}
 
@@ -70,6 +72,10 @@ export default class FlareAnimation {
 		}
 	}
 
+	animateColor(keyframes, multiplier, offsetTime) {
+		return this.animateMultidimensionalProperty('frameFillColor', keyframes, multiplier, offsetTime)
+	}
+
 	animateTranslation(keyframes, multiplier, offsetTime) {
 		
 		const framePosX = []
@@ -118,7 +124,37 @@ export default class FlareAnimation {
 		}
 	}
 
-	animateUnidimensionalProperty(keyframes, multiplier, propertyName, offsetTime) {
+	animateMultidimensionalProperty(propertyName, keyframes, multiplier, offsetTime) {
+		return {
+			[propertyName]: keyframes.map((keyframe, index) => {
+				if (index === keyframes.length - 1) {
+					return {
+						v: keyframe.value.map(value => value * multiplier),
+						t: (keyframe.time + offsetTime) / this._FPS,
+						i: 1,
+					}
+				}
+				
+				const interpolation = {}
+				if (keyframe.interpolationType === 0) {
+					interpolation.i = 0
+				} else {
+					const inValues = toArray(keyframe.in[0])
+					const outValues = toArray(keyframe.out[0])
+					const curve = outValues.concat(inValues)
+					interpolation.i = 2
+					interpolation.curve = curve
+				}
+				return {
+					v: keyframe.value.map(value => value * multiplier),
+					t: (keyframe.time + offsetTime) / this._FPS,
+					...interpolation
+				}
+			})
+		}
+	}
+
+	animateUnidimensionalProperty(propertyName, keyframes, multiplier, offsetTime) {
 
 		return {
 			[propertyName]: keyframes.map((keyframe, index) => {
@@ -151,27 +187,32 @@ export default class FlareAnimation {
 
 	animateOpacity(keyframes, multiplier, offsetTime) {
 
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameOpacity', offsetTime)
+		return this.animateUnidimensionalProperty('frameOpacity', keyframes, multiplier, offsetTime)
+	}
+
+	animateStroke(keyframes, multiplier, offsetTime) {
+
+		return this.animateUnidimensionalProperty('frameStrokeWidth', keyframes, multiplier, offsetTime)
 	}
 
 	animateRotation(keyframes, multiplier, offsetTime) {
 		
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameRotation', offsetTime)
+		return this.animateUnidimensionalProperty('frameRotation', keyframes, multiplier, offsetTime)
 	}
 
 	animateTrimStart(keyframes, multiplier, offsetTime) {
 		
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeStart', offsetTime)
+		return this.animateUnidimensionalProperty('frameStrokeStart', keyframes, multiplier, offsetTime)
 	}
 
 	animateTrimEnd(keyframes, multiplier, offsetTime) {
 		
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeEnd', offsetTime)
+		return this.animateUnidimensionalProperty('frameStrokeEnd', keyframes, multiplier, offsetTime)
 	}
 
 	animateTrimOffset(keyframes, multiplier, offsetTime) {
 		
-		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeOffset', offsetTime)
+		return this.animateUnidimensionalProperty('frameStrokeOffset', keyframes, multiplier, offsetTime)
 	}
 
 	addAnimation(property, type, nodeId, multiplier, offsetTime) {

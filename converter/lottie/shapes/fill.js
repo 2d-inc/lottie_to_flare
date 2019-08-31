@@ -1,15 +1,16 @@
 import deserialize from "../deserialize.js";
-import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import shapeTypes from './shapeTypes';
 import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
+import AnimatableProperty from "../properties/animatable_property.js";
+import PrimitiveType from "../properties/primitiveType.js";
 
 export default class Fill
 {
     constructor()
     {
         this._Name = null;
-        this._Color = [0, 0, 0];
-        this._Opacity = 0;
+        this._Color = null;
+        this._Opacity = null;
         this._Type = shapeTypes.FILL;
         this._DrawOrder = getDrawOrderIndex();
     }
@@ -21,11 +22,14 @@ export default class Fill
             this._Name = value;
         });
 
-        this._Color = getPropertyFirstValue(json['c'])
-
-        deserialize.number(getPropertyFirstValue(json['o']), (value) =>
+        AnimatableProperty.deserializeType(json['o'], PrimitiveType, (value) =>
         {
-            this._Opacity = value / 100;
+            this._Opacity = value;
+        });
+
+        AnimatableProperty.deserializeType(json['c'], PrimitiveType, (value) =>
+        {
+            this._Color = value;
         });
         
         return true;

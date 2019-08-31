@@ -1,5 +1,5 @@
 import shapeTypes from '../lottie/shapes/shapeTypes.js';
-import ShapeCollection from './helpers/shape/ShapeCollection';
+import ShapeCollection from './models/shapes/ShapeCollection';
 
 const pathTypes = [
 	shapeTypes.PATH,
@@ -22,20 +22,35 @@ const iterateGroup = (items, shapes, tranforms, modifiers) => {
 	const localShapes = []
 	const localTransforms = [...tranforms]
 	const localModifiers = [...modifiers]
+	let lastShape
 	items
 	.forEach(item => {
 		if (item.type === shapeTypes.GROUP) {
 			iterateGroup(item.items, shapes, localTransforms, localModifiers)
-		} else if (item.type === shapeTypes.FILL || item.type === shapeTypes.STROKE) {
+			lastShape = null
+		} else if (item.type === shapeTypes.FILL) {
 			const shape = createNewShape(item, localTransforms, localModifiers)
 			shapes.push(shape)
 			localShapes.push(shape)
+			lastShape = shape
+		} else if (item.type === shapeTypes.STROKE) {
+			if (lastShape) {
+				lastShape.addPaint(item)
+			} else {
+				const shape = createNewShape(item, localTransforms, localModifiers)
+				shapes.push(shape)
+				localShapes.push(shape)
+			}
+			lastShape = null
 		} else if (item.type === shapeTypes.TRANSFORM) {
 			localTransforms.push(item)
+			lastShape = null
 		} else if (item.type === shapeTypes.TRIM_PATH) {
 			localModifiers.push(item)
+			lastShape = null
 		} else if (pathTypes.includes(item.type)) {
 			addPathToShapes(item, shapes, tranforms)
+			lastShape = null
 		}
 	})
 

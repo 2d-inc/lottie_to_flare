@@ -1,7 +1,8 @@
 import deserialize from "../deserialize.js";
-import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import shapeTypes from './shapeTypes';
 import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
+import AnimatableProperty from "../properties/animatable_property.js";
+import PrimitiveType from "../properties/primitiveType.js";
 
 export default class Stroke
 {
@@ -24,14 +25,17 @@ export default class Stroke
             this._Name = value;
         });
 
-        this._Color = getPropertyFirstValue(json['c'])
-
-        deserialize.number(getPropertyFirstValue(json['o']), (value) =>
+        AnimatableProperty.deserializeType(json['c'], PrimitiveType, (value) =>
         {
-            this._Opacity = value / 100;
+            this._Color = value;
         });
 
-        deserialize.number(getPropertyFirstValue(json['w']), (value) =>
+        AnimatableProperty.deserializeType(json['o'], PrimitiveType, (value) =>
+        {
+            this._Opacity = value;
+        });
+
+        AnimatableProperty.deserializeType(json['w'], PrimitiveType, (value) =>
         {
             this._Width = value;
         });
