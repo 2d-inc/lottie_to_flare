@@ -11,7 +11,7 @@ const ljEnum = {
 	3: 'bevel'
 }
 
-const stroke = (color, opacity = 1, width = 1, cap = 1, join = 1) => {
+const stroke = (color, opacity = 1, width = 1, cap = 1, join = 1, animations, offsetTime, trimModifierData) => {
 	return {
 		type: "colorStroke",
 		id: nodeId(),
@@ -21,10 +21,7 @@ const stroke = (color, opacity = 1, width = 1, cap = 1, join = 1) => {
 		width,
 		cap: lcEnum[cap],
 		join: ljEnum[cap],
-		trim: "off",
-		trimStart: 0,
-		trimEnd: 1,
-		trimOffset: 0
+		...trimModifierData,
 	}
 }
 

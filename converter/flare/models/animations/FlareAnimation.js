@@ -13,6 +13,9 @@ export default class FlareAnimation {
 
 		this._Converters = {
 			rotation: this.animateRotation.bind(this),
+			trimStart: this.animateTrimStart.bind(this),
+			trimEnd: this.animateTrimEnd.bind(this),
+			trimOffset: this.animateTrimOffset.bind(this),
 			translation: this.animateTranslation.bind(this),
 			scale: this.animateScale.bind(this),
 			opacity: this.animateOpacity.bind(this),
@@ -154,6 +157,21 @@ export default class FlareAnimation {
 	animateRotation(keyframes, multiplier, offsetTime) {
 		
 		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameRotation', offsetTime)
+	}
+
+	animateTrimStart(keyframes, multiplier, offsetTime) {
+		
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeStart', offsetTime)
+	}
+
+	animateTrimEnd(keyframes, multiplier, offsetTime) {
+		
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeEnd', offsetTime)
+	}
+
+	animateTrimOffset(keyframes, multiplier, offsetTime) {
+		
+		return this.animateUnidimensionalProperty(keyframes, multiplier, 'frameStrokeOffset', offsetTime)
 	}
 
 	addAnimation(property, type, nodeId, multiplier, offsetTime) {

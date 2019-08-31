@@ -3,7 +3,7 @@ import getPropertyFirstValue from "../../helpers/getPropertyFirstValue.js";
 import shapeTypes from './shapeTypes';
 import {getDrawOrderIndex} from '../../helpers/drawOrderIndex';
 
-export default class Fill
+export default class Stroke
 {
     constructor()
     {

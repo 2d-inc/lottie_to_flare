@@ -6,6 +6,7 @@ import Fill from "../shapes/fill.js";
 import Stroke from "../shapes/stroke.js";
 import Rectangle from "../shapes/rectangle.js";
 import Ellipse from "../shapes/ellipse.js";
+import TrimPath from "../shapes/trimPath.js";
 
 export default class ShapeLayer extends Layer
 {
@@ -29,6 +30,7 @@ export default class ShapeLayer extends Layer
             'st': Stroke,
             'rc': Rectangle,
             'el': Ellipse,
+            'tm': TrimPath,
         };
         deserialize.typesList(json['shapes'].reverse(), shapeTypes, (value) =>
         {

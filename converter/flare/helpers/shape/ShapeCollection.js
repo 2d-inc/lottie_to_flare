@@ -4,16 +4,17 @@ import {convertFillType, convertStrokeType} from './textureConverters.js';
 import {addChildrenToLastLeaves, addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import nodeId from '../../../helpers/nodeId';
 import FlareTransform from '../../models/properties/FlareTransform';
+import convertProperty from '../propertyConverter';
 
 export default class ShapeCollection {
 
-	constructor(shapeData, transforms, animations) {
+	constructor(shapeData, transforms, modifiers) {
 
 		this._ShapeData = shapeData
 		this._Transforms = [...transforms]
 		this._Paths = []
 		this._IsClosed = false
-		this._Animations = animations
+		this._Modifiers = modifiers
 	}
 
 	addPath(path, transforms) {
@@ -29,7 +30,7 @@ export default class ShapeCollection {
 		this._IsClosed = true
 	}
 
-	convertPath (pathData, animations) {
+	convertPath (pathData, animations, offsetTime) {
 
 		const converters = {
 			[shapeTypes.PATH]: convertPathType,
@@ -38,10 +39,11 @@ export default class ShapeCollection {
 		}
 		// console.log('pathData.path.type', pathData.path.type)
 
-		return converters[pathData.path.type](pathData.path, animations)
+		return converters[pathData.path.type](pathData.path, animations, offsetTime)
 	}
 
-	convertTexture(textureData, animations) {
+	convertTexture(textureData, animations, offsetTime, trimModifierData) {
+
 		const converters = {
 			fill: convertFillType,
 			stroke: convertStrokeType,
@@ -49,22 +51,53 @@ export default class ShapeCollection {
 
 		// console.log('textureData.type', textureData.type)
 
-		return converters[textureData.type](textureData, animations)
+		return converters[textureData.type](textureData, animations, offsetTime, trimModifierData)
 	}
 
-	convert(animations) {
+	exportTrim(animations, nodeId, offsetTime) {
 
-		const paths = this._Paths.map((pathData) => this.convertPath(pathData, animations))
+		const trimModifier = this._Modifiers.find(modifier => modifier.type === shapeTypes.TRIM_PATH)
 
-		const texture = this.convertTexture(this._ShapeData, animations)
+		let trimData
+
+		if (trimModifier) {
+
+			const trimStart = convertProperty(trimModifier.start, 'trimStart', animations, nodeId, 0.01, offsetTime)
+			const trimEnd = convertProperty(trimModifier.end, 'trimEnd', animations, nodeId, 0.01, offsetTime)
+			const trimOffset = convertProperty(trimModifier.offset, 'trimOffset', animations, nodeId, 1 / 360, offsetTime)
+			trimData = {
+				trim: "sequential",
+				trimStart,
+				trimEnd,
+				trimOffset,
+			}
+		} else {
+			trimData = {
+				trim: "off",
+				trimStart: 0,
+				trimEnd: 1,
+				trimOffset: 0,
+			}
+		}
+
+		return trimData
+	}
+
+	convert(animations, offsetTime) {
+
+		const paths = this._Paths.map((pathData) => this.convertPath(pathData, animations, offsetTime))
+
+		const id = nodeId()
+		const trimModifierData = this.exportTrim(animations, id, offsetTime)
+		const texture = this.convertTexture(this._ShapeData, animations, offsetTime, trimModifierData)
 
 		const shape = {
 			type: 'shape',
-			id: nodeId(),
+			id,
 			name: "Shape",
 			blendMode: "srcOver",
 			drawOrder: this._ShapeData.drawOrder,
-			children: [texture, ...paths]
+			children: [texture, ...paths],
 		}
 
 		let mainNode = shape

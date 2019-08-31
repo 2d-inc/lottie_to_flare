@@ -6,6 +6,7 @@ import Transform from "../properties/transform.js";
 import shapeTypes from './shapeTypes';
 import Rectangle from "../shapes/rectangle.js";
 import Ellipse from "../shapes/ellipse.js";
+import TrimPath from "../shapes/trimPath.js";
 
 export default class Group
 {
@@ -31,6 +32,7 @@ export default class Group
             'tr': Transform,
             'rc': Rectangle,
             'el': Ellipse,
+            'tm': TrimPath,
         };
         
         deserialize.typesList(json['it'].reverse(), itemTypes, (value) =>

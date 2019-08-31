@@ -1,6 +1,8 @@
 import toArray from '../../helpers/toArray'
 import nodeId from '../../helpers/nodeId'
 
+const oneDimensionalRegularProperties = ['opacity', 'trimStart', 'trimEnd', 'trimOffset']
+
 const convert3dTo2dArray = (arr, multiplier) => {
 	return toArray(arr, multiplier)
 	.filter((element, index) => index < 2)
@@ -35,7 +37,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 		let convertedProp
 		if (type === 'translation' || type === 'scale') {
 			convertedProp = convert3dTo2dArray(property.keyframes[0].value, multiplier)
-		} else if (type === 'opacity') {
+		} else if (oneDimensionalRegularProperties.includes(type)) {
 			convertedProp = property.keyframes[0].value * multiplier
 		} else if (type === 'rotation') {
 			convertedProp = property.keyframes[0].value
@@ -54,7 +56,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 	} else {
 		if (type === 'translation' || type === 'scale') {
 			return convert3dTo2dArray(property.value, multiplier)
-		} else if (type === 'opacity') {
+		} else if (oneDimensionalRegularProperties.includes(type)) {
 			return property.value * multiplier
 		} else if (type === 'rotation') {
 			return property.value

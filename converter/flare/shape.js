@@ -7,8 +7,8 @@ const pathTypes = [
 	shapeTypes.ELLIPSE,
 ]
 
-const createNewShape = (shape, transforms) => {
-	return new ShapeCollection(shape, transforms)
+const createNewShape = (shape, transforms, modifiers) => {
+	return new ShapeCollection(shape, transforms, modifiers)
 }
 
 const addPathToShapes = (path, shapes, transforms) => {
@@ -17,24 +17,23 @@ const addPathToShapes = (path, shapes, transforms) => {
 	})
 }
 
-const iterateGroup = (items, shapes, tranforms) => {
+const iterateGroup = (items, shapes, tranforms, modifiers) => {
 
 	const localShapes = []
 	const localTransforms = [...tranforms]
+	const localModifiers = [...modifiers]
 	items
 	.forEach(item => {
 		if (item.type === shapeTypes.GROUP) {
-			iterateGroup(item.items, shapes, localTransforms)
-		} else if (item.type === shapeTypes.FILL) {
-			const shape = createNewShape(item, localTransforms)
-			shapes.push(shape)
-			localShapes.push(shape)
-		} else if (item.type === shapeTypes.STROKE) {
-			const shape = createNewShape(item, localTransforms)
+			iterateGroup(item.items, shapes, localTransforms, localModifiers)
+		} else if (item.type === shapeTypes.FILL || item.type === shapeTypes.STROKE) {
+			const shape = createNewShape(item, localTransforms, localModifiers)
 			shapes.push(shape)
 			localShapes.push(shape)
 		} else if (item.type === shapeTypes.TRANSFORM) {
 			localTransforms.push(item)
+		} else if (item.type === shapeTypes.TRIM_PATH) {
+			localModifiers.push(item)
 		} else if (pathTypes.includes(item.type)) {
 			addPathToShapes(item, shapes, tranforms)
 		}
@@ -46,9 +45,9 @@ const iterateGroup = (items, shapes, tranforms) => {
 }
 
 const buildShapes = (items, animations) => {
-
 	const tranforms = [];
-	const shapes = iterateGroup(items, [], tranforms)
+	const modifiers = [];
+	const shapes = iterateGroup(items, [], tranforms, modifiers)
 	.map(shapeCollection => shapeCollection.convert(animations));
 
 	return shapes;

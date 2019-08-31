@@ -6,4 +6,5 @@ export default {
 	RECTANGLE: 'rectangle',
 	TRANSFORM: 'transform',
 	PATH: 'path',
+	TRIM_PATH: 'trim path',
 }
