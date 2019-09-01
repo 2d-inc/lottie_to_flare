@@ -1,6 +1,7 @@
 import FlareContent from './FlareContent';
 import FlareLayerNull from './FlareLayerNull';
 import FlareLayerSolid from './FlareLayerSolid';
+import FlareLayerImage from './FlareLayerImage';
 import FlareLayerShape from './FlareLayerShape';
 
 export default class FlarePrecompLayer extends FlareContent {
@@ -20,6 +21,8 @@ export default class FlarePrecompLayer extends FlareContent {
 			return new FlarePrecompLayer(layer, this._Animations, offsetTime);
 			case 1:
 			return new FlareLayerSolid(layer, this._Animations, offsetTime);
+			case 2:
+			return new FlareLayerImage(layer, this._Animations, offsetTime);
 			case 3:
 			return new FlareLayerNull(layer, this._Animations, offsetTime);
 			case 4:
