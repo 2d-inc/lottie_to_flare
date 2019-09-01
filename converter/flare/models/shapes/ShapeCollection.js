@@ -52,6 +52,7 @@ export default class ShapeCollection {
 	}
 
 	convertTextures(animations, id, offsetTime, trimModifierData) {
+
 		return this._Paints.map(paint => {
 			return paint.convert(id, animations, offsetTime, trimModifierData)
 		})
@@ -97,11 +98,13 @@ export default class ShapeCollection {
 
 		shapeNode.addChildren([...textures, ...paths])
 
-		let mainNode = {
+		const shape = {
 			...shapeNode.convert(),
 			blendMode: "srcOver",
 			drawOrder: this._DrawOrder,
 		}
+
+		let mainNode = shape
 
 		const transforms = this._Transforms
 

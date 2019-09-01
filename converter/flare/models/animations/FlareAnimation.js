@@ -27,51 +27,7 @@ export default class FlareAnimation {
 	}
 
 	animateScale(keyframes, multiplier, offsetTime) {
-		
-		const frameScaleX = []
-		const frameScaleY = []
-
-		keyframes.forEach((keyframe, index) => {
-			const inValuesX = toArray(keyframe.in[0])
-			const outValuesX = toArray(keyframe.out[0])
-			const inValuesY = toArray(keyframe.in[1])
-			const outValuesY = toArray(keyframe.out[1])
-
-			let props = {
-				t: (keyframe.time + offsetTime) / this._FPS,
-			}
-
-			if (index === keyframes.length - 1) {
-				props = {
-					...props,
-					i: 1,
-				}
-			} else {
-				props = {
-					...props,
-					i: 2,
-				}
-			}
-
-			const value = keyframe.value
-
-			frameScaleX.push({
-				v: value[0] * multiplier,
-				curve: outValuesX.concat(inValuesX),
-				...props,
-			})
-
-			frameScaleY.push({
-				v: value[1] * multiplier,
-				curve: outValuesY.concat(inValuesY),
-				...props,
-			})
-		})
-
-		return {
-			frameScaleX,
-			frameScaleY,
-		}
+		return this.animateMultiNamedProperty(keyframes, multiplier, offsetTime, ['frameScaleX', 'frameScaleY'])
 	}
 
 	animateColor(keyframes, multiplier, offsetTime) {
@@ -79,9 +35,12 @@ export default class FlareAnimation {
 	}
 
 	animateTranslation(keyframes, multiplier, offsetTime) {
-		
-		const framePosX = []
-		const framePosY = []
+		return this.animateMultiNamedProperty(keyframes, multiplier, offsetTime, ['framePosX', 'framePosY'])
+	}
+
+	animateMultiNamedProperty(keyframes, multiplier, offsetTime, names) {
+		const nameArrays = names.map(() => [])
+
 
 		keyframes.forEach((keyframe, index) => {
 			const inValuesX = toArray(keyframe.in[0])
@@ -107,71 +66,27 @@ export default class FlareAnimation {
 
 			const value = keyframe.value
 
-			framePosX.push({
+			nameArrays[0].push({
 				v: value[0] * multiplier,
 				curve: outValuesX.concat(inValuesX),
 				...props,
 			})
 
-			framePosY.push({
+			nameArrays[1].push({
 				v: value[1] * multiplier,
 				curve: outValuesY.concat(inValuesY),
 				...props,
 			})
 		})
 
-		return {
-			framePosX,
-			framePosY,
-		}
+		return names.reduce((accumulator, value, index) => {
+			accumulator[value] = nameArrays[index]
+			return accumulator
+		}, {})
 	}
 
 	animateSize(keyframes, multiplier, offsetTime) {
-		
-		const frameWidth = []
-		const frameHeight = []
-
-		keyframes.forEach((keyframe, index) => {
-			const inValuesX = toArray(keyframe.in[0])
-			const outValuesX = toArray(keyframe.out[0])
-			const inValuesY = toArray(keyframe.in[1])
-			const outValuesY = toArray(keyframe.out[1])
-
-			let props = {
-				t: (keyframe.time + offsetTime) / this._FPS,
-			}
-
-			if (index === keyframes.length - 1) {
-				props = {
-					...props,
-					i: 1,
-				}
-			} else {
-				props = {
-					...props,
-					i: 2,
-				}
-			}
-
-			const value = keyframe.value
-
-			frameWidth.push({
-				v: value[0] * multiplier,
-				curve: outValuesX.concat(inValuesX),
-				...props,
-			})
-
-			frameHeight.push({
-				v: value[1] * multiplier,
-				curve: outValuesY.concat(inValuesY),
-				...props,
-			})
-		})
-
-		return {
-			frameWidth,
-			frameHeight,
-		}
+		return this.animateMultiNamedProperty(keyframes, multiplier, offsetTime, ['frameWidth', 'frameHeight'])
 	}
 
 	animateMultidimensionalProperty(propertyName, keyframes, multiplier, offsetTime) {

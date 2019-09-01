@@ -22,6 +22,7 @@ export default class FlareFill {
 			...node.convert(),
 			color,
 			fillRule,
+			...trimModifiers,
 		}
 	}
 }

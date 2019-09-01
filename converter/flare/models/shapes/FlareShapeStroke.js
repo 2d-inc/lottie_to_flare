@@ -38,6 +38,7 @@ export default class FlareStroke {
 			cap: ljEnum[this._PaintData.lineCap],
 			join: ljEnum[this._PaintData.lineJoin],
 			width,
+			...trimModifiers,
 		}
 	}
 }
