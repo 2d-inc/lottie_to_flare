@@ -6,12 +6,12 @@ import bind from "bind";
 import download from "downloadjs";
 import JSZip from "jszip";
 import LottieToFlare from "../converter/lottie_to_flare.js";
-import assets from "../converter/flare/assets"
 import "./style.css";
 
 // const DefaultLottieUrl = "https://assets10.lottiefiles.com/packages/lf20_Vs49OV.json";//"https://assets5.lottiefiles.com/packages/lf20_9wwQRk.json";
 const DefaultLottieUrl = "animations/data.json";//"Local json";
 const DefaultLottieZip = "animations/animations.zip";//"Local zip";
+// const DefaultLottieZip = "animations/google/spongebob.zip";//"Local zip";
 
 class App extends React.Component
 {
@@ -26,7 +26,7 @@ class App extends React.Component
 	componentDidMount()
 	{
 		window.addEventListener("resize", this.onResizeWindow);
-		this.downloadLottie(DefaultLottieZip);
+		this.downloadLottie(DefaultLottieUrl);
 	}
 
 	componentWillUnmount()
@@ -201,7 +201,6 @@ class App extends React.Component
 			const lottieValue = lottieEditor.getValue();
 			const lottieAssets = JSON.parse(lottieValue).assets
 			.filter(asset => !!asset.p)
-			const asset = lottieAssets[0]
 			const assetsData = await Promise.all(lottieAssets.map(asset => this.zipObject.file(`${asset.u}${asset.p}`).async('arraybuffer')))
 			lottieAssets.forEach((asset, index) => {
 				zip.file(asset.id, assetsData[index]);

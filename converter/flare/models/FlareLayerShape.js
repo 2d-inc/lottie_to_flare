@@ -31,7 +31,7 @@ export default class FlareLayerShape extends FlareContent {
 			if (item.type === shapeTypes.GROUP) {
 				this.iterateGroup(item.items, shapes, localTransforms, localModifiers)
 				lastShape = null
-			} else if (item.type === shapeTypes.FILL) {
+			} else if (item.type === shapeTypes.FILL || item.type === shapeTypes.GRADIENT_FILL) {
 				const shape = this.createNewShape(item, localTransforms, localModifiers)
 				shapes.push(shape)
 				localShapes.push(shape)

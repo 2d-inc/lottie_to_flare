@@ -5,6 +5,7 @@ import FlareNode from '../../models/nodes/FlareNode';
 import convertProperty from '../../helpers/propertyConverter';
 
 import FlareShapeFill from './FlareShapeFill';
+import FlareShapeGradientFill from './FlareShapeGradientFill';
 import FlareShapeStroke from './FlareShapeStroke';
 import FlareShapeEllipse from './FlareShapeEllipse';
 import FlareShapeRectangle from './FlareShapeRectangle';
@@ -12,6 +13,7 @@ import FlareShapePath from './FlareShapePath';
 
 const paintTypes = {
 	fill: FlareShapeFill,
+	gradient_fill: FlareShapeGradientFill,
 	stroke: FlareShapeStroke,
 }
 

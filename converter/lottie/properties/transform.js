@@ -49,10 +49,6 @@ export default class Transform
         return this._Position
     }
 
-    get position2() {
-        return this._Position
-    }
-
     get anchorPoint() {
         return this._AnchorPoint
     }

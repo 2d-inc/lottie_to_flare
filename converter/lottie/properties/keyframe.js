@@ -9,6 +9,7 @@ export default class Keyframe
         this._Out = [vec2.fromValues(1, 1), vec2.fromValues(1, 1)];
         this._Time = 0;
         this._Property = null;
+        this._InterpolationType = null;
     }
 
     static deserializeType(prevJson, json, type, cb)
@@ -61,6 +62,11 @@ export default class Keyframe
             this._Time = value;
         });
 
+        deserialize.number(json['h'], (value) => {
+
+            this._InterpolationType = value === null ? 2 : 0;
+        })
+
         const s = json['s'] || prevJson['e'];
         if (s)
         {
@@ -96,5 +102,9 @@ export default class Keyframe
 
     get out() {
         return this._Out
+    }
+
+    get interpolation() {
+        return this._InterpolationType
     }
 }

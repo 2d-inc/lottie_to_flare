@@ -1,6 +1,7 @@
 import deserialize from "../deserialize.js";
 import Path from "./path.js";
 import Fill from "./fill.js";
+import GradientFill from "./gradientFill.js";
 import Stroke from "./stroke.js";
 import Transform from "../properties/transform.js";
 import shapeTypes from './shapeTypes';
@@ -28,6 +29,7 @@ export default class Group
             'sh': Path,
             'gr': Group,
             'fl': Fill,
+            'gf': GradientFill,
             'st': Stroke,
             'tr': Transform,
             'rc': Rectangle,

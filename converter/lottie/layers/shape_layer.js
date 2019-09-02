@@ -3,6 +3,7 @@ import Layer from "./layer.js";
 import Path from "../shapes/path.js";
 import Group from "../shapes/group.js";
 import Fill from "../shapes/fill.js";
+import GradientFill from "../shapes/gradientFill.js";
 import Stroke from "../shapes/stroke.js";
 import Rectangle from "../shapes/rectangle.js";
 import Ellipse from "../shapes/ellipse.js";
@@ -27,6 +28,7 @@ export default class ShapeLayer extends Layer
             'sh': Path,
             'gr': Group,
             'fl': Fill,
+            'gf': GradientFill,
             'st': Stroke,
             'rc': Rectangle,
             'el': Ellipse,

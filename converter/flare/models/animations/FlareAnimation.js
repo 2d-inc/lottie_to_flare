@@ -1,5 +1,6 @@
 import toArray from '../../../helpers/toArray'
 import nodeId from '../../../helpers/nodeId'
+import {createColorStop} from '../../helpers/propertyConverter'
 
 export default class FlareAnimation {
 
@@ -38,15 +39,29 @@ export default class FlareAnimation {
 		return this.animateMultiNamedProperty(keyframes, multiplier, offsetTime, ['framePosX', 'framePosY'])
 	}
 
+	createInterpolationData(keyframe, dimension = 0) {
+		let interpolation;
+		if (keyframe.interpolation === 0) {
+			interpolation = {
+				i: 0
+			};
+		} else {
+			const inValues = toArray(keyframe.in[dimension]);
+			const outValues = toArray(keyframe.out[dimension]);
+			interpolation = {
+				curve: outValues.concat(inValues),
+				i: 2,
+			};
+			
+		}
+		return interpolation;
+	}
+
 	animateMultiNamedProperty(keyframes, multiplier, offsetTime, names) {
 		const nameArrays = names.map(() => [])
 
 
 		keyframes.forEach((keyframe, index) => {
-			const inValuesX = toArray(keyframe.in[0])
-			const outValuesX = toArray(keyframe.out[0])
-			const inValuesY = toArray(keyframe.in[1])
-			const outValuesY = toArray(keyframe.out[1])
 
 			let props = {
 				t: (keyframe.time + offsetTime) / this._FPS,
@@ -68,13 +83,13 @@ export default class FlareAnimation {
 
 			nameArrays[0].push({
 				v: value[0] * multiplier,
-				curve: outValuesX.concat(inValuesX),
+				...this.createInterpolationData(keyframe, 0),
 				...props,
 			})
 
 			nameArrays[1].push({
 				v: value[1] * multiplier,
-				curve: outValuesY.concat(inValuesY),
+				...this.createInterpolationData(keyframe, 1),
 				...props,
 			})
 		})
@@ -100,20 +115,11 @@ export default class FlareAnimation {
 					}
 				}
 				
-				const interpolation = {}
-				if (keyframe.interpolationType === 0) {
-					interpolation.i = 0
-				} else {
-					const inValues = toArray(keyframe.in[0])
-					const outValues = toArray(keyframe.out[0])
-					const curve = outValues.concat(inValues)
-					interpolation.i = 2
-					interpolation.curve = curve
-				}
 				return {
 					v: keyframe.value.map(value => value * multiplier),
 					t: (keyframe.time + offsetTime) / this._FPS,
-					...interpolation
+					...this.createInterpolationData(keyframe, 0),
+
 				}
 			})
 		}
@@ -131,20 +137,10 @@ export default class FlareAnimation {
 					}
 				}
 				
-				const interpolation = {}
-				if (keyframe.interpolationType === 0) {
-					interpolation.i = 0
-				} else {
-					const inValues = toArray(keyframe.in[0])
-					const outValues = toArray(keyframe.out[0])
-					const curve = outValues.concat(inValues)
-					interpolation.i = 2
-					interpolation.curve = curve
-				}
 				return {
 					v: keyframe.value[0] * multiplier,
 					t: (keyframe.time + offsetTime) / this._FPS,
-					...interpolation
+					...this.createInterpolationData(keyframe, 0),
 				}
 			})
 		}
@@ -203,9 +199,6 @@ export default class FlareAnimation {
 		const frameVerticesNode = {
 			framePathVertices: keyframes.map(keyframe => {
 				
-				const inValuesX = toArray(keyframe.in[0])
-				const outValuesX = toArray(keyframe.out[0])
-
 				const vertices = keyframe.value.vertices
 				.reduce((accumulator, vertex, index, all) => {
 
@@ -224,8 +217,7 @@ export default class FlareAnimation {
 				return {
 					t: (keyframe.time + offsetTime) / this._FPS,
 					v: vertices,
-					i: 2,
-					curve: outValuesX.concat(inValuesX),
+					...this.createInterpolationData(keyframe, 0),
 				}
 			})
 		}
@@ -240,8 +232,34 @@ export default class FlareAnimation {
 
 	}
 
+	addGradientStopAnimation(property, nodeId, offsetTime) {
+		const stops = property.stops;
+		const keyframes = property.color.keyframes
+		const fillAnimation = {
+			frameFillRadial: keyframes.map(keyframe => {
+
+
+				const colors = keyframe.value;
+
+				const value = createColorStop(colors, stops);
+
+				return {
+					t: (keyframe.time + offsetTime) / this._FPS,
+					v: value,
+					...this.createInterpolationData(keyframe, 0)
+				}
+			})
+		}
+		const node = {
+			...this._Nodes[nodeId],
+			...fillAnimation,
+			
+		}
+
+		this._Nodes[nodeId] = node;
+	}
+
 	offsetAnimations() {
-		
 	}
 
 	convert() {

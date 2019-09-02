@@ -66,19 +66,19 @@ export default class FlareContent extends FlareLayer {
 
 			if (lottieLayer.inPoint + this.offsetTime > animations.inPoint) {
 				keyframes.push({
-					interpolationType: 0,
+					interpolation: 0,
 					value: [0],
 					time: lottieLayer.inPoint + this.offsetTime - (1 / animations.frameRate)
 				})
 			}
 
 			keyframes.push({
-				interpolationType: 0,
+				interpolation: 0,
 				value: [100],
 				time: lottieLayer.inPoint
 			},
 			{
-				interpolationType: 0,
+				interpolation: 0,
 				value: [0],
 				time: lottieLayer.outPoint
 			})
