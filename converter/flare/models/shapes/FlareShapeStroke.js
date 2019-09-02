@@ -1,16 +1,6 @@
 import FlareNode from '../nodes/FlareNode'
 import convertProperty from '../../helpers/propertyConverter';
-
-const lcEnum = {
-	1: 'butt',
-	2: 'round',
-	3: 'square'
-}
-const ljEnum = {
-	1: 'miter',
-	2: 'round',
-	3: 'bevel'
-}
+import {lineCapTypes, lineJoinTypes} from '../../helpers/strokeProperties';
 
 export default class FlareStroke {
 	
@@ -35,8 +25,8 @@ export default class FlareStroke {
 		return {
 			...node.convert(),
 			color,
-			cap: ljEnum[this._PaintData.lineCap],
-			join: ljEnum[this._PaintData.lineJoin],
+			cap: lineCapTypes[this._PaintData.lineCap],
+			join: lineJoinTypes[this._PaintData.lineJoin],
 			width,
 			...trimModifiers,
 		}

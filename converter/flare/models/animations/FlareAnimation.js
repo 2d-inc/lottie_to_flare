@@ -1,6 +1,6 @@
 import toArray from '../../../helpers/toArray'
 import nodeId from '../../../helpers/nodeId'
-import {createColorStop} from '../../helpers/propertyConverter'
+import {createColorStop, propertyTypes} from '../../helpers/propertyConverter'
 
 export default class FlareAnimation {
 
@@ -232,16 +232,27 @@ export default class FlareAnimation {
 
 	}
 
-	addGradientStopAnimation(property, nodeId, offsetTime) {
+	addGradientStopAnimation(property, nodeId, offsetTime, propertyName) {
+
+		const start = property.start;
+		const end = property.end;
+		let extraValues = [];
+		if (property.type === propertyTypes.GRADIENT_FILL_RADIAL_STOPS 
+			|| property.type === propertyTypes.GRADIENT_STROKE_RADIAL_STOPS) 
+		{
+			// this is the "secondaryRadiusScale"
+			extraValues.push(1);
+		}
+		extraValues = extraValues.concat(start).concat(end);
 		const stops = property.stops;
-		const keyframes = property.color.keyframes
+		const keyframes = property.color.keyframes;
 		const fillAnimation = {
-			frameFillRadial: keyframes.map(keyframe => {
+			[propertyName]: keyframes.map(keyframe => {
 
 
 				const colors = keyframe.value;
 
-				const value = createColorStop(colors, stops);
+				const value = createColorStop(colors, stops, extraValues);
 
 				return {
 					t: (keyframe.time + offsetTime) / this._FPS,

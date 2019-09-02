@@ -36,7 +36,7 @@ export default class FlareLayerShape extends FlareContent {
 				shapes.push(shape)
 				localShapes.push(shape)
 				lastShape = shape
-			} else if (item.type === shapeTypes.STROKE) {
+			} else if (item.type === shapeTypes.STROKE || item.type === shapeTypes.GRADIENT_STROKE) {
 				if (lastShape) {
 					lastShape.addPaint(item)
 				} else {

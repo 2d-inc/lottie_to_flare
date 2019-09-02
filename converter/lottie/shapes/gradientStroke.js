@@ -5,7 +5,7 @@ import AnimatableProperty from "../properties/animatable_property.js";
 import PrimitiveType from "../properties/primitiveType.js";
 import GradientStops from '../properties/gradientStops.js';
 
-export default class GradientFill
+export default class GradientStroke
 {
     constructor()
     {
@@ -16,7 +16,10 @@ export default class GradientFill
         this._Gradient = null;
         this._HighlightLength = null;
         this._GradientType = 1;
-        this._Type = shapeTypes.GRADIENT_FILL;
+        this._Width = 0;
+        this._LineCap = 0;
+        this._LineJoin = 0;
+        this._Type = shapeTypes.GRADIENT_STROKE;
         this._DrawOrder = getDrawOrderIndex();
     }
 
@@ -51,6 +54,21 @@ export default class GradientFill
         deserialize.type(json['g'], GradientStops, (value) =>
         {
             this._Gradient = value;
+        });
+
+        AnimatableProperty.deserializeType(json['w'], PrimitiveType, (value) =>
+        {
+            this._Width = value;
+        });
+
+        deserialize.number(json['lc'], (value) =>
+        {
+            this._LineCap = value;
+        });
+
+        deserialize.number(json['lj'], (value) =>
+        {
+            this._LineJoin = value;
         });
 
         if (this._GradientType === 2) {
@@ -97,6 +115,18 @@ export default class GradientFill
 
     get highlightLength() {
         return this._HighlightLength
+    }
+
+    get width() {
+        return this._Width
+    }
+
+    get lineCap() {
+        return this._LineCap
+    }
+
+    get lineJoin() {
+        return this._LineCap
     }
 
     get drawOrder() {

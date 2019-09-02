@@ -14,7 +14,10 @@ export const propertyTypes = {
 	ROTATION: 'rotation',
 	PATH: 'path',
 	COLOR: 'color',
-	GRADIENT_STOPS: 'gradientStops',
+	GRADIENT_FILL_STOPS: 'gradientFillStops',
+	GRADIENT_FILL_RADIAL_STOPS: 'gradientFillRadialStops',
+	GRADIENT_STROKE_STOPS: 'gradientStrokeStops',
+	GRADIENT_STROKE_RADIAL_STOPS: 'gradientStrokeRadialStops',
 	GRADIENT_START: 'gradientStart',
 	GRADIENT_END: 'gradientEnd',
 	GRADIENT_HIGHLIGHT_LENGTH: 'gradientHighlightLength',
@@ -28,13 +31,20 @@ const oneDimensionalRegularProperties = [
 	propertyTypes.STROKE_WIDTH, 
 	propertyTypes.CORNER_RADIUS, 
 	propertyTypes.GRADIENT_HIGHLIGHT_LENGTH, 
+];
+
+const gradientTypes = [
+	propertyTypes.GRADIENT_FILL_STOPS,
+	propertyTypes.GRADIENT_FILL_RADIAL_STOPS,
+	propertyTypes.GRADIENT_STROKE_STOPS,
+	propertyTypes.GRADIENT_STROKE_RADIAL_STOPS,
 ]
 
-export const createColorStop = (colors, stops) => {
+export const createColorStop = (colors, stops, extraValues = []) => {
 	const hasAlphaValue = colors.length === stops * 5;
 
 	let count = 0;
-	let value = [];
+	let value = [...extraValues];
 	while (count < stops) {
 		const index = hasAlphaValue ? count * 5 : count * 4;
 		const currentStop = [colors[index + 1], colors[index + 2], colors[index + 3]];
@@ -77,13 +87,13 @@ const convertPath = (shapeVertices) => {
 }
 
 const convertGradientStops = (gradientData) => {
-	console.log(gradientData)
 	const colors = gradientData.color.animated ? gradientData.color.keyframes[0].value : gradientData.color.value
 	const stops = gradientData.stops;
 	return createColorStop(colors, stops);
 }
 
 export default (property, type, animations, nodeId, multiplier = 1, offsetTime = 0) => {
+
 	if (property.animated) {
 		let convertedProp
 		if (type === propertyTypes.TRANSLATION || type === propertyTypes.SCALE || type === propertyTypes.SIZE) {
@@ -96,15 +106,21 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 			convertedProp = convertPath(property.keyframes[0].value)
 		} else if (type === propertyTypes.COLOR) {
 			convertedProp = convertToArray(property.keyframes[0].value, multiplier)
-		} else if (type === propertyTypes.GRADIENT_STOPS) {
+		} else if (gradientTypes.includes(type)) {
 			convertedProp = convertGradientStops(property)
 		} else {
 			convertedProp = toArray(property.value, multiplier)
 		}
 		if (type === propertyTypes.PATH) {
 			animations.addPathAnimation(property, nodeId, convertedProp, offsetTime)
-		} else if (type === propertyTypes.GRADIENT_STOPS) {
-			animations.addGradientStopAnimation(property, nodeId, offsetTime)
+		} else if (gradientTypes.includes(type)) {
+			const propertyNames = {
+				[propertyTypes.GRADIENT_FILL_STOPS]: 'frameFillGradient',
+				[propertyTypes.GRADIENT_FILL_RADIAL_STOPS]: 'frameFillRadial',
+				[propertyTypes.GRADIENT_STROKE_STOPS]: 'frameStrokeGradient',
+				[propertyTypes.GRADIENT_STROKE_RADIAL_STOPS]: 'frameStrokeRadial',
+			}
+			animations.addGradientStopAnimation(property, nodeId, offsetTime, propertyNames[type])
 		} else {
 			animations.addAnimation(property, type, nodeId, multiplier, offsetTime)
 			
@@ -120,7 +136,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 			return property.value
 		} else if (type === propertyTypes.PATH) {
 			return convertPath(property.value)
-		} else if (type === propertyTypes.GRADIENT_STOPS) {
+		} else if (gradientTypes.includes(type)) {
 			return convertGradientStops(property)
 		} else {
 			return toArray(property.value, multiplier)
