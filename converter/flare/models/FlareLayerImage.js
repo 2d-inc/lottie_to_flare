@@ -18,6 +18,12 @@ export default class FlareLayerSolid extends FlareContent {
 				id: nodeId(),
 				name: "Image",
 				asset: assetData.id,
+				
+				// Flare can use this as a hint to find an
+				// existing asset that's already loaded
+				// (in case the images are imported separately)
+				assetPath: assetData.u + assetData.p,
+
 				blendMode: "srcOver",
 				drawOrder: layer.drawOrder,
 				translation: [assetWidth / 2, assetHeight / 2],
