@@ -192,6 +192,32 @@ export default class FlareAnimation {
 
 	}
 
+	addSeparateDimensionsAnimation(property, type, nodeId, multiplier, offsetTime) {
+
+		let node = {
+			...this._Nodes[nodeId],
+		}
+		const x = property.x;
+		const y = property.y;
+
+		if (x.animated) {
+			node = {
+				...node,
+				...this.animateUnidimensionalProperty('framePosX', x.keyframes, multiplier, offsetTime)
+			}
+		}
+
+		if (y.animated) {
+			node = {
+				...node,
+				...this.animateUnidimensionalProperty('framePosY', y.keyframes, multiplier, offsetTime)
+			}
+		}
+
+		this._Nodes[nodeId] = node;
+
+	}
+
 	addPathAnimation(property, nodeId, verticesNodes, offsetTime) {
 
 		const keyframes = property.keyframes

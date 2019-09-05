@@ -1,6 +1,7 @@
 import deserialize from "../deserialize.js";
 import AnimatableProperty from "./animatable_property.js";
 import PrimitiveType from "./primitiveType.js";
+import Position from "./position.js";
 import { vec2 } from "gl-matrix";
 
 export default class Transform
@@ -12,7 +13,7 @@ export default class Transform
         this._Scale = vec2.fromValues(0, 0);
         this._Rotation = 0;
         this._Opacity = 0;
-        this._Type = 'transform'
+        this._Type = 'transform';
     }
 
     deserialize(json) {
@@ -27,7 +28,7 @@ export default class Transform
             this._Opacity = value;
         });
 
-        AnimatableProperty.deserializeType(json['p'], PrimitiveType, (value) =>
+        deserialize.type(json['p'], Position, (value) =>
         {
             this._Position = value;
         });

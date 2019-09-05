@@ -18,32 +18,6 @@ export default class FlareTransform {
 		this._ContainerName = containerName
 	}
 
-	getPropertyIfNotDefault(property, defaultValue) {
-
-		let returnValue = void 0
-
-		if (property.animated) {
-			returnValue = property
-		} else {
-			if(property.animatable) {
-				returnValue = property
-			} else {
-				returnValue = {
-					value: property
-				}
-			}
-
-			if (returnValue.value.length) {
-				const index = returnValue.value.findIndex(val => val !== defaultValue)
-				if (index === -1) {
-					returnValue = void 0
-				}
-			}
-		}
-
-		return returnValue
-	}
-
 	traverseTransformProps(transform) {
 
 		if(!transform) {
@@ -52,22 +26,22 @@ export default class FlareTransform {
 
 		const transformProperties = {}
 
-		transformProperties.rotation = this.getPropertyIfNotDefault(transform.rotation, 0)
+		transformProperties.rotation = transform.rotation.getValueIfNotDefault(0);
 
 		if ('position' in transform) {
-			transformProperties.translation = this.getPropertyIfNotDefault(transform.position, 0)
+			transformProperties.translation = transform.position.getValueIfNotDefault(0);
 		}
 
 		if ('scale' in transform) {
-			transformProperties.scale = this.getPropertyIfNotDefault(transform.scale, 100)
+			transformProperties.scale = transform.scale.getValueIfNotDefault(100);
 		}
 
 		if ('anchorPoint' in transform) {
-			transformProperties.anchorPoint = this.getPropertyIfNotDefault(transform.anchorPoint, 0)
+			transformProperties.anchorPoint = transform.anchorPoint.getValueIfNotDefault(0);
 		}
 
 		if ('opacity' in transform) {
-			transformProperties.opacity = this.getPropertyIfNotDefault(transform.opacity, 1)
+			transformProperties.opacity = transform.opacity.getValueIfNotDefault(1);
 		}
 
 		return transformProperties

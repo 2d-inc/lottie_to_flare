@@ -14,7 +14,7 @@ export default class FlareShapePath extends FlareShapeBase {
 		const verticesData = shapeData.vertices
 
 		// Setting path as closed or open depending only on the first shape if animated
-		const isClosed = verticesData.animated ? verticesData.keyframes[0].value.closed : verticesData.value.closed
+		const isClosed = verticesData.animated ? verticesData.firstValue.closed : verticesData.value.closed
 
 		const shapeNode = new FlarePathNode("Path", isClosed)
 

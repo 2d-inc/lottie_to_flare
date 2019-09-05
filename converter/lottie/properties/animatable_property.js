@@ -88,4 +88,20 @@ export default class AnimatableProperty
     get keyframes() {
         return this._KeyFrames;
     }
+
+    get firstValue() {
+        return this.animated ? this._KeyFrames[0].value :  this.value;
+    }
+
+    getValueIfNotDefault(defaultValue) {
+        if (this.animated) {
+            return this;
+        } else {
+            const value = this.value;
+            if (value.length && value.findIndex(val => val !== defaultValue) === -1) {
+                return void 0;
+            }
+            return this;
+        }
+    }
 }

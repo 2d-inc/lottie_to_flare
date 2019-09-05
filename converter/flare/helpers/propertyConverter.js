@@ -87,25 +87,24 @@ const convertPath = (shapeVertices) => {
 }
 
 const convertGradientStops = (gradientData) => {
-	const colors = gradientData.color.animated ? gradientData.color.keyframes[0].value : gradientData.color.value
+	const colors = gradientData.color.animated ? gradientData.color.firstValue : gradientData.color.value
 	const stops = gradientData.stops;
 	return createColorStop(colors, stops);
 }
 
 export default (property, type, animations, nodeId, multiplier = 1, offsetTime = 0) => {
-
 	if (property.animated) {
 		let convertedProp
 		if (type === propertyTypes.TRANSLATION || type === propertyTypes.SCALE || type === propertyTypes.SIZE) {
-			convertedProp = convertToArray(property.keyframes[0].value, multiplier, 2)
+			convertedProp = convertToArray(property.firstValue, multiplier, 2)
 		} else if (oneDimensionalRegularProperties.includes(type)) {
-			convertedProp = property.keyframes[0].value * multiplier
+			convertedProp = property.firstValue * multiplier
 		} else if (type === propertyTypes.ROTATION) {
-			convertedProp = property.keyframes[0].value
+			convertedProp = property.firstValue
 		} else if (type === propertyTypes.PATH) {
-			convertedProp = convertPath(property.keyframes[0].value)
+			convertedProp = convertPath(property.firstValue)
 		} else if (type === propertyTypes.COLOR) {
-			convertedProp = convertToArray(property.keyframes[0].value, multiplier)
+			convertedProp = convertToArray(property.firstValue, multiplier)
 		} else if (gradientTypes.includes(type)) {
 			convertedProp = convertGradientStops(property)
 		} else {
@@ -121,9 +120,10 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 				[propertyTypes.GRADIENT_STROKE_RADIAL_STOPS]: 'frameStrokeRadial',
 			}
 			animations.addGradientStopAnimation(property, nodeId, offsetTime, propertyNames[type])
+		} else if(type === propertyTypes.TRANSLATION && property.hasSeparateDimensions) {
+			animations.addSeparateDimensionsAnimation(property, type, nodeId, multiplier, offsetTime)
 		} else {
 			animations.addAnimation(property, type, nodeId, multiplier, offsetTime)
-			
 		}
 
 		return convertedProp

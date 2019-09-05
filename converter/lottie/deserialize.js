@@ -13,6 +13,16 @@ export default class Deserialize
         }
         return cb(def);
     }
+    
+    static boolean(value, def, cb)
+    {
+        if (!cb)
+        {
+            cb = def;
+            def = null;
+        }
+        return cb(!!value);
+    }
 
     static number(value, def, cb)
     {

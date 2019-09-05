@@ -85,8 +85,9 @@ export default class FlareContent extends FlareLayer {
 
 			inOutNode.opacity = convertProperty({
 				animated: true,
+				firstValue: keyframes[0].value,
 				keyframes,
-			}, 'opacity', animations, inOutNode.id, 0.01, offsetTime)
+			}, 'opacity', animations, inOutNode.id, 0.01, offsetTime);
 
 			content = [inOutNode.convert()]
 
