@@ -296,14 +296,46 @@ export default class FlareAnimation {
 		this._Nodes[nodeId] = node;
 	}
 
-	offsetAnimations() {
+	getMinimumKeyframeTime() {
+		let offset = 0;
+		const nodes = Object.keys(this._Nodes)
+		nodes.forEach(nodeId => {
+			const node = this._Nodes[nodeId];
+			const animations = Object.keys(node);
+			animations.forEach(propName => {
+				const keyframes = node[propName];
+				offset = Math.min(offset, keyframes[0].t);
+			})
+		})
+		return offset;
+	}
+
+	offsetAnimations(offsetTime) {
+		const nodes = Object.keys(this._Nodes)
+		nodes.forEach(nodeId => {
+			const node = this._Nodes[nodeId];
+			const animations = Object.keys(node);
+			animations.forEach(propName => {
+				const keyframes = node[propName];
+				keyframes.forEach(keyframe => {
+					keyframe.t += offsetTime;
+				})
+			})
+		})
 	}
 
 	convert() {
 
-		const workAreaStart = this.inPoint / this.frameRate
-		const workAreaEnd = this.outPoint / this.frameRate
-		const duration = this.outPoint / this.frameRate + 4
+		let initialOffsetTime = -this.getMinimumKeyframeTime();
+		// minTime = 0;
+
+		if (initialOffsetTime > 0) {
+			this.offsetAnimations(initialOffsetTime);
+		}
+
+		const workAreaStart = this.inPoint / this.frameRate + initialOffsetTime
+		const workAreaEnd = this.outPoint / this.frameRate + initialOffsetTime
+		const duration = this.outPoint / this.frameRate + 4 + initialOffsetTime
 
 		return [{
 			displayEnd: duration,
