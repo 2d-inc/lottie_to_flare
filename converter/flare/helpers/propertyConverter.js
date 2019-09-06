@@ -108,7 +108,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 		} else if (gradientTypes.includes(type)) {
 			convertedProp = convertGradientStops(property)
 		} else {
-			convertedProp = toArray(property.value, multiplier)
+			convertedProp = toArray(property.firstValue, multiplier)
 		}
 		if (type === propertyTypes.PATH) {
 			animations.addPathAnimation(property, nodeId, convertedProp, offsetTime)

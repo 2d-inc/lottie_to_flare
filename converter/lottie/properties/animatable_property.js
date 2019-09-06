@@ -28,7 +28,19 @@ export default class AnimatableProperty
 
     deserialize(value, type)
     {
-        const isAnimated = value['a'] ? true : false;
+        let isAnimated
+        if ('a' in value) {
+            isAnimated = value['a'] ? true : false;
+        } else {
+            if ('k' in value 
+                && Array.isArray(value.k) 
+                && typeof value.k[0] === 'object' 
+                && 's' in value.k[0]) 
+            {
+                isAnimated = true;
+            }
+        }
+
         this._IsAnimated = isAnimated;
 
         const k = value['k'];
