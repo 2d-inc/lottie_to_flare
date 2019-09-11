@@ -96,7 +96,7 @@ export default class Animation
 	}
 
 	get startPoint() {
-		return this._InPoint
+		return 0
 	}
 
 	get outPoint() {
