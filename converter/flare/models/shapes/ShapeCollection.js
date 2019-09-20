@@ -106,6 +106,7 @@ export default class ShapeCollection {
 			...shapeNode.convert(),
 			blendMode: "srcOver",
 			drawOrder: this._DrawOrder,
+			transformAffectsStroke: true,
 		}
 
 		let mainNode = shape
