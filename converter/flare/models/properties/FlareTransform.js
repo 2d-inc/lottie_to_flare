@@ -15,7 +15,7 @@ export default class FlareTransform {
 		const transformProps = this.traverseTransformProps(transformData)
 		this._AnchorPointTransform = this.getAnchorPointTransform(transformProps)
 		this._OuterTransform = this.getOuterPointTransform(transformProps)
-		this._ContainerName = containerName
+		this._ContainerName = containerName || 'Container'
 	}
 
 	traverseTransformProps(transform) {

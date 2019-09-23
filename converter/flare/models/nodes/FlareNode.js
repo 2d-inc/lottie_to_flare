@@ -8,7 +8,7 @@ export default class FlareNode {
 		this._Children = children;
 		this._Transform = transform;
 		this._Opacity = opacity;
-		this._Name = name;
+		this._Name = name || 'NodeName';
 		this._Type = type;
 		this._Clips = null;
 	}
