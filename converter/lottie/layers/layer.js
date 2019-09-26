@@ -13,10 +13,12 @@ export default class Layer
 		this._StartPoint = null;
 		this._Id = null;
 		this._ParentId = null;
+		this._MaskType = null;
 		this._BlendMode = null;
 		this._Transform = null;
 		this._ParentHierarchy = [];
 		this._Masks = [];
+		this._IsTrackMask = false;
 	}
 
 	deserialize(json)
@@ -71,6 +73,17 @@ export default class Layer
 			this._Masks = value;
 		});
 
+		if (json['tt']) {
+			deserialize.number(json['tt'], (value) =>
+			{
+				this._MaskType = value;
+			});
+		}
+
+		if (json['td']) {
+			this._IsTrackMask = true;
+		}
+
 		return true;
 	}
 
@@ -108,6 +121,14 @@ export default class Layer
 
 	get masks() {
 		return this._Masks
+	}
+
+	get trackMaskType() {
+		return this._MaskType
+	}
+
+	get isTrackMask() {
+		return this._IsTrackMask
 	}
 
 }

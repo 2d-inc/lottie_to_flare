@@ -53,11 +53,21 @@ export default class FlarePrecompLayer extends FlareContent {
 		return remaining
 	}
 
+	convertChild(child, index, children) {
+		return child.convert()
+	}
+
+	linkLayer(child, index, children) {
+		child.previous = children[index - 1];
+		return child;
+	}
+
 	convertLayers(layers) {
 		return layers
 		.reverse()
 		.map(this.createLayer)
+		.map(this.linkLayer)
 		.reduce(this.nestChildLayers,[])
-		.map(child => child.convert())
+		.map(this.convertChild)
 	}
 }
