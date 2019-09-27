@@ -5,9 +5,9 @@ import ShapeCollection from "./shapes/ShapeCollection";
 
 export default class FlareContent extends FlareLayer {
 
-	constructor(lottieLayer, animations, offsetTime) {
+	constructor(lottieLayer, animations, offsetTime, isHidden) {
 
-		super(lottieLayer, animations, offsetTime)
+		super(lottieLayer, animations, offsetTime, isHidden)
 
 	}
 
@@ -101,10 +101,6 @@ export default class FlareContent extends FlareLayer {
 		const offsetTime = this.offsetTime
 
 		let content = this.convertContent(lottieLayer, animations, offsetTime)
-
-		if (lottieLayer.isTrackMask) {
-			content[0].hidden = true
-		}
 
 		return this.createContentWrapper(content)
 

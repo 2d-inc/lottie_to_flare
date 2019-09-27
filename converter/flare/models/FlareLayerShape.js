@@ -1,6 +1,7 @@
 import FlareContent from './FlareContent';
 import shapeTypes from '../../lottie/shapes/shapeTypes.js';
 import ShapeCollection from './shapes/ShapeCollection';
+import {visibilityModes} from '../helpers/visibilityModes.js';
 
 const pathTypes = [
 	shapeTypes.PATH,
@@ -62,11 +63,11 @@ export default class FlareLayerShape extends FlareContent {
 		return shapes
 	}
 
-	buildShapes(items, animations, offsetTime) {
+	buildShapes(items, animations, offsetTime, isHidden) {
 		const tranforms = [];
 		const modifiers = [];
 		const shapes = this.iterateGroup(items, [], tranforms, modifiers)
-		.map(shapeCollection => shapeCollection.convert(animations, offsetTime));
+		.map(shapeCollection => shapeCollection.convert(animations, offsetTime, isHidden));
 
 		return shapes;
 	}
@@ -77,7 +78,9 @@ export default class FlareLayerShape extends FlareContent {
 		const animations = this._Animations
 		const offsetTime = this.offsetTime
 
-		return this.buildShapes(layer.items, animations, offsetTime);
+		const isHidden = this.visibility !== visibilityModes.VISIBLE 
+
+		return this.buildShapes(layer.items, animations, offsetTime, isHidden);
 
 	}
 }

@@ -1,17 +1,19 @@
 import FlareTransform from './properties/FlareTransform'
 import FlareNode from './nodes/FlareNode'
 import {addChildrenToLastLeaves} from '../helpers/lastLeavesHelper.js';
+import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayer
 {
 
-	constructor(lottieLayer, animations, offsetTime)
+	constructor(lottieLayer, animations, offsetTime, isHidden)
 	{
 		this._LottieLayer = lottieLayer
 		this._Animations = animations
 		this._OffsetTime = offsetTime
 		this._Transforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
 		this._Children = []
+		this._Visibility = isHidden ? visibilityModes.HIDDEN_FULL : lottieLayer.isTrackMask ? visibilityModes.HIDDEN_LOCAL : visibilityModes.VISIBLE
 		this._ContentId = null
 		this._PreviousChild = null
 	}
@@ -77,6 +79,10 @@ export default class FlareLayer
 
 	get contentId() {
 		return this._ContentId
+	}
+
+	get visibility() {
+		return this._Visibility
 	}
 
 	set previous(child) {

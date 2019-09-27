@@ -2,6 +2,7 @@ import FlareContent from './FlareContent';
 import FlareShapeFill from './shapes/FlareShapeFill';
 import FlareShapeRectangle from './shapes/FlareShapeRectangle';
 import nodeId from '../../helpers/nodeId';
+import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayerSolid extends FlareContent {
 
@@ -39,7 +40,8 @@ export default class FlareLayerSolid extends FlareContent {
 				children: [
 					shapeFill.convert('', null, null, null),
 					shapeRectangle.convert(null, null),
-				]
+				],
+				hidden: this.visibility !== visibilityModes.VISIBLE,
 			}
 		]
 

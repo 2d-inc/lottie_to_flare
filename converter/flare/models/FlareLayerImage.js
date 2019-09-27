@@ -1,5 +1,6 @@
 import FlareContent from './FlareContent';
 import nodeId from '../../helpers/nodeId';
+import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayerSolid extends FlareContent {
 
@@ -18,6 +19,7 @@ export default class FlareLayerSolid extends FlareContent {
 				id: nodeId(),
 				name: "Image",
 				asset: assetData.id,
+				hidden: this.visibility !== visibilityModes.VISIBLE,
 				
 				// Flare can use this as a hint to find an
 				// existing asset that's already loaded
