@@ -41,14 +41,14 @@ const gradientTypes = [
 ]
 
 export const createColorStop = (colors, stops, extraValues = []) => {
-	const hasAlphaValue = colors.length === stops * 5;
+	const hasAlphaValue = colors.length === stops * 6;
 
 	let count = 0;
 	let value = [...extraValues];
 	while (count < stops) {
-		const index = hasAlphaValue ? count * 5 : count * 4;
+		const index = count * 4;
 		const currentStop = [colors[index + 1], colors[index + 2], colors[index + 3]];
-		currentStop.push(hasAlphaValue ? colors[index + 4] : 1);
+		currentStop.push(hasAlphaValue ? colors[stops * 4 + count * 2 + 1] : 1);
 		currentStop.push(colors[index]);
 		value = value.concat(currentStop);
 		count += 1;
