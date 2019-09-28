@@ -8,10 +8,13 @@ export default class FlareFill {
 	}
 
 	convert(id, animations, offsetTime, trimModifiers) {
-
+		if (!this._PaintData.opacity.animated && this._PaintData.opacity.value === 0) {
+			return void 0;
+		}
 		const node = new FlareNode('Color', null, 'colorFill');
 
 		const opacity = convertProperty(this._PaintData.opacity, 'opacity', animations, id, 0.01, offsetTime)
+		
 		node.opacity = opacity
 
 		const color = convertProperty(this._PaintData.color, 'color', animations, id, 1, offsetTime)

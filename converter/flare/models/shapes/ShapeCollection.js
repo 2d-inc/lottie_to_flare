@@ -60,6 +60,7 @@ export default class ShapeCollection {
 		return this._Paints.map(paint => {
 			return paint.convert(id, animations, offsetTime, trimModifierData, isHidden)
 		})
+		.filter(paint => !!paint)
 	}
 
 	exportTrim(animations, nodeId, offsetTime) {

@@ -45,7 +45,7 @@ export default class FlareContent extends FlareLayer {
 		}
 
 		if (this._Transforms && this._Transforms.opacity) {
-			
+
 			const children = content
 
 			const opacityNode = new FlareNode(name + '_Opacity', children)
