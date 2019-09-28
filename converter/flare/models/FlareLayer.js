@@ -57,9 +57,6 @@ export default class FlareLayer
 
 		}
 		
-
-
-
 		const transform = this._Transforms.convert(this._Animations, this.offsetTime)
 
 		if (transform) {

@@ -35,7 +35,8 @@ export default class FlareContent extends FlareLayer {
 			})
 
 			const convertedMask = shapeCollection.convert(animations, offsetTime)
-			content.push(convertedMask)
+
+			content = [content, convertedMask]
 
 			const maskNode = new FlareNode(name + '_Clip', content)
 			maskNode.clips = [convertedMask.id]
@@ -43,7 +44,7 @@ export default class FlareContent extends FlareLayer {
 			content = maskNode.convert()
 		}
 
-		if (lottieLayer.transform && lottieLayer.transform.opacity) {
+		if (this._Transforms && this._Transforms.opacity) {
 			
 			const children = content
 

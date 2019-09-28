@@ -28,7 +28,7 @@ export default class FlareArtboard extends FlarePrecompLayer {
 			color: [0,0,0,0],
 			clipContents: true,
 			animations: this._Animations.convert(),
-			children
+			children: [children]
 		}
 	}
 }
