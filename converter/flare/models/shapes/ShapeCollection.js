@@ -119,15 +119,19 @@ export default class ShapeCollection {
 			transforms.forEach(transform => {
 				const flareTransform = new FlareTransform(transform)
 				const node = flareTransform.convert(animations, offsetTime)
-				if (!lastNode) {
-					mainNode = node
-				} else {
-					addChildToLastLeaves(lastNode, node)
+				if (node) {
+					if (!lastNode) {
+						mainNode = node
+					} else {
+						addChildToLastLeaves(lastNode, node)
+					}
+					lastNode = node
 				}
-				lastNode = node
 			})
 			
-			addChildToLastLeaves(lastNode, shape)
+			if (lastNode) {
+				addChildToLastLeaves(lastNode, shape)
+			}
 		}
 
 

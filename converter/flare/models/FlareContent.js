@@ -40,7 +40,7 @@ export default class FlareContent extends FlareLayer {
 			const maskNode = new FlareNode(name + '_Clip', content)
 			maskNode.clips = [convertedMask.id]
 
-			content = [maskNode.convert()]
+			content = maskNode.convert()
 		}
 
 		if (lottieLayer.transform && lottieLayer.transform.opacity) {
@@ -52,7 +52,7 @@ export default class FlareContent extends FlareLayer {
 
 			opacityNode.opacity = convertProperty(lottieLayer.transform.opacity, 'opacity', animations, opacityNode.id, 0.01, offsetTime)
 
-			content = [opacityNode.convert()]
+			content = opacityNode.convert()
 		}
 
 		if (lottieLayer.inPoint + this.offsetTime > animations.inPoint || lottieLayer.outPoint + this.offsetTime < animations.outPoint) {
@@ -87,9 +87,10 @@ export default class FlareContent extends FlareLayer {
 				keyframes,
 			}, 'opacity', animations, inOutNode.id, 0.01, offsetTime);
 
-			content = [inOutNode.convert()]
+			content = inOutNode.convert()
 
 		}
+
 
 		return content
 	}

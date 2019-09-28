@@ -55,7 +55,7 @@ export default class FlarePrecompLayer extends FlareContent {
 		return remaining
 	}
 
-	convertChild(child, index, children) {
+	convertChild(child) {
 		return child.convert()
 	}
 
