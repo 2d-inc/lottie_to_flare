@@ -1,11 +1,8 @@
 # Lottie To Flare
 Converter from Lottie's Bodymovin JSON format to the Flare editor's file format. 
 
-# NEW - Not functional yet!
-Please note this is a work in progress, the tool is currently not functional as it spits out a known good Flare file for any input, but it is already stubbed out to do the Bodymovin parsing, conversion, and download of a valid flr2d file.
-
 # Goal
-Edit Lottie files in Flare and export them to Flutter or anywhere Flare runs. The code for the converter will be natively integrated into Flare so Lottie files can be directly dragged and dropped into Flare. 
+Edit Lottie files in Flare and export them to Flutter or anywhere Flare runs. The code for the converter is integrated into Flare so Lottie files can be directly dragged and dropped into Flare. 
 
 # Converter Tool
 <img src="./readme_assets/preview.png" align="right" width="300">
@@ -14,6 +11,6 @@ This repository contains the converter code and a tool for debugging/testing the
 [Try it out.](https://2d-inc.github.io/lottie_to_flare/)
 
 # Flare Plugin
-The plan is to have the converter integrated into Flare so you can directly drag & drop in a Lottie .json file and Flare will run this converter internally. We're publishing it as an open source project to allow the community to contribute directly to the converter. Help us add the features you want!
+The converter is integrated into Flare so you can directly drag & drop in a Lottie .json file. We're publishing it as an open source project to allow the community to contribute directly to the converter. Help us add the features you want!
 
 
