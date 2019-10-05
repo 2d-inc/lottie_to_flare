@@ -74,7 +74,7 @@ export default class Stroke
     }
 
     get lineJoin() {
-        return this._LineCap
+        return this._LineJoin
     }
 
     get drawOrder() {

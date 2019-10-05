@@ -21,7 +21,6 @@ export default class FlareStroke {
 
 		// return stroke(data.color, data.opacity, data.width, data.lineCap, data.lineJoin, animations, offsetTime, trimModifierData)
 
-
 		return {
 			...node.convert(),
 			color,
