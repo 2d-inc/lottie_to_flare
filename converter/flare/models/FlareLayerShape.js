@@ -53,7 +53,7 @@ export default class FlareLayerShape extends FlareContent {
 				localModifiers.push(item)
 				lastShape = null
 			} else if (pathTypes.includes(item.type)) {
-				this.addPathToShapes(item, shapes, tranforms)
+				this.addPathToShapes(item, shapes, localTransforms)
 				lastShape = null
 			}
 		})

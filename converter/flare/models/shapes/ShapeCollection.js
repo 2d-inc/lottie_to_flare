@@ -44,10 +44,14 @@ export default class ShapeCollection {
 		this._Paints.push(paint);
 	}
 
+	getAdditionalTransforms(pathTransform) {
+		return pathTransform.slice(this._Transforms.length)
+	}
+
 	addPath(path, transforms) {
 		if (!this._IsClosed) {
 			const PathType = pathTypes[path.type]
-			this._Paths.push(new PathType(path, [...transforms]));
+			this._Paths.push(new PathType(path, this.getAdditionalTransforms(transforms)));
 		}
 	}
 
