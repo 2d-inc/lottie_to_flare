@@ -12,9 +12,9 @@ export default class FlareTransform {
 
 	constructor(transformData, containerName) {
 
-		const transformProps = this.traverseTransformProps(transformData)
-		this._AnchorPointTransform = this.getAnchorPointTransform(transformProps)
-		this._OuterTransform = this.getOuterPointTransform(transformProps)
+		this._TransformProps = this.traverseTransformProps(transformData)
+		this._AnchorPointTransform = this.getAnchorPointTransform(this._TransformProps)
+		this._OuterTransform = this.getOuterPointTransform(this._TransformProps)
 		this._ContainerName = containerName || 'Container'
 	}
 
@@ -41,7 +41,7 @@ export default class FlareTransform {
 		}
 
 		if ('opacity' in transform) {
-			transformProperties.opacity = transform.opacity.getValueIfNotDefault(-100);
+			transformProperties.opacity = transform.opacity.getValueIfNotDefault(100);
 		}
 
 		return transformProperties
@@ -120,6 +120,10 @@ export default class FlareTransform {
 			return anchorNode.convert()
 		}
 		
+	}
+
+	get opacity() {
+		return this._TransformProps && this._TransformProps.opacity
 	}
 
 }

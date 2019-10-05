@@ -5,7 +5,7 @@ import nodeId from '../helpers/nodeId'
 const convert = async(animation) => {
 
 	const board = await artboard(animation)
-	const assetsArray = assets(animation.assets)
+	const assetsArray = assets(animation.assets || [])
 
 	return {
 		artboards: {

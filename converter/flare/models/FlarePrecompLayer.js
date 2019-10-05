@@ -4,6 +4,7 @@ import FlareLayerSolid from './FlareLayerSolid';
 import FlareLayerImage from './FlareLayerImage';
 import FlareLayerShape from './FlareLayerShape';
 import {visibilityModes} from '../helpers/visibilityModes.js';
+import FlareNode from './nodes/FlareNode';
 
 export default class FlarePrecompLayer extends FlareContent {
 
@@ -55,7 +56,7 @@ export default class FlarePrecompLayer extends FlareContent {
 		return remaining
 	}
 
-	convertChild(child, index, children) {
+	convertChild(child) {
 		return child.convert()
 	}
 
@@ -64,12 +65,14 @@ export default class FlarePrecompLayer extends FlareContent {
 		return child;
 	}
 
-	convertLayers(layers) {
-		return layers
+	convertLayers(lottieLayers) {
+		const layers = lottieLayers
 		.reverse()
 		.map(this.createLayer)
 		.map(this.linkLayer)
 		.reduce(this.nestChildLayers,[])
 		.map(this.convertChild)
+
+		return new FlareNode('Precomp_Container', layers).convert()
 	}
 }

@@ -30,20 +30,18 @@ export default class FlareLayerSolid extends FlareContent {
 			}
 		})
 
-		return [
-			{
-				type: "shape",
-				id: nodeId(),
-				name: "Shape",
-				blendMode: "srcOver",
-				drawOrder: layer.drawOrder,
-				children: [
-					shapeFill.convert('', null, null, null),
-					shapeRectangle.convert(null, null),
-				],
-				hidden: this.visibility !== visibilityModes.VISIBLE,
-			}
-		]
+		return {
+			type: "shape",
+			id: nodeId(),
+			name: "Shape",
+			blendMode: "srcOver",
+			drawOrder: layer.drawOrder,
+			children: [
+				shapeFill.convert('', null, null, null),
+				shapeRectangle.convert(null, null),
+			],
+			hidden: this.visibility !== visibilityModes.VISIBLE,
+		}
 
 	}
 }

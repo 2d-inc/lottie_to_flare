@@ -64,6 +64,7 @@ export default class ShapeCollection {
 		return this._Paints.map(paint => {
 			return paint.convert(id, animations, offsetTime, trimModifierData, isHidden)
 		})
+		.filter(paint => !!paint)
 	}
 
 	exportTrim(animations, nodeId, offsetTime) {
@@ -122,18 +123,30 @@ export default class ShapeCollection {
 			let lastNode
 			transforms.forEach(transform => {
 				const flareTransform = new FlareTransform(transform)
-				const node = flareTransform.convert(animations, offsetTime)
-				if (!lastNode) {
-					mainNode = node
-				} else {
-					addChildToLastLeaves(lastNode, node)
+				if (flareTransform.opacity) {
+					const opacityNode = new FlareNode('Shape_Opacity', lastNode)
+					opacityNode.opacity = convertProperty(transform.opacity, 'opacity', animations, opacityNode.id, 0.01, offsetTime)
+					const opacityNodeData = opacityNode.convert()
+					if (!lastNode) {
+						mainNode = opacityNodeData
+					}
+					lastNode = opacityNodeData
 				}
-				lastNode = node
+				const node = flareTransform.convert(animations, offsetTime)
+				if (node) {
+					if (!lastNode) {
+						mainNode = node
+					} else {
+						addChildToLastLeaves(lastNode, node)
+					}
+					lastNode = node
+				}
 			})
-			
-			addChildToLastLeaves(lastNode, shape)
-		}
 
+			if (lastNode) {
+				addChildToLastLeaves(lastNode, shape)
+			}
+		}
 
 		return mainNode
 	}

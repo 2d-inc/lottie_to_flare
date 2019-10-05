@@ -5,6 +5,9 @@ export default class FlareNode {
 	constructor(name = 'NodeName', children = [], type = 'node', transform = {}, opacity = 1) {
 
 		this._Id = nodeId();
+		if (!Array.isArray(children) && children) {
+			children = [children]
+		}
 		this._Children = children;
 		this._Transform = transform;
 		this._Opacity = opacity;
@@ -18,7 +21,10 @@ export default class FlareNode {
 	}
 
 	addChild(child) {
-		this._Children.push(child)
+		if (!Array.isArray(child) && child) {
+			child = [child]
+		}
+		this.addChildren(child)
 	}
 
 	convert() {

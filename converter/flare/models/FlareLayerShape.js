@@ -2,6 +2,7 @@ import FlareContent from './FlareContent';
 import shapeTypes from '../../lottie/shapes/shapeTypes.js';
 import ShapeCollection from './shapes/ShapeCollection';
 import {visibilityModes} from '../helpers/visibilityModes.js';
+import FlareNode from './nodes/FlareNode';
 
 const pathTypes = [
 	shapeTypes.PATH,
@@ -69,7 +70,7 @@ export default class FlareLayerShape extends FlareContent {
 		const shapes = this.iterateGroup(items, [], tranforms, modifiers)
 		.map(shapeCollection => shapeCollection.convert(animations, offsetTime, isHidden));
 
-		return shapes;
+		return new FlareNode('Shapes_Container', shapes).convert();
 	}
 
 	convertContent() {

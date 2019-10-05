@@ -1,6 +1,6 @@
 import FlareTransform from './properties/FlareTransform'
 import FlareNode from './nodes/FlareNode'
-import {addChildrenToLastLeaves} from '../helpers/lastLeavesHelper.js';
+import {addChildToLastLeaves} from '../helpers/lastLeavesHelper.js';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayer
@@ -26,23 +26,9 @@ export default class FlareLayer
 
 	convert() {
 
-
-		let children = this._Children.map(child => {return child.convert()})
-
-		const content = this.createContent()
-
-		children = content.concat(children)
-
-		const transform = this._Transforms.convert(this._Animations, this.offsetTime)
-
-		if (transform) {
-			addChildrenToLastLeaves(transform, children)
-			children = transform
-		}
-
-
+		let content = this.createContent()
 		///
-		const maskedChild = children.length ? children[0] : children;
+		const maskedChild = content;
 		this._ContentId = maskedChild.id;
 
 
@@ -61,8 +47,27 @@ export default class FlareLayer
 		}
 
 		maskedChild.maskType = maskType;
+		////
 
-		return children
+		if (this._Children.length) {
+			let children = this._Children.map(child => {return child.convert()})
+			children = [content].concat(children)
+
+			content = new FlareNode(name + '_Parenter', children).convert()
+
+		}
+		
+		const transform = this._Transforms.convert(this._Animations, this.offsetTime)
+
+		if (transform) {
+			addChildToLastLeaves(transform, content)
+			content = transform
+		}
+
+
+		
+
+		return content
 	}
 
 	addChild(child) {

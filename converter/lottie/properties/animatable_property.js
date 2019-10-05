@@ -110,9 +110,16 @@ export default class AnimatableProperty
             return this;
         } else {
             const value = this.value;
-            if (value.length && value.findIndex(val => val !== defaultValue) === -1) {
-                return void 0;
+            if (Array.isArray(value)) {
+                if (value.length && value.findIndex(val => val !== defaultValue) === -1) {
+                    return void 0;
+                }
+            } else {
+                if(value === defaultValue) {
+                    return void 0;
+                }
             }
+            
             return this;
         }
     }
