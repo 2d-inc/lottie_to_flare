@@ -344,7 +344,7 @@ export default class FlareAnimation {
 
 		return [{
 			displayEnd: duration,
-			displayStart: workAreaStart - 1,
+			displayStart: Math.max(0, workAreaStart - 1),
 			duration,
 			fps: this._FPS,
 			id: nodeId(),
