@@ -21,6 +21,7 @@ export default class FlareAnimation {
 			scale: this.animateScale.bind(this),
 			opacity: this.animateOpacity.bind(this),
 			color: this.animateColor.bind(this),
+			strokeColor: this.animateStrokeColor.bind(this),
 			strokeWidth: this.animateStroke.bind(this),
 			cornerRadius: this.animateCornerRadius.bind(this),
 			size: this.animateSize.bind(this),
@@ -33,6 +34,10 @@ export default class FlareAnimation {
 
 	animateColor(keyframes, multiplier, offsetTime) {
 		return this.animateMultidimensionalProperty('frameFillColor', keyframes, multiplier, offsetTime)
+	}
+
+	animateStrokeColor(keyframes, multiplier, offsetTime) {
+		return this.animateMultidimensionalProperty('frameStrokeColor', keyframes, multiplier, offsetTime)
 	}
 
 	animateTranslation(keyframes, multiplier, offsetTime) {

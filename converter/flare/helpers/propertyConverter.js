@@ -14,6 +14,7 @@ export const propertyTypes = {
 	ROTATION: 'rotation',
 	PATH: 'path',
 	COLOR: 'color',
+	STROKE_COLOR: 'strokeColor',
 	GRADIENT_FILL_STOPS: 'gradientFillStops',
 	GRADIENT_FILL_RADIAL_STOPS: 'gradientFillRadialStops',
 	GRADIENT_STROKE_STOPS: 'gradientStrokeStops',
@@ -103,7 +104,7 @@ export default (property, type, animations, nodeId, multiplier = 1, offsetTime =
 			convertedProp = property.firstValue
 		} else if (type === propertyTypes.PATH) {
 			convertedProp = convertPath(property.firstValue)
-		} else if (type === propertyTypes.COLOR) {
+		} else if (type === propertyTypes.COLOR || type === propertyTypes.STROKE_COLOR) {
 			convertedProp = convertToArray(property.firstValue, multiplier)
 		} else if (gradientTypes.includes(type)) {
 			convertedProp = convertGradientStops(property)
