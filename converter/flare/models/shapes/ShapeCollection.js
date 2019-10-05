@@ -55,10 +55,10 @@ export default class ShapeCollection {
 		this._IsClosed = true
 	}
 
-	convertTextures(animations, id, offsetTime, trimModifierData) {
+	convertTextures(animations, id, offsetTime, trimModifierData, isHidden) {
 
 		return this._Paints.map(paint => {
-			return paint.convert(id, animations, offsetTime, trimModifierData)
+			return paint.convert(id, animations, offsetTime, trimModifierData, isHidden)
 		})
 	}
 
@@ -91,14 +91,14 @@ export default class ShapeCollection {
 		return trimData
 	}
 
-	convert(animations, offsetTime) {
+	convert(animations, offsetTime, isHidden) {
 
 		const paths = this._Paths.map((pathData) => pathData.convert(animations, offsetTime))
 
 		let shapeNode = new FlareNode('Shape', [], 'shape')
 
 		const trimModifierData = this.exportTrim(animations, shapeNode.id, offsetTime)
-		const textures = this.convertTextures(animations, shapeNode.id, offsetTime, trimModifierData)
+		const textures = this.convertTextures(animations, shapeNode.id, offsetTime, trimModifierData, isHidden)
 
 		shapeNode.addChildren([...textures, ...paths])
 
@@ -107,6 +107,7 @@ export default class ShapeCollection {
 			blendMode: "srcOver",
 			drawOrder: this._DrawOrder,
 			transformAffectsStroke: true,
+			hidden: isHidden,
 		}
 
 		let mainNode = shape

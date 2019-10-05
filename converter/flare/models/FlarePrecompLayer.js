@@ -3,11 +3,12 @@ import FlareLayerNull from './FlareLayerNull';
 import FlareLayerSolid from './FlareLayerSolid';
 import FlareLayerImage from './FlareLayerImage';
 import FlareLayerShape from './FlareLayerShape';
+import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlarePrecompLayer extends FlareContent {
 
-	constructor(lottieLayer, animations, offsetTime) {
-		super(lottieLayer, animations, offsetTime)
+	constructor(lottieLayer, animations, offsetTime, isHidden) {
+		super(lottieLayer, animations, offsetTime, isHidden)
 
 		this.createLayer = this.createLayer.bind(this)
 	}
@@ -15,18 +16,19 @@ export default class FlarePrecompLayer extends FlareContent {
 	createLayer(layer) {
 
 		const offsetTime = this.lottieLayer.startPoint + this.offsetTime
+		const isHidden = this.visibility !== visibilityModes.VISIBLE
 
 		switch(layer.type) {
 			case 0:
-			return new FlarePrecompLayer(layer, this._Animations, offsetTime);
+			return new FlarePrecompLayer(layer, this._Animations, offsetTime, isHidden);
 			case 1:
-			return new FlareLayerSolid(layer, this._Animations, offsetTime);
+			return new FlareLayerSolid(layer, this._Animations, offsetTime, isHidden);
 			case 2:
-			return new FlareLayerImage(layer, this._Animations, offsetTime);
+			return new FlareLayerImage(layer, this._Animations, offsetTime, isHidden);
 			case 3:
-			return new FlareLayerNull(layer, this._Animations, offsetTime);
+			return new FlareLayerNull(layer, this._Animations, offsetTime, isHidden);
 			case 4:
-			return new FlareLayerShape(layer, this._Animations, offsetTime);
+			return new FlareLayerShape(layer, this._Animations, offsetTime, isHidden);
 			default:
 			return null
 		}
@@ -53,11 +55,21 @@ export default class FlarePrecompLayer extends FlareContent {
 		return remaining
 	}
 
+	convertChild(child, index, children) {
+		return child.convert()
+	}
+
+	linkLayer(child, index, children) {
+		child.previous = children[index - 1];
+		return child;
+	}
+
 	convertLayers(layers) {
 		return layers
 		.reverse()
 		.map(this.createLayer)
+		.map(this.linkLayer)
 		.reduce(this.nestChildLayers,[])
-		.map(child => child.convert())
+		.map(this.convertChild)
 	}
 }

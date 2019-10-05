@@ -41,7 +41,7 @@ export default class FlareTransform {
 		}
 
 		if ('opacity' in transform) {
-			transformProperties.opacity = transform.opacity.getValueIfNotDefault(1);
+			transformProperties.opacity = transform.opacity.getValueIfNotDefault(-100);
 		}
 
 		return transformProperties

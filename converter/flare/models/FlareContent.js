@@ -5,11 +5,9 @@ import ShapeCollection from "./shapes/ShapeCollection";
 
 export default class FlareContent extends FlareLayer {
 
-	constructor(lottieLayer, animations, offsetTime, converter) {
+	constructor(lottieLayer, animations, offsetTime, isHidden) {
 
-		super(lottieLayer, animations, offsetTime)
-
-		this._Converter = converter
+		super(lottieLayer, animations, offsetTime, isHidden)
 
 	}
 
@@ -97,8 +95,6 @@ export default class FlareContent extends FlareLayer {
 	}
 
 	createContent() {
-
-		const converter = this.convertContent || this._Converter
 
 		const lottieLayer = this.lottieLayer
 		const animations = this._Animations
