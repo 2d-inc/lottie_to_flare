@@ -119,16 +119,19 @@ export default class ShapeCollection {
 
 		const transforms = this._Transforms
 
+
 		if (transforms.length) {
 			let lastNode
 			transforms.forEach(transform => {
 				const flareTransform = new FlareTransform(transform)
 				if (flareTransform.opacity) {
-					const opacityNode = new FlareNode('Shape_Opacity', lastNode)
+					const opacityNode = new FlareNode('Shape_Opacity')
 					opacityNode.opacity = convertProperty(transform.opacity, 'opacity', animations, opacityNode.id, 0.01, offsetTime)
 					const opacityNodeData = opacityNode.convert()
 					if (!lastNode) {
 						mainNode = opacityNodeData
+					} else {
+						addChildToLastLeaves(lastNode, opacityNodeData)
 					}
 					lastNode = opacityNodeData
 				}
@@ -146,6 +149,7 @@ export default class ShapeCollection {
 			if (lastNode) {
 				addChildToLastLeaves(lastNode, shape)
 			}
+
 		}
 
 		return mainNode
