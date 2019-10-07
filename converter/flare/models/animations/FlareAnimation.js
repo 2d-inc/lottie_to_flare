@@ -44,12 +44,16 @@ export default class FlareAnimation {
 		return this.animateMultiNamedProperty(keyframes, multiplier, offsetTime, ['framePosX', 'framePosY'])
 	}
 
-	createInterpolationData(keyframe, dimension = 0) {
+	createInterpolationData(keyframe, nextKeyframe, dimension = 0) {
 		let interpolation;
 		if (keyframe.interpolation === 0) {
 			interpolation = {
 				i: 0
 			};
+		} else if(keyframe && nextKeyframe && (nextKeyframe.time - keyframe.time) <= 1) {
+			interpolation = {
+				i: 0
+			}
 		} else {
 			const inValues = toArray(keyframe.in[dimension]);
 			const outValues = toArray(keyframe.out[dimension]);
@@ -75,13 +79,13 @@ export default class FlareAnimation {
 
 			nameArrays[0].push({
 				v: value[0] * multiplier,
-				...this.createInterpolationData(keyframe, 0),
+				...this.createInterpolationData(keyframe, keyframes[index + 1], 0),
 				...props,
 			})
 
 			nameArrays[1].push({
 				v: value[1] * multiplier,
-				...this.createInterpolationData(keyframe, 1),
+				...this.createInterpolationData(keyframe, keyframes[index + 1], 1),
 				...props,
 			})
 		})
@@ -110,7 +114,7 @@ export default class FlareAnimation {
 				return {
 					v: keyframe.value.map(value => value * multiplier),
 					t: (keyframe.time + offsetTime) / this._FPS,
-					...this.createInterpolationData(keyframe, 0),
+					...this.createInterpolationData(keyframe, keyframes[index + 1], 0),
 
 				}
 			})
@@ -132,7 +136,7 @@ export default class FlareAnimation {
 				return {
 					v: keyframe.value[0] * multiplier,
 					t: (keyframe.time + offsetTime) / this._FPS,
-					...this.createInterpolationData(keyframe, 0),
+					...this.createInterpolationData(keyframe, keyframes[index + 1], 0),
 				}
 			})
 		}
@@ -215,7 +219,7 @@ export default class FlareAnimation {
 		const keyframes = property.keyframes
 
 		const frameVerticesNode = {
-			framePathVertices: keyframes.map(keyframe => {
+			framePathVertices: keyframes.map((keyframe, keyframeIndex) => {
 				
 				const vertices = keyframe.value.vertices
 				.reduce((accumulator, vertex, index, all) => {
@@ -235,7 +239,7 @@ export default class FlareAnimation {
 				return {
 					t: (keyframe.time + offsetTime) / this._FPS,
 					v: vertices,
-					...this.createInterpolationData(keyframe, 0),
+					...this.createInterpolationData(keyframe, keyframes[keyframeIndex + 1], 0),
 				}
 			})
 		}
@@ -265,7 +269,7 @@ export default class FlareAnimation {
 		const stops = property.stops;
 		const keyframes = property.color.keyframes;
 		const fillAnimation = {
-			[propertyName]: keyframes.map(keyframe => {
+			[propertyName]: keyframes.map((keyframe, index) => {
 
 
 				const colors = keyframe.value;
@@ -275,7 +279,7 @@ export default class FlareAnimation {
 				return {
 					t: (keyframe.time + offsetTime) / this._FPS,
 					v: value,
-					...this.createInterpolationData(keyframe, 0)
+					...this.createInterpolationData(keyframe, keyframes[index + 1], 0)
 				}
 			})
 		}
