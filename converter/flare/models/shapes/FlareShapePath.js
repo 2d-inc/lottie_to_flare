@@ -22,8 +22,6 @@ export default class FlareShapePath extends FlareShapeBase {
 
 		shapeNode.addChildren(vertices)
 
-		return shapeNode.convert()
-		//TODO uncomment when nodes are supported
-		// return this.createTransformTree(shapeNode.convert(), animations, offsetTime)
+		return this.createTransformTree(shapeNode.convert(), animations, offsetTime)
 	}
 }
