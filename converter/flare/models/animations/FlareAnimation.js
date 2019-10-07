@@ -65,23 +65,10 @@ export default class FlareAnimation {
 	animateMultiNamedProperty(keyframes, multiplier, offsetTime, names) {
 		const nameArrays = names.map(() => [])
 
-
 		keyframes.forEach((keyframe, index) => {
 
 			let props = {
 				t: (keyframe.time + offsetTime) / this._FPS,
-			}
-
-			if (index === keyframes.length - 1) {
-				props = {
-					...props,
-					i: 1,
-				}
-			} else {
-				props = {
-					...props,
-					i: 2,
-				}
 			}
 
 			const value = keyframe.value
