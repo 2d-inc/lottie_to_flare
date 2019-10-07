@@ -12,12 +12,12 @@ export default class FlareShapeRectangle extends FlareShapeBase{
 		const size = convertProperty(this._ShapeData.size, 'size', animations, node.id, 1, offsetTime)
 		const cornerRadius = convertProperty(this._ShapeData.roundness, 'cornerRadius', animations, node.id, 1, offsetTime)
 
-		return this.createTransformTree({
+		return {
 			...node.convert(),
 			translation,
 			width: size[0],
 			height: size[1],
 			cornerRadius,
-		})
+		}
 	}
 }

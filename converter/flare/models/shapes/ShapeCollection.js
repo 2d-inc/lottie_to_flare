@@ -11,6 +11,7 @@ import FlareShapeStroke from './FlareShapeStroke';
 import FlareShapeEllipse from './FlareShapeEllipse';
 import FlareShapeRectangle from './FlareShapeRectangle';
 import FlareShapePath from './FlareShapePath';
+import FlareShapeNode from './FlareShapeNode';
 
 const paintTypes = {
 	fill: FlareShapeFill,
@@ -34,6 +35,7 @@ export default class ShapeCollection {
 		this._DrawOrder = paintData.drawOrder
 		this._Transforms = [...transforms]
 		this._Paths = []
+		this._Nodes = []
 		this._IsClosed = false
 		this._Modifiers = modifiers
 	}
@@ -48,10 +50,35 @@ export default class ShapeCollection {
 		return pathTransform.slice(this._Transforms.length)
 	}
 
+	addPathToNode(path, transforms) {
+		let node = this._Nodes.find(node => {
+			const unmatchedTranform = node.transforms.find((transform, index) => {
+				if (transform !== transforms[index]) {
+					return true
+				}
+			})
+			if(!unmatchedTranform && transforms.length === node.transforms.length) {
+				return node
+			}
+		})
+		if (!node) {
+			node = new FlareShapeNode(transforms)
+			this._Paths.push(node)
+			this._Nodes.push(node)
+		}
+		node.addPath(path)
+	}
+
 	addPath(path, transforms) {
 		if (!this._IsClosed) {
 			const PathType = pathTypes[path.type]
-			this._Paths.push(new PathType(path, this.getAdditionalTransforms(transforms)));
+			const additionalTransforms = this.getAdditionalTransforms(transforms)
+			const pathInstance = new PathType(path);
+			if (additionalTransforms.length) {
+				this.addPathToNode(pathInstance, additionalTransforms)
+			} else {
+				this._Paths.push(pathInstance);
+			}
 		}
 	}
 

@@ -11,11 +11,11 @@ export default class FlareShapeEllipse extends FlareShapeBase {
 		const translation = convertProperty(this._ShapeData.position, 'translation', animations, node.id, 1, offsetTime)
 		const size = convertProperty(this._ShapeData.size, 'size', animations, node.id, 1, offsetTime)
 
-		return this.createTransformTree({
+		return {
 			...node.convert(),
 			translation,
 			width: size[0],
 			height: size[1],
-		})
+		}
 	}
 }
