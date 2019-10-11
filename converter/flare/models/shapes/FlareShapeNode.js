@@ -27,8 +27,9 @@ export default class FlareShapeNode {
 				}
 				lastNode = node
 			})
-			
-			addChildToLastLeaves(lastNode, innerNode)
+			if(lastNode) {
+				addChildToLastLeaves(lastNode, innerNode)
+			}
 		}
 
 		return mainNode
