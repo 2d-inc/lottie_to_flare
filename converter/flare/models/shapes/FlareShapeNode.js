@@ -20,6 +20,7 @@ export default class FlareShapeNode {
 			transforms.forEach(transform => {
 				const flareTransform = new FlareTransform(transform)
 				const node = flareTransform.convert(animations, offsetTime)
+				if(!node) { return; }
 				if (!lastNode) {
 					mainNode = node
 				} else {
@@ -31,7 +32,6 @@ export default class FlareShapeNode {
 				addChildToLastLeaves(lastNode, innerNode)
 			}
 		}
-
 		return mainNode
 	}
 
