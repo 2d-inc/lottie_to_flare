@@ -40,7 +40,7 @@ export default class FlareShapeNode {
 	}
 
 	convert(animations, offsetTime) {
-		const children = this._Paths.map(path => path.convert())
+		const children = this._Paths.map(path => path.convert(animations, offsetTime))
 		let innerNode
 		if (children.length === 1) {
 			innerNode = children[0]
