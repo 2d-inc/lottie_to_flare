@@ -3,6 +3,10 @@ import FlareLayerNull from './FlareLayerNull';
 import FlareLayerSolid from './FlareLayerSolid';
 import FlareLayerImage from './FlareLayerImage';
 import FlareLayerShape from './FlareLayerShape';
+import FlareOuterTransform from './FlareOuterTransform';
+import FlareAnchorTransform from './FlareAnchorTransform';
+import FlareInOut from './FlareInOut';
+import FlareOpacity from './FlareOpacity';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 import FlareNode from './nodes/FlareNode';
 
@@ -12,6 +16,11 @@ export default class FlarePrecompLayer extends FlareContent {
 		super(lottieLayer, animations, offsetTime, isHidden)
 
 		this.createLayer = this.createLayer.bind(this)
+
+		this.createLayers();
+		const children = this.wrapLayers();
+		this.addChildren(children);
+
 	}
 
 	createLayer(layer) {
@@ -35,16 +44,6 @@ export default class FlarePrecompLayer extends FlareContent {
 		}
 	}
 
-	createContent() {
-		const lottieLayer = this.lottieLayer
-		const animations = this._Animations
-		const offsetTime = this.offsetTime
-
-		let content = this.convertLayers(this.lottieLayer.layers, this._Animations, offsetTime)
-
-		return this.createContentWrapper(content)
-	}
-
 	nestChildLayers(remaining, child, index, children) {
 
 		if (child.lottieLayer.parentId) {
@@ -65,6 +64,46 @@ export default class FlarePrecompLayer extends FlareContent {
 		return child;
 	}
 
+	processContent() {
+
+	}
+
+	wrapLayers() {
+		return this.layers.map(layer => {
+			let outerNode = layer
+			const layerOpacity = new FlareOpacity(layer)
+			if (layerOpacity.hasOpacity()) {
+				layerOpacity.addChild(outerNode)
+				outerNode = layerOpacity
+			}
+			const layerInOut = new FlareInOut(layer)
+			if (layerInOut.hasInOutPoints()) {
+				layerInOut.addChild(outerNode)
+				outerNode = layerInOut
+			}
+			const layerAnchorTransform = new FlareAnchorTransform(layer)
+			if (layerAnchorTransform.hasTransformationApplied()) {
+				layerAnchorTransform.addChild(outerNode)
+				outerNode = layerAnchorTransform
+			}
+			const layerOuterTransform = new FlareOuterTransform(layer)
+			if (layerOuterTransform.hasTransformationApplied()) {
+				layerOuterTransform.addChild(outerNode)
+				outerNode = layerOuterTransform
+			}
+			return outerNode
+		})
+	}
+
+	createLayers() {
+		const lottieLayers = this.lottieLayer.layers
+		this._Layers = lottieLayers
+		.reverse()
+		.map(this.createLayer)
+		.map(this.linkLayer)
+		.reduce(this.nestChildLayers,[])
+	}
+
 	convertLayers(lottieLayers) {
 		const layers = lottieLayers
 		.reverse()
@@ -74,5 +113,9 @@ export default class FlarePrecompLayer extends FlareContent {
 		.map(this.convertChild)
 
 		return new FlareNode('Precomp_Container', layers).convert()
+	}
+
+	get layers() {
+		return this._Layers;
 	}
 }

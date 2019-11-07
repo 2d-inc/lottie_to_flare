@@ -26,9 +26,10 @@ const pathTypes = {
 	[shapeTypes.ELLIPSE]: FlareShapeEllipse,
 }
 
-export default class ShapeCollection {
+export default class ShapeCollection extends FlareNode {
 
 	constructor(paintData, transforms = [], modifiers = []) {
+		super()
 		const PaintType = paintTypes[paintData.type];
 		const paint = new PaintType(paintData);
 		this._Paints = [paint];

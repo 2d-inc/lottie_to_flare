@@ -4,17 +4,16 @@ import nodeId from '../../helpers/nodeId';
 export default class FlareArtboard extends FlarePrecompLayer {
 
 	constructor(composition, animations) {
-		super(composition, animations);
+		super(composition, animations, 0);
 		this._Composition = composition;
-		this._OffsetTime = 0;
+		this.name = 'Composition';
+		this.type = 'artboard';
 	}
 
 	convert() {
-		const children = super.convert();
+		
 		return {
-			type: "artboard",
-			id: nodeId(),
-			name: "Composition",
+			...super.convert(),
 			translation: [
 			    0,
 			    0
@@ -28,7 +27,6 @@ export default class FlareArtboard extends FlarePrecompLayer {
 			color: [0,0,0,0],
 			clipContents: true,
 			animations: this._Animations.convert(),
-			children: [children]
 		}
 	}
 }

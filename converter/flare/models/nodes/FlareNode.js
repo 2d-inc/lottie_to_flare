@@ -27,18 +27,25 @@ export default class FlareNode {
 		this.addChildren(child)
 	}
 
-	convert() {
+	addChildToLastLeave(child) {
+		if (this._Children.length) {
+			this._Children.forEach(child => child.addChildToLastLeave(child))
+		} else {
+			this.addChild(child)
+		}
+	}
+
+	convert(animations, offsetTime) {
 
 		return {
 			type: this._Type,
 			id: this.id,
 			name: this._Name,
-			...this._Transform,
+			// ...this._Transform.convert(animations, offsetTime),
 			opacity: this._Opacity,
 			displayType: "empty",
-			children: this._Children,
+			children: this._Children ? this._Children.map(child => child.convert(animations, offsetTime)): null,
 			clips: this._Clips,
-
 		}
 	}
 
