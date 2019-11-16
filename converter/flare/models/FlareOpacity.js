@@ -19,9 +19,7 @@ export default class FlareOpacity extends FlareNode {
 		}
 	}
 
-	convert() {
-		const animations = this._Layer.animations
-		const offsetTime = this._Layer.offsetTime
+	convert(animations, offsetTime) {
 		return {
 			...super.convert(animations, offsetTime),
 			...this.convertOpacity(animations, offsetTime),

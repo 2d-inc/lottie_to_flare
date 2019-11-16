@@ -1,4 +1,4 @@
-import FlareContent from './FlareContent';
+import FlareLayerContent from './FlareLayerContent';
 import shapeTypes from '../../lottie/shapes/shapeTypes.js';
 import ShapeCollection from './shapes/ShapeCollection';
 import {visibilityModes} from '../helpers/visibilityModes.js';
@@ -10,9 +10,15 @@ const pathTypes = [
 	shapeTypes.ELLIPSE,
 ]
 
-export default class FlareLayerShape extends FlareContent {
+export default class FlareLayerShape extends FlareLayerContent {
+
+	constructor(lottieLayer, animations, offsetTime, isHidden) {
+		super(lottieLayer, animations, offsetTime, isHidden)
+		this.buildShapes(this.lottieLayer.items, this.visibility !== visibilityModes.VISIBLE)
+	}
 
 	createNewShape (shape, transforms, modifiers) {
+		console.log(transforms)
 		return new ShapeCollection(shape, transforms, modifiers)
 	}
 
@@ -64,7 +70,16 @@ export default class FlareLayerShape extends FlareContent {
 		return shapes
 	}
 
-	buildShapes(items, animations, offsetTime, isHidden) {
+	buildShapes(items, isHidden) {
+		const tranforms = [];
+		const modifiers = [];
+		const shapes = this.iterateGroup(items, [], tranforms, modifiers);
+
+		this.addChildren(shapes)
+
+	}
+
+	_buildShapes(items, animations, offsetTime, isHidden) {
 		const tranforms = [];
 		const modifiers = [];
 		const shapes = this.iterateGroup(items, [], tranforms, modifiers)
@@ -73,7 +88,7 @@ export default class FlareLayerShape extends FlareContent {
 		return new FlareNode('Shapes_Container', shapes).convert();
 	}
 
-	convertContent() {
+	_convertContent() {
 
 		const layer = this.lottieLayer
 		const animations = this._Animations

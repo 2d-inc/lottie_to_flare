@@ -6,14 +6,15 @@ export default class FlareArtboard extends FlarePrecompLayer {
 	constructor(composition, animations) {
 		super(composition, animations, 0);
 		this._Composition = composition;
+		this._Animations = animations;
 		this.name = 'Composition';
 		this.type = 'artboard';
 	}
 
 	convert() {
-		
+
 		return {
-			...super.convert(),
+			...super.convert(this._Animations, 0),
 			translation: [
 			    0,
 			    0

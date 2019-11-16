@@ -7,8 +7,8 @@ import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayerSolid extends FlareLayerContent {
 
-	constructor(lottieLayer, animations, offsetTime, isHidden) {
-		super(lottieLayer, animations, offsetTime, isHidden)
+	constructor(lottieLayer, isHidden) {
+		super(lottieLayer, isHidden)
 
 		const layer = this.lottieLayer
 
@@ -54,14 +54,10 @@ export default class FlareLayerSolid extends FlareLayerContent {
 
 	}
 
-	convert() {
-		const layer = this.lottieLayer
+	convert(animations, offsetTime) {
 
 		return {
-			...super.convert(this._Animations, this._OffsetTime),
-			blendMode: "srcOver",
-			drawOrder: layer.drawOrder,
-			hidden: this.visibility !== visibilityModes.VISIBLE,
+			...super.convert(animations, offsetTime),
 		}
 	}
 }

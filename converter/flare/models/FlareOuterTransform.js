@@ -2,8 +2,8 @@ import FlareBaseTransform from './FlareBaseTransform'
 
 export default class FlareOuterTransform extends FlareBaseTransform {
 
-	constructor(layer) {
-		super(layer, layer.name + '_Outer')
+	constructor(transform, layerName) {
+		super(transform, layerName + '_Outer')
 	}
 
 	traverseTransformProps(transform) {

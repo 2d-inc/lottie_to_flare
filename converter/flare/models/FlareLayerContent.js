@@ -24,6 +24,18 @@ export default class FlareLayerContent extends FlareNode
 
 	}
 
+	convert(animations, offsetTime) {
+
+		const layer = this.lottieLayer
+		
+		return {
+			...super.convert(animations, offsetTime),
+			blendMode: "srcOver",
+			drawOrder: layer.drawOrder,
+			hidden: this.visibility !== visibilityModes.VISIBLE,
+		}
+	}
+
 	_convert() {
 
 		let content = this.createContent()

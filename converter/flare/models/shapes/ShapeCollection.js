@@ -2,6 +2,9 @@ import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
 import {addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
 import FlareTransform from '../../models/properties/FlareTransform';
 import FlareNode from '../../models/nodes/FlareNode';
+import FlareOuterTransform from '../../models/FlareOuterTransform';
+import FlareAnchorTransform from '../../models/FlareAnchorTransform';
+import FlareOpacity from '../../models/FlareOpacity';
 import convertProperty from '../../helpers/propertyConverter';
 
 import FlareShapeFill from './FlareShapeFill';
@@ -41,6 +44,27 @@ export default class ShapeCollection extends FlareNode {
 		this._Modifiers = modifiers
 		this._Paths = new ShapePaths()
 		this._Paints = new ShapePaints(paint, this.id, this._Modifiers)
+		// this.wrapLayer()
+	}
+
+	wrapLayer() {
+		this._OuterNode = this._LayerContent
+		this._OpacityNode = new FlareOpacity(this._LayerContent)
+		this._AnchorNode = new FlareAnchorTransform(this._LayerContent)
+		this._OuterTransformNode = new FlareOuterTransform(this._LayerContent)
+
+		if (this._OpacityNode.hasOpacity()) {
+			this._OpacityNode.addChild(this._OuterNode)
+			this._OuterNode = this._OpacityNode
+		}
+		if (this._AnchorNode.hasTransformationApplied()) {
+			this._AnchorNode.addChild(this._OuterNode)
+			this._OuterNode = this._AnchorNode 
+		}
+		if (this._OuterTransformNode.hasTransformationApplied()) {
+			this._OuterTransformNode.addChild(this._OuterNode)
+			this._OuterNode = this._OuterTransformNode
+		}
 	}
 
 	addPaint(paintData) {

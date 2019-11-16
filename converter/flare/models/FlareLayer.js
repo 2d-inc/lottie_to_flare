@@ -5,36 +5,35 @@ import FlareLayerImage from './FlareLayerImage';
 import FlareLayerShape from './FlareLayerShape';
 import FlareOuterTransform from './FlareOuterTransform';
 import FlareAnchorTransform from './FlareAnchorTransform';
-import FlareInOut from './FlareInOut';
 import FlareOpacity from './FlareOpacity';
+import FlareInOut from './FlareInOut';
 import FlareMaskNode from './FlareMaskNode';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayer
 {
 
-	constructor(lottieLayer, animations, offsetTime, isHidden)
+	constructor(lottieLayer, offsetTime, isHidden)
 	{
 		this._LottieLayer = lottieLayer
-		this._Animations = animations
 		this._OffsetTime = offsetTime
-		this._LayerContent = this.createContent(lottieLayer, animations, offsetTime, isHidden)
+		this._LayerContent = this.createContent(lottieLayer, isHidden)
 		this.wrapLayer()
 	}
 
-	createContent(layer, animations, offsetTime, isHidden) {
+	createContent(layer, isHidden) {
 
 		switch(layer.type) {
 			case 0:
-			return new FlarePrecompLayer(layer, this._Animations, offsetTime, isHidden);
+			return new FlarePrecompLayer(layer, isHidden);
 			case 1:
-			return new FlareLayerSolid(layer, this._Animations, offsetTime, isHidden);
+			return new FlareLayerSolid(layer, isHidden);
 			case 2:
-			return new FlareLayerImage(layer, this._Animations, offsetTime, isHidden);
+			return new FlareLayerImage(layer, isHidden);
 			case 3:
-			return new FlareLayerNull(layer, this._Animations, offsetTime, isHidden);
+			return new FlareLayerNull(layer, isHidden);
 			case 4:
-			return new FlareLayerShape(layer, this._Animations, offsetTime, isHidden);
+			return new FlareLayerShape(layer, isHidden);
 			default:
 			return null
 		}
@@ -46,8 +45,8 @@ export default class FlareLayer
 		this._MaskNode = new FlareMaskNode(this._LayerContent)
 		this._OpacityNode = new FlareOpacity(this._LayerContent)
 		this._InOutNode = new FlareInOut(this._LayerContent)
-		this._AnchorNode = new FlareAnchorTransform(this._LayerContent)
-		this._OuterTransformNode = new FlareOuterTransform(this._LayerContent)
+		this._AnchorNode = new FlareAnchorTransform(this._LottieLayer.transform, this._LayerContent.name)
+		this._OuterTransformNode = new FlareOuterTransform(this._LottieLayer.transform, this._LayerContent.name)
 
 		if (this._MaskNode.hasMasks()) {
 			this._MaskNode.addChild(this._OuterNode)
@@ -88,6 +87,6 @@ export default class FlareLayer
 	}
 
 	convert(animations, offsetTime) {
-		return this._OuterNode.convert(animations, offsetTime)
+		return this._OuterNode.convert(animations, this._OffsetTime)
 	}
 }

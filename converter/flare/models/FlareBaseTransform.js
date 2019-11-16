@@ -10,10 +10,9 @@ const multipliers = {
 
 export default class FlareBaseTransform extends FlareNode {
 
-	constructor(layer, layerName) {
+	constructor(transform, layerName) {
 		super(layerName)
-		this._Layer = layer
-		this._TransformProps = this.traverseTransformProps(layer.lottieLayer.transform)
+		this._TransformProps = this.traverseTransformProps(transform)
 	}
 
 	hasTransformationApplied() {
@@ -21,19 +20,16 @@ export default class FlareBaseTransform extends FlareNode {
 	}
 
 	convertTransformations(animations, offsetTime) {
-		const nodeId = this._Layer.id
 		return Object.keys(this._TransformProps)
 		.reduce((properties, key) => {
 			const propertyKey = key === 'anchorPoint' ? 'translation' : key
 			const multiplier = multipliers[key] || 1
-			properties[propertyKey] = convertProperty(this._TransformProps[key], propertyKey, animations, nodeId, multiplier, offsetTime)
+			properties[propertyKey] = convertProperty(this._TransformProps[key], propertyKey, animations, this.id, multiplier, offsetTime)
 			return properties
 		}, {})
 	}
 
-	convert() {
-		const animations = this._Layer.animations
-		const offsetTime = this._Layer.offsetTime
+	convert(animations, offsetTime) {
 		return {
 			...super.convert(animations, offsetTime),
 			...this.convertTransformations(animations, offsetTime),

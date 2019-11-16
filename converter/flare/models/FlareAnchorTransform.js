@@ -2,8 +2,8 @@ import FlareBaseTransform from './FlareBaseTransform'
 
 export default class FlareAnchorTransform extends FlareBaseTransform {
 
-	constructor(layer) {
-		super(layer, layer.name + '_Anchor')
+	constructor(transform, layerName) {
+		super(transform, layerName + '_Anchor')
 	}
 
 	traverseTransformProps(transform) {

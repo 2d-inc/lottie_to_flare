@@ -5,8 +5,8 @@ import FlareNode from './nodes/FlareNode';
 
 export default class FlarePrecompLayer extends FlareContent {
 
-	constructor(lottieLayer, animations, offsetTime, isHidden) {
-		super(lottieLayer, animations, offsetTime, isHidden)
+	constructor(lottieLayer, offsetTime, isHidden) {
+		super(lottieLayer, offsetTime, isHidden)
 
 		this.createLayer = this.createLayer.bind(this)
 
@@ -20,7 +20,7 @@ export default class FlarePrecompLayer extends FlareContent {
 		const offsetTime = this.lottieLayer.startPoint + this.offsetTime
 		const isHidden = this.visibility !== visibilityModes.VISIBLE
 
-		return new FlareLayer(layer, this._Animations, offsetTime, isHidden)
+		return new FlareLayer(layer, offsetTime, isHidden)
 
 	}
 
@@ -32,10 +32,6 @@ export default class FlarePrecompLayer extends FlareContent {
 			remaining.push(child)
 		}
 		return remaining
-	}
-
-	convertChild(child) {
-		return child.convert()
 	}
 
 	linkLayer(child, index, children) {
