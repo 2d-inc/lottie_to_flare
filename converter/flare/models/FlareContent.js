@@ -1,9 +1,9 @@
-import FlareLayer from './FlareLayer';
+import FlareLayerContent from './FlareLayerContent';
 import FlareNode from './nodes/FlareNode';
 import convertProperty from '../helpers/propertyConverter';
 import ShapeCollection from "./shapes/ShapeCollection";
 
-export default class FlareContent extends FlareLayer {
+export default class FlareContent extends FlareLayerContent {
 
 	constructor(lottieLayer, animations, offsetTime, isHidden) {
 

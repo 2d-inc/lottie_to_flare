@@ -1,112 +1,93 @@
-import FlareTransform from './properties/FlareTransform'
-import FlareNode from './nodes/FlareNode'
-import {addChildToLastLeaves} from '../helpers/lastLeavesHelper.js';
+import FlareContent from './FlareContent';
+import FlareLayerNull from './FlareLayerNull';
+import FlareLayerSolid from './FlareLayerSolid';
+import FlareLayerImage from './FlareLayerImage';
+import FlareLayerShape from './FlareLayerShape';
+import FlareOuterTransform from './FlareOuterTransform';
+import FlareAnchorTransform from './FlareAnchorTransform';
+import FlareInOut from './FlareInOut';
+import FlareOpacity from './FlareOpacity';
+import FlareMaskNode from './FlareMaskNode';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
-export default class FlareLayer extends FlareNode
+export default class FlareLayer
 {
 
 	constructor(lottieLayer, animations, offsetTime, isHidden)
 	{
-		super()
 		this._LottieLayer = lottieLayer
 		this._Animations = animations
 		this._OffsetTime = offsetTime
-		this.transforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
-		this._Visibility = isHidden ? visibilityModes.HIDDEN_FULL : lottieLayer.isTrackMask ? visibilityModes.HIDDEN_LOCAL : visibilityModes.VISIBLE
-		this._ContentId = null
-		this._PreviousChild = null
+		this._LayerContent = this.createContent(lottieLayer, animations, offsetTime, isHidden)
+		this.wrapLayer()
 	}
 
-	createContent() {
+	createContent(layer, animations, offsetTime, isHidden) {
 
-		return []
+		switch(layer.type) {
+			case 0:
+			return new FlarePrecompLayer(layer, this._Animations, offsetTime, isHidden);
+			case 1:
+			return new FlareLayerSolid(layer, this._Animations, offsetTime, isHidden);
+			case 2:
+			return new FlareLayerImage(layer, this._Animations, offsetTime, isHidden);
+			case 3:
+			return new FlareLayerNull(layer, this._Animations, offsetTime, isHidden);
+			case 4:
+			return new FlareLayerShape(layer, this._Animations, offsetTime, isHidden);
+			default:
+			return null
+		}
 
 	}
 
-	_convert() {
+	wrapLayer() {
+		this._OuterNode = this._LayerContent
+		this._MaskNode = new FlareMaskNode(this._LayerContent)
+		this._OpacityNode = new FlareOpacity(this._LayerContent)
+		this._InOutNode = new FlareInOut(this._LayerContent)
+		this._AnchorNode = new FlareAnchorTransform(this._LayerContent)
+		this._OuterTransformNode = new FlareOuterTransform(this._LayerContent)
 
-		let content = this.createContent()
-		///
-		const maskedChild = content;
-		this._ContentId = maskedChild.id;
-
-
-		let maskType = 'alpha'
-		const lottieLayer = this.lottieLayer
-		if (lottieLayer.trackMaskType) {
-			const maskTypes = {
-				1: 'alpha',
-				2: 'inverted-alpha',
-				3: 'luminance',
-				4: 'inverted-luminance',
-			}
-			const maskerId = this._PreviousChild.contentId;
-			maskedChild.masks = [maskerId];
-			maskType = maskTypes[lottieLayer.trackMaskType];
+		if (this._MaskNode.hasMasks()) {
+			this._MaskNode.addChild(this._OuterNode)
+			this._OuterNode = this._MaskNode
 		}
-
-		maskedChild.maskType = maskType;
-		////
-
-		if (this._Children.length) {
-			let children = this._Children.map(child => {return child.convert()})
-			children = [content].concat(children)
-
-			content = new FlareNode(name + '_Parenter', children).convert()
-
+		if (this._OpacityNode.hasOpacity()) {
+			this._OpacityNode.addChild(this._OuterNode)
+			this._OuterNode = this._OpacityNode
 		}
-		
-		// const transform = this._Transforms.convert(this._Animations, this.offsetTime)
-
-		// if (transform) {
-		// 	addChildToLastLeaves(transform, content)
-		// 	content = transform
-		// }
-
-
-		
-
-		return content
+		if (this._InOutNode.hasInOutPoints()) {
+			this._InOutNode.addChild(this._OuterNode)
+			this._OuterNode = this._InOutNode
+		}
+		if (this._AnchorNode.hasTransformationApplied()) {
+			this._AnchorNode.addChild(this._OuterNode)
+			this._OuterNode = this._AnchorNode 
+		}
+		if (this._OuterTransformNode.hasTransformationApplied()) {
+			this._OuterTransformNode.addChild(this._OuterNode)
+			this._OuterNode = this._OuterTransformNode
+		}
 	}
 
 	addChild(child) {
-		this._Children.push(child)
+		if (this._AnchorNode.hasTransformationApplied()) {
+			this._AnchorNode.addChild(child)
+		} else {
+			this._OuterTransformNode.addChild(child)
+		}
 	}
 
 	get lottieLayer() {
 		return this._LottieLayer
 	}
 
-	get offsetTime() {
-		return this._OffsetTime
-	}
-
-	get animations() {
-		return this._Animations
-	}
-
-	get contentId() {
-		return this._ContentId
-	}
-
-	get visibility() {
-		return this._Visibility
-	}
-
-	get inPoint() {
-		return this._LottieLayer.inPoint
-	}
-
-	get outPoint() {
-		return this._LottieLayer.outPoint
-	}
-
-	get animations() {
-		return this._Animations
-	}
-
 	set previous(child) {
 		this._PreviousChild = child
+	}
+
+	convert(animations, offsetTime) {
+		return this._OuterNode.convert(animations, offsetTime)
 	}
 }

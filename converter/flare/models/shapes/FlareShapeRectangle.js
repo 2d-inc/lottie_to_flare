@@ -3,8 +3,8 @@ import convertProperty from '../../helpers/propertyConverter';
 
 export default class FlareShapeRectangle extends FlareShapeBase {
 
-	constructor(shapeData, transforms) {
-		super(shapeData, transforms, 'Rectangle Path', 'rectangle')
+	constructor(shapeData) {
+		super(shapeData, 'Rectangle Path', 'rectangle')
 	}
 
 	convert(animations, offsetTime) {

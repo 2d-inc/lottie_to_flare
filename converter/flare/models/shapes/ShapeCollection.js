@@ -12,6 +12,8 @@ import FlareShapeEllipse from './FlareShapeEllipse';
 import FlareShapeRectangle from './FlareShapeRectangle';
 import FlareShapePath from './FlareShapePath';
 import FlareShapeNode from './FlareShapeNode';
+import ShapePaints from './ShapePaints';
+import ShapePaths from './ShapePaths';
 
 const paintTypes = {
 	fill: FlareShapeFill,
@@ -29,22 +31,22 @@ const pathTypes = {
 export default class ShapeCollection extends FlareNode {
 
 	constructor(paintData, transforms = [], modifiers = []) {
-		super()
+		super('Shape', [], 'shape')
 		const PaintType = paintTypes[paintData.type];
 		const paint = new PaintType(paintData);
-		this._Paints = [paint];
 		this._DrawOrder = paintData.drawOrder
 		this._Transforms = [...transforms]
-		this._Paths = []
 		this._Nodes = []
 		this._IsClosed = false
 		this._Modifiers = modifiers
+		this._Paths = new ShapePaths()
+		this._Paints = new ShapePaints(paint, this.id, this._Modifiers)
 	}
 
 	addPaint(paintData) {
 		const PaintType = paintTypes[paintData.type];
 		const paint = new PaintType(paintData);
-		this._Paints.push(paint);
+		this._Paints.addPaint(paint);
 	}
 
 	getAdditionalTransforms(pathTransform) {
@@ -64,7 +66,7 @@ export default class ShapeCollection extends FlareNode {
 		})
 		if (!node) {
 			node = new FlareShapeNode(transforms)
-			this._Paths.push(node)
+			this._Paths.addPath(node)
 			this._Nodes.push(node)
 		}
 		node.addPath(path)
@@ -78,7 +80,7 @@ export default class ShapeCollection extends FlareNode {
 			if (additionalTransforms.length) {
 				this.addPathToNode(pathInstance, additionalTransforms)
 			} else {
-				this._Paths.push(pathInstance);
+				this._Paths.addPath(pathInstance);
 			}
 		}
 	}
@@ -87,12 +89,9 @@ export default class ShapeCollection extends FlareNode {
 		this._IsClosed = true
 	}
 
-	convertTextures(animations, id, offsetTime, trimModifierData, isHidden) {
+	convertTextures() {
 
-		return this._Paints.map(paint => {
-			return paint.convert(id, animations, offsetTime, trimModifierData, isHidden)
-		})
-		.filter(paint => !!paint)
+		return this._Paints
 	}
 
 	exportTrim(animations, nodeId, offsetTime) {
@@ -126,17 +125,11 @@ export default class ShapeCollection extends FlareNode {
 
 	convert(animations, offsetTime, isHidden) {
 
-		const paths = this._Paths.map((pathData) => pathData.convert(animations, offsetTime))
 
-		let shapeNode = new FlareNode('Shape', [], 'shape')
-
-		const trimModifierData = this.exportTrim(animations, shapeNode.id, offsetTime)
-		const textures = this.convertTextures(animations, shapeNode.id, offsetTime, trimModifierData, isHidden)
-
-		shapeNode.addChildren([...textures, ...paths])
+		this.addChildren([this._Paints, this._Paths])
 
 		const shape = {
-			...shapeNode.convert(),
+			...super.convert(animations, offsetTime),
 			blendMode: "srcOver",
 			drawOrder: this._DrawOrder,
 			transformAffectsStroke: true,
@@ -146,7 +139,6 @@ export default class ShapeCollection extends FlareNode {
 		let mainNode = shape
 
 		const transforms = this._Transforms
-
 
 		if (transforms.length) {
 			let lastNode
@@ -181,5 +173,13 @@ export default class ShapeCollection extends FlareNode {
 		}
 
 		return mainNode
+	}
+
+	__convertTextures(animations, id, offsetTime, trimModifierData, isHidden) {
+
+		return this._Paints.map(paint => {
+			return paint.convert(id, animations, offsetTime, trimModifierData, isHidden)
+		})
+		.filter(paint => !!paint)
 	}
 }

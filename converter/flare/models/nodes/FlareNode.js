@@ -35,6 +35,24 @@ export default class FlareNode {
 		}
 	}
 
+	convertChild(child, animations, offsetTime) {
+		return child.convert(animations, offsetTime)
+	}
+
+	convertChildren(animations, offsetTime) {
+		if (this._Children) {
+			return this._Children.map(child => this.convertChild(child, animations, offsetTime))
+			.reduce((accumulator, child) => {
+				if (Array.isArray(child)) {
+					return [...accumulator, ...child]
+				} else {
+					return [...accumulator, child]
+				}
+			}, [])
+		}
+		return null
+	}
+
 	convert(animations, offsetTime) {
 
 		return {
@@ -44,7 +62,7 @@ export default class FlareNode {
 			// ...this._Transform.convert(animations, offsetTime),
 			opacity: this._Opacity,
 			displayType: "empty",
-			children: this._Children ? this._Children.map(child => child.convert(animations, offsetTime)): null,
+			children: this.convertChildren(animations, offsetTime),
 			clips: this._Clips,
 		}
 	}

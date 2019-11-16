@@ -1,9 +1,9 @@
 import FlareNode from '../nodes/FlareNode';
 
-export default class FlareShape extends FlareNode {
+export default class FlareShapeBase extends FlareNode {
 	
-	constructor(shapeData, transforms, name, type) {
-		super(name, null, type)
+	constructor(shapeData, name, type) {
+		super(name, [], type)
 		this._ShapeData = shapeData
 	}
 }
