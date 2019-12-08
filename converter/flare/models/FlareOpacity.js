@@ -3,10 +3,10 @@ import convertProperty from '../helpers/propertyConverter'
 
 export default class FlareOpacity extends FlareNode {
 
-	constructor(layer) {
-		super(layer.name + '_Opacity')
-		this._Layer = layer
-		this._Opacity = this._Layer.lottieLayer.transform.opacity.getValueIfNotDefault(100)
+	constructor(transform, layerName) {
+		super(layerName + '_Opacity')
+		this._Transform = transform
+		this._Opacity = transform.opacity.getValueIfNotDefault(100)
 	}
 
 	hasOpacity() {
@@ -15,7 +15,7 @@ export default class FlareOpacity extends FlareNode {
 
 	convertOpacity(animations, offsetTime) {
 		return {
-			opacity:convertProperty(this._Layer.lottieLayer.transform.opacity, 'opacity', animations, this.id, 0.01, offsetTime)
+			opacity:convertProperty(this._Transform.opacity, 'opacity', animations, this.id, 0.01, offsetTime)
 		}
 	}
 

@@ -8,7 +8,7 @@ import {visibilityModes} from '../helpers/visibilityModes.js';
 export default class FlareLayerSolid extends FlareLayerContent {
 
 	constructor(lottieLayer, isHidden) {
-		super(lottieLayer, isHidden)
+		super(lottieLayer, isHidden, 'shape')
 
 		const layer = this.lottieLayer
 

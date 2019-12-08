@@ -1,17 +1,14 @@
-import FlareContent from './FlareContent';
+import FlareLayerContent from './FlareLayerContent';
 import FlareLayer from './FlareLayer';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 import FlareNode from './nodes/FlareNode';
 
-export default class FlarePrecompLayer extends FlareContent {
+export default class FlarePrecompLayer extends FlareLayerContent {
 
-	constructor(lottieLayer, offsetTime, isHidden) {
-		super(lottieLayer, offsetTime, isHidden)
-
+	constructor(lottieLayer, isHidden, offsetTime) {
+		super(lottieLayer, isHidden, offsetTime)
 		this.createLayer = this.createLayer.bind(this)
-
-		this.createLayers();
-		this.addChildren(this._Layers);
+		this._Layers = this.createLayers();
 
 	}
 
@@ -19,8 +16,7 @@ export default class FlarePrecompLayer extends FlareContent {
 
 		const offsetTime = this.lottieLayer.startPoint + this.offsetTime
 		const isHidden = this.visibility !== visibilityModes.VISIBLE
-
-		return new FlareLayer(layer, offsetTime, isHidden)
+		return new FlareLayer(layer, isHidden, offsetTime)
 
 	}
 
@@ -40,12 +36,32 @@ export default class FlarePrecompLayer extends FlareContent {
 	}
 
 	createLayers() {
-		const lottieLayers = this.lottieLayer.layers
-		this._Layers = lottieLayers
+		return this.lottieLayer.layers
 		.reverse()
 		.map(this.createLayer)
 		.map(this.linkLayer)
+	}
+
+	wrapLayers(animations) {
+		this.layers.forEach(layer => layer.wrapLayer(animations))
+	}
+
+	trackMatteMaskLayers() {
+		this.layers.forEach((layer, index) => {
+			if (layer.isTrackMask && index < this.layers.length - 1) {
+				this.layers[index + 1].addTrackMask(layer.id)
+			}
+			if (layer.layerType === 0) {
+				layer.trackMatteMaskLayers()
+			}
+		})
+	}
+
+	parentLayers() {
+		this.layers.forEach(layer => layer.parentLayers())
+		const childLayers = this.layers
 		.reduce(this.nestChildLayers,[])
+		this.addChildren(childLayers);
 	}
 
 	get layers() {

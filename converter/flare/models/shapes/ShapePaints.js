@@ -1,3 +1,6 @@
+import shapeTypes from '../../../lottie/shapes/shapeTypes.js';
+import convertProperty from '../../helpers/propertyConverter';
+
 export default class ShapePaints {
 
 	constructor(paint, nodeId, modifiers, isHidden) {

@@ -1,53 +1,47 @@
 import FlareNode from '../nodes/FlareNode';
-import FlareTransform from '../../models/properties/FlareTransform';
-import {addChildToLastLeaves} from '../../helpers/lastLeavesHelper.js';
+import FlareOuterTransform from '../../models/FlareOuterTransform';
+import FlareAnchorTransform from '../../models/FlareAnchorTransform';
+import FlareOpacity from '../../models/FlareOpacity';
+import ShapePaths from './ShapePaths';
 
 export default class FlareShapeNode {
 
 	constructor(transforms) {
+		const groupNode = new FlareNode('Group Path', [], 'node')
 		this._Transforms = transforms
-		this._Paths = []
+		this._Paths = new ShapePaths()
+		groupNode.addChild(this._Paths)
+		this._OuterNode = groupNode
+		this.wrapLayer()
 	}
 
-	createTransformTree(innerNode, animations, offsetTime) {
-
-		let mainNode = innerNode
-
-		const transforms = this._Transforms
-
-		if (transforms.length) {
-			let lastNode
-			transforms.forEach(transform => {
-				const flareTransform = new FlareTransform(transform)
-				const node = flareTransform.convert(animations, offsetTime)
-				if(!node) { return; }
-				if (!lastNode) {
-					mainNode = node
-				} else {
-					addChildToLastLeaves(lastNode, node)
-				}
-				lastNode = node
-			})
-			if(lastNode) {
-				addChildToLastLeaves(lastNode, innerNode)
+	wrapLayer() {
+		for (let i = this._Transforms.length - 1; i >= 0 ; i -= 1) {
+			const transform = this._Transforms [i]
+			const opacityNode = new FlareOpacity(transform, 'Shape')
+			const anchorNode = new FlareAnchorTransform(transform, 'Shape')
+			const outerTransformNode = new FlareOuterTransform(transform, 'Shape')
+			if (opacityNode.hasOpacity()) {
+				opacityNode.addChild(this._OuterNode)
+				this._OuterNode = opacityNode
+			}
+			if (anchorNode.hasTransformationApplied()) {
+				anchorNode.addChild(this._OuterNode)
+				this._OuterNode = anchorNode 
+			}
+			if (outerTransformNode.hasTransformationApplied()) {
+				outerTransformNode.addChild(this._OuterNode)
+				this._OuterNode = outerTransformNode
 			}
 		}
-		return mainNode
 	}
-
+	
 	addPath(path) {
-		this._Paths.push(path)
+		this._Paths.addPath(path)
 	}
 
 	convert(animations, offsetTime) {
-		const children = this._Paths.map(path => path.convert(animations, offsetTime))
-		let innerNode
-		if (children.length === 1) {
-			innerNode = children[0]
-		} else {
-			innerNode = new FlareNode('Group Path', children, 'node').convert()
-		}
-		return this.createTransformTree(innerNode, animations, offsetTime)
+		return this._OuterNode.convert(animations, offsetTime)
 	}
 
 	get transforms() {

@@ -1,21 +1,45 @@
 import FlareTransform from './properties/FlareTransform'
 import FlareNode from './nodes/FlareNode'
+import FlareDrawable from './nodes/FlareDrawable'
 import {addChildToLastLeaves} from '../helpers/lastLeavesHelper.js';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
-export default class FlareLayerContent extends FlareNode
-{
+const nodeTypes = {
+	0: 'node',
+	1: 'shape',
+	2: 'node',
+	3: 'node',
+	4: 'node',
+	5: 'node',
+}
 
-	constructor(lottieLayer, animations, offsetTime, isHidden)
+export default class FlareLayerContent extends FlareDrawable {
+
+	constructor(lottieLayer, offsetTime, isHidden)
 	{
-		super(lottieLayer.name)
-		this._LottieLayer = lottieLayer
-		this._Animations = animations
+		const visibility = isHidden ? visibilityModes.HIDDEN_FULL : lottieLayer.isTrackMask ? visibilityModes.HIDDEN_LOCAL : visibilityModes.VISIBLE
+		super(lottieLayer.drawOrder, visibility !== visibilityModes.VISIBLE, lottieLayer.name, nodeTypes[lottieLayer.type])
 		this._OffsetTime = offsetTime
-		this.transforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
+		this._LottieLayer = lottieLayer
+		// TODO: check if this is necessary
+		this._TTransforms = new FlareTransform(lottieLayer.transform, lottieLayer.name)
 		this._Visibility = isHidden ? visibilityModes.HIDDEN_FULL : lottieLayer.isTrackMask ? visibilityModes.HIDDEN_LOCAL : visibilityModes.VISIBLE
 		this._ContentId = null
 		this._PreviousChild = null
+		this._Mask = null
+		const maskTypes = {
+			1: 'alpha',
+			2: 'inverted-alpha',
+			3: 'luminance',
+			4: 'inverted-luminance',
+		}
+		this._MaskType = maskTypes[lottieLayer.trackMaskType] || 'alpha'
+	}
+
+	getType(type) {
+		switch(type) {
+
+		}
 	}
 
 	createContent() {
@@ -24,66 +48,33 @@ export default class FlareLayerContent extends FlareNode
 
 	}
 
-	convert(animations, offsetTime) {
+	buildMasks() {
 
-		const layer = this.lottieLayer
-		
-		return {
-			...super.convert(animations, offsetTime),
-			blendMode: "srcOver",
-			drawOrder: layer.drawOrder,
-			hidden: this.visibility !== visibilityModes.VISIBLE,
+	}
+
+	convertMasks() {
+		if(this._Mask) {
+			return {
+				masks: [this._Mask]
+			}
 		}
 	}
 
-	_convert() {
+	convert(animations, offsetTime) {
 
-		let content = this.createContent()
-		///
-		const maskedChild = content;
-		this._ContentId = maskedChild.id;
-
-
-		let maskType = 'alpha'
-		const lottieLayer = this.lottieLayer
-		if (lottieLayer.trackMaskType) {
-			const maskTypes = {
-				1: 'alpha',
-				2: 'inverted-alpha',
-				3: 'luminance',
-				4: 'inverted-luminance',
-			}
-			const maskerId = this._PreviousChild.contentId;
-			maskedChild.masks = [maskerId];
-			maskType = maskTypes[lottieLayer.trackMaskType];
+		return {
+			...super.convert(animations, offsetTime),
+			...this.convertMasks(),
+			maskType: this._MaskType
 		}
-
-		maskedChild.maskType = maskType;
-		////
-
-		if (this._Children.length) {
-			let children = this._Children.map(child => {return child.convert()})
-			children = [content].concat(children)
-
-			content = new FlareNode(name + '_Parenter', children).convert()
-
-		}
-		
-		// const transform = this._Transforms.convert(this._Animations, this.offsetTime)
-
-		// if (transform) {
-		// 	addChildToLastLeaves(transform, content)
-		// 	content = transform
-		// }
-
-
-		
-
-		return content
 	}
 
 	addChild(child) {
 		this._Children.push(child)
+	}
+
+	addTrackMask(id) {
+		this._Mask = id
 	}
 
 	get lottieLayer() {
@@ -107,18 +98,17 @@ export default class FlareLayerContent extends FlareNode
 	}
 
 	get inPoint() {
+		console.log('NOT EXPECTED', new Error().stack)
 		return this._LottieLayer.inPoint
 	}
 
 	get outPoint() {
+		console.log('NOT EXPECTED', new Error().stack)
 		return this._LottieLayer.outPoint
 	}
 
-	get animations() {
-		return this._Animations
-	}
-
-	set previous(child) {
-		this._PreviousChild = child
+	get transforms() {
+		console.log('NOT EXPECTED', new Error().stack)
+		return this._TTransforms
 	}
 }

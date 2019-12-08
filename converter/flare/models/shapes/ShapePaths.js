@@ -9,6 +9,7 @@ export default class ShapePaths {
 	}
 
 	convert(animations, offsetTime) {
+
 		return this._Paths.map((pathData) => pathData.convert(animations, offsetTime))
 	}
 }

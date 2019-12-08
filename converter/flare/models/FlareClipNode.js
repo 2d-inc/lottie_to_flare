@@ -2,16 +2,16 @@ import FlareNode from './nodes/FlareNode'
 import convertProperty from '../helpers/propertyConverter'
 import ShapeCollection from "./shapes/ShapeCollection"
 
-export default class FlareMaskNode extends FlareNode {
+export default class FlareClipNode extends FlareNode {
 
 	constructor(layer) {
 		super(layer.name + '_Clip')
 		this._Layer = layer
-		this._Masks = null
-		this.createMasks();
+		this._Clips = null
+		this._createClips();
 	}
 
-	createMasks() {
+	_createClips() {
 		if ((this._Layer.lottieLayer.masks && this._Layer.lottieLayer.masks.length)) {
 			const shapeData = {
 				type: 'fill',
@@ -26,30 +26,25 @@ export default class FlareMaskNode extends FlareNode {
 				shapeCollection.addPath(mask, [])
 			})
 
-			console.log(shapeCollection)
-			this._Masks = shapeCollection
-			this.addChild(this._Masks)
+			this._Clips = shapeCollection
+			this.addChild(this._Clips)
 		}
 	}
 
-	hasMasks() {
-		return !!this._Masks
+	hasClips() {
+		return !!this._Clips
 	}
 
-	convertMasks(animations, offsetTime) {
-		console.log('convertMasks')
-
+	_convertClips(animations, offsetTime) {
 		return {
-			clips: [this._Masks.id]
+			clips: [this._Clips.id]
 		}
 	}
 
-	convert() {
-		const animations = this._Layer.animations
-		const offsetTime = this._Layer.offsetTime
+	convert(animations, offsetTime) {
 		return {
 			...super.convert(animations, offsetTime),
-			...this.convertMasks(animations, offsetTime),
+			...this._convertClips(animations, offsetTime),
 		}
 	}
 }

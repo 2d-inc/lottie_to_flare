@@ -4,11 +4,14 @@ import nodeId from '../../helpers/nodeId';
 export default class FlareArtboard extends FlarePrecompLayer {
 
 	constructor(composition, animations) {
-		super(composition, animations, 0);
+		super(composition, false, 0);
 		this._Composition = composition;
 		this._Animations = animations;
 		this.name = 'Composition';
 		this.type = 'artboard';
+		this.wrapLayers(animations);
+		this.parentLayers();
+		this.trackMatteMaskLayers();
 	}
 
 	convert() {

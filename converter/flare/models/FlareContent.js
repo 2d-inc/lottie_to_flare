@@ -5,9 +5,9 @@ import ShapeCollection from "./shapes/ShapeCollection";
 
 export default class FlareContent extends FlareLayerContent {
 
-	constructor(lottieLayer, animations, offsetTime, isHidden) {
+	constructor(lottieLayer, offsetTime, isHidden) {
 
-		super(lottieLayer, animations, offsetTime, isHidden)
+		super(lottieLayer, offsetTime, isHidden)
 		
 	}
 
@@ -32,7 +32,6 @@ export default class FlareContent extends FlareLayerContent {
 			lottieLayer.masks.forEach(mask => {
 				shapeCollection.addPath(mask, [])
 			})
-
 			const maskNode = new FlareNode(name + '_Clip', content)
 			maskNode.clips = [shapeCollection.id]
 

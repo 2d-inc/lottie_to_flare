@@ -18,7 +18,6 @@ export default class FlareLayerShape extends FlareLayerContent {
 	}
 
 	createNewShape (shape, transforms, modifiers) {
-		console.log(transforms)
 		return new ShapeCollection(shape, transforms, modifiers)
 	}
 
