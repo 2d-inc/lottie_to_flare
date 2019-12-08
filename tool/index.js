@@ -9,7 +9,7 @@ import LottieToFlare from "../converter/lottie_to_flare.js";
 import "./style.css";
 
 // const DefaultLottieUrl = "https://assets10.lottiefiles.com/packages/lf20_Vs49OV.json";//"https://assets5.lottiefiles.com/packages/lf20_9wwQRk.json";
-const DefaultLottieUrl = "animations/data.json";//"Local json";
+const DefaultLottieUrl = "animations/bm.json";//"Local json";
 const DefaultLottieZip = "animations/animations.zip";//"Local zip";
 // const DefaultLottieZip = "animations/google/spongebob.zip";//"Local zip";
 

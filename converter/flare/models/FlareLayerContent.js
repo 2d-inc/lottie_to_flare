@@ -13,6 +13,13 @@ const nodeTypes = {
 	5: 'node',
 }
 
+const maskTypes = {
+	1: 'alpha',
+	2: 'inverted-alpha',
+	3: 'luminance',
+	4: 'inverted-luminance',
+}
+
 export default class FlareLayerContent extends FlareDrawable {
 
 	constructor(lottieLayer, offsetTime, isHidden)
@@ -27,12 +34,6 @@ export default class FlareLayerContent extends FlareDrawable {
 		this._ContentId = null
 		this._PreviousChild = null
 		this._Mask = null
-		const maskTypes = {
-			1: 'alpha',
-			2: 'inverted-alpha',
-			3: 'luminance',
-			4: 'inverted-luminance',
-		}
 		this._MaskType = maskTypes[lottieLayer.trackMaskType] || 'alpha'
 	}
 

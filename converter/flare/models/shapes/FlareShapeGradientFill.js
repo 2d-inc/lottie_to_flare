@@ -3,11 +3,12 @@ import FlareGradientStops from '../properties/FlareGradientStops'
 import convertProperty, {propertyTypes} from '../../helpers/propertyConverter';
 import {nodeTypes as gradientNodeTypes} from '../../helpers/gradientProperties';
 
-export default class FlareShapeGradientFill {
+export default class FlareShapeGradientFill extends FlareNode {
 	
 	constructor(paintData) {
-		this._PaintData = paintData;
 		const nodeType = paintData.gradientType === 1 ? gradientNodeTypes.GRADIENT_FILL : gradientNodeTypes.RADIAL_GRADIENT_FILL;
+		super('Gradient Fill', null, nodeType)
+		this._PaintData = paintData;
 		this._GradientStops = new FlareGradientStops(paintData.color, nodeType);
 	}
 
@@ -15,13 +16,7 @@ export default class FlareShapeGradientFill {
 
 		const paintData = this._PaintData;
 
-		const gradientType = paintData.gradientType;
-		const nodeType = gradientType === 1 ? gradientNodeTypes.GRADIENT_FILL : gradientNodeTypes.RADIAL_GRADIENT_FILL;
-
-		const node = new FlareNode('Gradient Fill', null, nodeType);
-
 		const opacity = convertProperty(paintData.opacity, propertyTypes.OPACITY, animations, id, 0.01, offsetTime);
-		node.opacity = opacity
 
 		// TODO: Start and End point can't be animated independently from gradient values.
 		// The only ones that could be animated are the ones that share same keyframes and interpolatiosn
@@ -45,7 +40,8 @@ export default class FlareShapeGradientFill {
 		const fillRule = "nonzero"
 
 		return {
-			...node.convert(),
+			...super.convert(animations, offsetTime),
+			opacity,
 			colorStops,
 			fillRule,
 			start,

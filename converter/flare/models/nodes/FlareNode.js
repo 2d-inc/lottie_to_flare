@@ -2,18 +2,17 @@ import nodeId from '../../../helpers/nodeId';
 
 export default class FlareNode {
 
-	constructor(name = 'NodeName', children = [], type = 'node', transform = {}, opacity = 1) {
+	constructor(name = 'NodeName', children = [], type = 'node') {
 
 		this._Id = nodeId();
+		//TODO check this
 		if (!Array.isArray(children) && children) {
 			children = [children]
 		}
+
 		this._Children = children;
-		this._Transform = transform;
-		this._Opacity = opacity;
 		this._Name = name || 'NodeName';
 		this._Type = type;
-		this._Clips = null;
 	}
 
 	addChildren(children) {
@@ -59,11 +58,8 @@ export default class FlareNode {
 			type: this._Type,
 			id: this.id,
 			name: this._Name,
-			// ...this._Transform.convert(animations, offsetTime),
-			opacity: this._Opacity,
 			displayType: "empty",
 			children: this.convertChildren(animations, offsetTime),
-			clips: this._Clips,
 		}
 	}
 
@@ -87,15 +83,4 @@ export default class FlareNode {
 		this._Type = value;
 	}
 
-	set transform(value) {
-		this._Transform = value;
-	}
-
-	set opacity(value) {
-		this._Opacity = value;
-	}
-
-	set clips(value) {
-		this._Clips = value;
-	}
 }

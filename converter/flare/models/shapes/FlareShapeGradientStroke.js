@@ -4,11 +4,12 @@ import convertProperty, {propertyTypes} from '../../helpers/propertyConverter';
 import {lineCapTypes, lineJoinTypes} from '../../helpers/strokeProperties';
 import {nodeTypes as gradientNodeTypes} from '../../helpers/gradientProperties';
 
-export default class FlareShapeGradientStroke {
+export default class FlareShapeGradientStroke extends FlareNode {
 	
 	constructor(paintData) {
-		this._PaintData = paintData;
 		const nodeType = paintData.gradientType === 1 ? gradientNodeTypes.GRADIENT_STROKE : gradientNodeTypes.RADIAL_GRADIENT_STROKE;
+		super('Gradient Stroke', null, nodeType)
+		this._PaintData = paintData;
 		this._GradientStops = new FlareGradientStops(paintData.color, nodeType);
 	}
 
@@ -16,13 +17,7 @@ export default class FlareShapeGradientStroke {
 
 		const paintData = this._PaintData;
 
-		const gradientType = paintData.gradientType;
-		const nodeType = gradientType === 1 ? gradientNodeTypes.GRADIENT_STROKE : gradientNodeTypes.RADIAL_GRADIENT_STROKE;
-
-		const node = new FlareNode('Gradient Stroke', null, nodeType);
-
 		const opacity = convertProperty(paintData.opacity, propertyTypes.OPACITY, animations, id, 0.01, offsetTime);
-		node.opacity = opacity
 		const width = convertProperty(this._PaintData.width, 'strokeWidth', animations, id, 1, offsetTime)
 
 		const start = convertProperty(paintData.startPoint, propertyTypes.GRADIENT_START, animations, id, 1, offsetTime);
@@ -40,7 +35,8 @@ export default class FlareShapeGradientStroke {
 		const fillRule = "nonzero"
 
 		return {
-			...node.convert(),
+			...super.convert(animations, offsetTime),
+			opacity,
 			colorStops,
 			fillRule,
 			start,

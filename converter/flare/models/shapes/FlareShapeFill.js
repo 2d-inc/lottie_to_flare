@@ -13,7 +13,8 @@ export default class FlareFill extends FlareNode {
 			return void 0;
 		}
 		const opacity = convertProperty(this._PaintData.opacity, propertyTypes.OPACITY, animations, id, 0.01, offsetTime)
-		
+		// this.opacity = opacity
+
 		const color = convertProperty(this._PaintData.color, propertyTypes.COLOR, animations, id, 1, offsetTime)
 
 		const fillRule = "nonzero"
@@ -21,6 +22,7 @@ export default class FlareFill extends FlareNode {
 		return {
 			...super.convert(animations, offsetTime),
 			color,
+			// opacity,
 			fillRule,
 			...trimModifiers,
 		}
