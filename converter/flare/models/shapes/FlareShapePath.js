@@ -20,25 +20,4 @@ export default class FlareShapePath extends FlareShapeBase {
 			isClosed: this._IsClosed,
 		}
 	}
-
-	__buildVertices(vertices, animations, nodeId, offsetTime) {
-		return convertProperty(vertices, 'path', animations, nodeId, 1, offsetTime)
-	}
-
-	__convert(animations, offsetTime) {
-
-		const shapeData = this._ShapeData
-		const verticesData = shapeData.vertices
-
-		// Setting path as closed or open depending only on the first shape if animated
-		const isClosed = verticesData.animated ? verticesData.firstValue.closed : verticesData.value.closed
-
-		const shapeNode = new FlarePathNode("Path", isClosed)
-
-		const vertices = this.buildVertices(verticesData, animations, shapeNode.id, offsetTime)
-
-		shapeNode.addChildren(vertices)
-
-		return shapeNode.convert()
-	}
 }

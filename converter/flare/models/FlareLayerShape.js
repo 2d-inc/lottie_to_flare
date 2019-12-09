@@ -12,8 +12,8 @@ const pathTypes = [
 
 export default class FlareLayerShape extends FlareLayerContent {
 
-	constructor(lottieLayer, animations, offsetTime, isHidden) {
-		super(lottieLayer, animations, offsetTime, isHidden)
+	constructor(lottieLayer, isHidden, offsetTime) {
+		super(lottieLayer, isHidden, offsetTime)
 		this.buildShapes(this.lottieLayer.items, this.visibility !== visibilityModes.VISIBLE)
 	}
 
@@ -78,24 +78,4 @@ export default class FlareLayerShape extends FlareLayerContent {
 
 	}
 
-	_buildShapes(items, animations, offsetTime, isHidden) {
-		const tranforms = [];
-		const modifiers = [];
-		const shapes = this.iterateGroup(items, [], tranforms, modifiers)
-		.map(shapeCollection => shapeCollection.convert(animations, offsetTime, isHidden));
-
-		return new FlareNode('Shapes_Container', shapes).convert();
-	}
-
-	_convertContent() {
-
-		const layer = this.lottieLayer
-		const animations = this._Animations
-		const offsetTime = this.offsetTime
-
-		const isHidden = this.visibility !== visibilityModes.VISIBLE 
-
-		return this.buildShapes(layer.items, animations, offsetTime, isHidden);
-
-	}
 }

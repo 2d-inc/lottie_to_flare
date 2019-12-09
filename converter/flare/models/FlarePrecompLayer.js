@@ -13,7 +13,6 @@ export default class FlarePrecompLayer extends FlareLayerContent {
 	}
 
 	createLayer(layer) {
-
 		const offsetTime = this.lottieLayer.startPoint + this.offsetTime
 		const isHidden = this.visibility !== visibilityModes.VISIBLE
 		return new FlareLayer(layer, isHidden, offsetTime)

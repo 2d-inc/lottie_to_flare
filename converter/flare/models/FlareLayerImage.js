@@ -1,32 +1,56 @@
-import FlareContent from './FlareContent';
+import FlareLayerContent from './FlareLayerContent';
+import FlareImageMeshPoint from './image/FlareImageMeshPoint.js';
+import FlareImageDeformPoint from './image/FlareImageDeformPoint.js';
 import nodeId from '../../helpers/nodeId';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
-export default class FlareLayerSolid extends FlareContent {
+export default class FlareLayerImage extends FlareLayerContent {
 
-	convertContent() {
+	constructor(lottieLayer, isHidden, offsetTime) {
+		super(lottieLayer, isHidden, offsetTime)
+		const layer = this.lottieLayer
+		const assetData = layer.assetData
+		const assetWidth = assetData.w
+		const assetHeight = assetData.h
+		const imageMeshPoint1 = new FlareImageMeshPoint(-assetWidth / 2, -assetHeight / 2, 0, 0)
+		const imageMeshPoint2 = new FlareImageMeshPoint(assetWidth / 2, -assetHeight / 2, assetWidth, 0)
+		const imageMeshPoint3 = new FlareImageMeshPoint(assetWidth / 2, assetHeight / 2, assetWidth, assetHeight)
+		const imageMeshPoint4 = new FlareImageMeshPoint(-assetWidth / 2, assetHeight / 2, 0, assetHeight)
+		imageMeshPoint1.contour = imageMeshPoint2.id;
+		imageMeshPoint2.contour = imageMeshPoint3.id;
+		imageMeshPoint3.contour = imageMeshPoint4.id;
+		imageMeshPoint4.contour = imageMeshPoint1.id;
+		const imageDeformPoint1 = new FlareImageDeformPoint(-assetWidth / 2, -assetHeight / 2, 0, 0)
+		const imageDeformPoint2 = new FlareImageDeformPoint(assetWidth / 2, -assetHeight / 2, assetWidth, 0)
+		const imageDeformPoint3 = new FlareImageDeformPoint(assetWidth / 2, assetHeight / 2, assetWidth, assetHeight)
+		const imageDeformPoint4 = new FlareImageDeformPoint(-assetWidth / 2, assetHeight / 2, 0, assetHeight)
+		this.addChild(imageMeshPoint1)
+		this.addChild(imageMeshPoint2)
+		this.addChild(imageMeshPoint3)
+		this.addChild(imageMeshPoint4)
+		this.addChild(imageDeformPoint1)
+		this.addChild(imageDeformPoint2)
+		this.addChild(imageDeformPoint3)
+		this.addChild(imageDeformPoint4)
+	}
+
+	convert(animations, offsetTime) {
 		const layer = this.lottieLayer
 
 		const assetData = layer.assetData
 		const assetWidth = assetData.w
 		const assetHeight = assetData.h
 
-		const verticesIds = [nodeId(), nodeId(), nodeId(), nodeId()]
-
 		return {
-			type: "image",
-			id: nodeId(),
+			...super.convert(animations, offsetTime),
 			name: "Image",
 			asset: assetData.id,
-			hidden: this.visibility !== visibilityModes.VISIBLE,
 			
 			// Flare can use this as a hint to find an
 			// existing asset that's already loaded
 			// (in case the images are imported separately)
 			assetPath: assetData.u + assetData.p,
 
-			blendMode: "srcOver",
-			drawOrder: layer.drawOrder,
 			translation: [assetWidth / 2, assetHeight / 2],
 			"tris": [
 				3,
@@ -36,160 +60,6 @@ export default class FlareLayerSolid extends FlareContent {
 				2,
 				3
 			],
-			children: [
-				{
-					"type": "meshPoint",
-					"id": verticesIds[0],
-					"name": "Node",
-					"translation": [
-						-assetWidth / 2,
-						-assetHeight / 2
-					],
-					"uv": [
-						0,
-						0
-					],
-					"contour": verticesIds[1],
-					"isForced": false
-				},
-				{
-					"type": "meshPoint",
-					"id": verticesIds[1],
-					"name": "Node",
-					"translation": [
-						assetWidth / 2,
-						-assetHeight / 2
-					],
-					"uv": [
-						assetWidth,
-						0
-					],
-					"contour": verticesIds[2],
-					"isForced": false
-				},
-				{
-					"type": "meshPoint",
-					"id": verticesIds[2],
-					"name": "Node",
-					"translation": [
-						assetWidth / 2,
-						assetHeight / 2
-					],
-					"uv": [
-						assetWidth,
-						assetHeight
-					],
-					"contour": verticesIds[3],
-					"isForced": false
-				},
-				{
-					"type": "meshPoint",
-					"id": verticesIds[3],
-					"name": "Node",
-					"translation": [
-						-assetWidth / 2,
-						assetHeight / 2
-					],
-					"uv": [
-						0,
-						assetHeight
-					],
-					"contour": verticesIds[0],
-					"isForced": false
-				},
-				{
-					"type": "meshDeformPoint",
-					"id": nodeId(),
-					"name": "Node",
-					"translation": [
-						-assetWidth / 2,
-						-assetHeight / 2
-					],
-					"uv": [
-						0,
-						0
-					],
-					"weights": [
-						1,
-						0,
-						0,
-						0,
-						1,
-						0,
-						0,
-						0
-					]
-				},
-				{
-					"type": "meshDeformPoint",
-					"id": nodeId(),
-					"name": "Node",
-					"translation": [
-						assetWidth / 2,
-						-assetHeight / 2
-					],
-					"uv": [
-						assetWidth,
-						0
-					],
-					"weights": [
-						1,
-						0,
-						0,
-						0,
-						1,
-						0,
-						0,
-						0
-					]
-				},
-				{
-					"type": "meshDeformPoint",
-					"id": nodeId(),
-					"name": "Node",
-					"translation": [
-						assetWidth / 2,
-						assetHeight / 2
-					],
-					"uv": [
-						assetWidth,
-						assetHeight
-					],
-					"weights": [
-						1,
-						0,
-						0,
-						0,
-						1,
-						0,
-						0,
-						0
-					]
-				},
-				{
-					"type": "meshDeformPoint",
-					"id": nodeId(),
-					"name": "Node",
-					"translation": [
-						-assetWidth / 2,
-						assetHeight / 2
-					],
-					"uv": [
-						0,
-						assetHeight
-					],
-					"weights": [
-						1,
-						0,
-						0,
-						0,
-						1,
-						0,
-						0,
-						0
-					]
-				}
-			]
 		}
 	}
 }

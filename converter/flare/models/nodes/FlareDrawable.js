@@ -7,15 +7,6 @@ export default class FlareDrawable extends FlareNode {
 
 		this._DrawOrder = drawOrder
 		this._IsHidden = isHidden
-		this._Opacity = 1
-	}
-
-	_exportOpacity() {
-		// if(this._Opacity !== 1) {
-			return {
-				opacity: this._Opacity
-			}
-		// }
 	}
 
 	convert(animations, offset) {
@@ -26,11 +17,7 @@ export default class FlareDrawable extends FlareNode {
 			drawOrder: this._DrawOrder,
 			transformAffectsStroke: true,
 			hidden: this._IsHidden,
-			// ...this._exportOpacity(),
 		}
 	}
 
-	/*set opacity(value) {
-		this._Opacity = value;
-	}*/
 }

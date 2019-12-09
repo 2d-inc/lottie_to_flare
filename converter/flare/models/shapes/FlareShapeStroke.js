@@ -18,8 +18,6 @@ export default class FlareStroke extends FlareNode {
 
 		const width = convertProperty(this._PaintData.width, propertyTypes.STROKE_WIDTH, animations, id, 1, offsetTime)
 
-		// return stroke(data.color, data.opacity, data.width, data.lineCap, data.lineJoin, animations, offsetTime, trimModifierData)
-
 		return {
 			...super.convert(animations, offsetTime),
 			color,

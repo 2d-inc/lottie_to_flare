@@ -1,4 +1,3 @@
-import FlareContent from './FlareContent';
 import FlareLayerNull from './FlareLayerNull';
 import FlareLayerSolid from './FlareLayerSolid';
 import FlareLayerImage from './FlareLayerImage';

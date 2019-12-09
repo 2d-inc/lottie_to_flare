@@ -7,8 +7,8 @@ import {visibilityModes} from '../helpers/visibilityModes.js';
 
 export default class FlareLayerSolid extends FlareLayerContent {
 
-	constructor(lottieLayer, isHidden) {
-		super(lottieLayer, isHidden, 'shape')
+	constructor(lottieLayer, isHidden, offsetTime) {
+		super(lottieLayer, isHidden, offsetTime)
 
 		const layer = this.lottieLayer
 
@@ -38,19 +38,6 @@ export default class FlareLayerSolid extends FlareLayerContent {
 		const child = new FlareNode('Shape', children, 'shape')
 
 		this.addChild(child);
-
-		/*return {
-			type: "shape",
-			id: nodeId(),
-			name: "Shape",
-			blendMode: "srcOver",
-			drawOrder: layer.drawOrder,
-			children: [
-				shapeFill.convert('', null, null, null),
-				shapeRectangle.convert(null, null),
-			],
-			hidden: this.visibility !== visibilityModes.VISIBLE,
-		}*/
 
 	}
 
