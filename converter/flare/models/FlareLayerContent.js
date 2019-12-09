@@ -1,7 +1,6 @@
 import FlareTransform from './properties/FlareTransform'
 import FlareNode from './nodes/FlareNode'
 import FlareDrawable from './nodes/FlareDrawable'
-import {addChildToLastLeaves} from '../helpers/lastLeavesHelper.js';
 import {visibilityModes} from '../helpers/visibilityModes.js';
 
 const nodeTypes = {
