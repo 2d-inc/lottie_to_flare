@@ -1,8 +1,8 @@
 {
   "name": "lottie_to_flare",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Lottie to Flare Converter",
-  "main": "index.js",
+  "main": "main.bundle.js",
   "scripts": {
     "start": "webpack-dev-server --open --hot --mode development",
     "build": "webpack --mode production"
@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/2d-inc/lottie_to_flare#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",

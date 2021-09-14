@@ -10,7 +10,7 @@
                 "root": [
                     "./dependencies"
                 ]
-            },
+            }
         ],
         [
             "@babel/plugin-proposal-decorators",
